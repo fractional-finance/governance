@@ -1,9 +1,5 @@
 <template>
   <div v-if="asset" class="container p-5 is-dark">
-    <StackNavigationBar @onBack="goBack">
-      {{ `${asset.address} - DAO` }}
-    </StackNavigationBar>
-
     <div class="columns is-centered" v-if="proposals">
       <ul class="column is-half mt-5 mb-5 mr-1 ml-1">
         <li>
@@ -32,7 +28,6 @@
 <script>
 import { toFixedNumber } from "../../utils/common"
 import { mapGetters, mapActions } from "vuex"
-import StackNavigationBar from "../layout/navigation/StackNavigationBar.vue"
 import ProposalListItem from "../views/voting/ProposalListItem.vue"
 
 export default {
@@ -44,7 +39,6 @@ export default {
     },
   },
   components: {
-    StackNavigationBar,
     ProposalListItem,
   },
   computed: {

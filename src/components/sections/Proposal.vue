@@ -1,7 +1,7 @@
 <template>
   <div v-if="proposal" class="container p-5">
     <StackNavigationBar class="mt-8" @onBack="goBack">
-      {{ "Proposal — " + proposal.title }}
+      {{ 'Proposal — ' + proposal.title }}
     </StackNavigationBar>
     <div class="columns is-full">
       <ProposalListItem
@@ -68,13 +68,13 @@
 </style>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-import StackNavigationBar from "../layout/navigation/StackNavigationBar.vue";
-import VotingProgressBar from "../views/voting/VotingProgressBar.vue";
-import Button from "../views/common/Button.vue";
-import { VoteType } from "../../models/vote";
-import ProposalListItem from "../views/voting/ProposalListItem.vue";
-import VueMarkdown from "vue-markdown-render";
+import { mapGetters, mapActions } from "vuex"
+import StackNavigationBar from "../layout/navigation/StackNavigationBar.vue"
+import VotingProgressBar from "../views/voting/VotingProgressBar.vue"
+import Button from "../views/common/Button.vue"
+import { VoteType } from "../../models/vote"
+import ProposalListItem from "../views/voting/ProposalListItem.vue"
+import VueMarkdown from "vue-markdown-render"
 
 export default {
   name: "Proposal",
@@ -100,7 +100,7 @@ export default {
       countdownRef: null,
       timeRemainingString: "",
       pickedOption: null,
-    };
+    }
   },
   computed: {
     ...mapGetters({
@@ -110,28 +110,28 @@ export default {
     }),
 
     asset() {
-      return this.assetMap.get(this.assetId);
+      return this.assetMap.get(this.assetId)
     },
 
     proposal() {
       console.table({
         id: this.proposalId,
         val: this.proposalsMap.get(this.proposalId),
-      });
-      return this.proposalsMap.get(this.proposalId);
+      })
+      return this.proposalsMap.get(this.proposalId)
     },
 
     votes() {
-      var yesVoteShares = 0;
-      var noVoteShares = 0;
+      var yesVoteShares = 0
+      var noVoteShares = 0
 
       this.proposal.votes.forEach((vote) => {
         if (vote.type == VoteType.Yes) {
-          yesVoteShares += vote.count;
+          yesVoteShares += vote.count
         } else if (vote.type == VoteType.No) {
-          noVoteShares += vote.count;
+          noVoteShares += vote.count
         }
-      });
+      })
 
       return {
         yes: {
@@ -142,7 +142,7 @@ export default {
           count: noVoteShares,
           percentage: (noVoteShares / (yesVoteShares + noVoteShares)) * 100,
         },
-      };
+      }
     },
 
     holderCounts() {
@@ -152,23 +152,23 @@ export default {
           parseInt(this.proposalId, 10) < 3
             ? this.asset.owners.size - 1
             : this.asset.owners.size,
-      };
+      }
     },
 
     voteOptions() {
-      return Object.values(VoteType);
+      return Object.values(VoteType)
     },
 
     isVotable() {
       if (parseInt(this.proposalId, 10) < 3) {
-        return false;
+        return false
       }
 
       let hasWalletVoted = this.proposal.votes.find((v) => {
-        return v.voterAddress == this.walletAddress;
-      });
+        return v.voterAddress == this.walletAddress
+      })
 
-      return !hasWalletVoted;
+      return !hasWalletVoted
     },
   },
   methods: {
@@ -179,53 +179,53 @@ export default {
     }),
 
     goBack() {
-      this.$router.back();
+      this.$router.back()
     },
 
     setTimeRemainingCountdown() {
-      clearInterval(this.countdownRef);
+      clearInterval(this.countdownRef)
 
       this.countdownRef = setInterval(
         function () {
-          let now = new Date().getTime() / 1000;
+          let now = new Date().getTime() / 1000
 
-          let t = this.proposal.endTimestamp - now;
+          let t = this.proposal.endTimestamp - now
 
           if (t >= 0) {
-            let days = Math.floor(t / (60 * 60 * 24));
-            let hours = Math.floor((t % (60 * 60 * 24)) / (60 * 60));
-            let mins = Math.floor((t % (60 * 60)) / 60);
-            let secs = Math.floor(t % 60);
+            let days = Math.floor(t / (60 * 60 * 24))
+            let hours = Math.floor((t % (60 * 60 * 24)) / (60 * 60))
+            let mins = Math.floor((t % (60 * 60)) / 60)
+            let secs = Math.floor(t % 60)
 
-            this.timeRemainingString = `${days} days, ${hours}h : ${mins}m : ${secs}s`;
+            this.timeRemainingString = `${days} days, ${hours}h : ${mins}m : ${secs}s`
           } else {
-            this.timeRemainingString = "The voting is over";
+            this.timeRemainingString = "The voting is over"
           }
         }.bind(this),
         1000
-      );
+      )
     },
     /* eslint-disable indent */
     optionPickedAtIndex(optionIndex) {
       switch (optionIndex) {
         case 0:
-          this.pickedOption = VoteType.Yes;
-          break;
+          this.pickedOption = VoteType.Yes
+          break
         case 1:
-          this.pickedOption = VoteType.No;
-          break;
+          this.pickedOption = VoteType.No
+          break
         case 2:
-          this.pickedOption = VoteType.Abstain;
-          break;
+          this.pickedOption = VoteType.Abstain
+          break
         default:
-          this.pickedOption = null;
-          break;
+          this.pickedOption = null
+          break
       }
     },
 
     vote() {
       if (!this.pickedOption) {
-        return;
+        return
       }
 
       this.voteOnProposal({
@@ -233,28 +233,28 @@ export default {
         proposalId: this.proposalId,
         voteType: this.pickedOption,
         $toast: this.$toast,
-      });
+      })
     },
 
     passed() {
-      const votes = this.votes;
+      const votes = this.votes
       if (votes.yes.count > votes.no.count) {
-        return this.PASSED.Yes;
+        return this.PASSED.Yes
       } else if (votes.yes.count < votes.no.count) {
-        return this.PASSED.No;
+        return this.PASSED.No
       }
-      return this.PASSED.Tie;
+      return this.PASSED.Tie
     },
   },
   mounted() {
-    this.refresh({ assetId: this.assetId });
-    this.syncWallet();
+    this.refresh({ assetId: this.assetId })
+    this.syncWallet()
   },
   created() {
-    this.setTimeRemainingCountdown();
+    this.setTimeRemainingCountdown()
   },
   unmounted() {
-    clearInterval(this.countdownRef);
+    clearInterval(this.countdownRef)
   },
-};
+}
 </script>

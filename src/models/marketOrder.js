@@ -7,7 +7,7 @@
  * @property {BigInt} price Price stored as BigInt
  * @property {number} amount Amount of tokens in the aggregated order
  */
- class MarketOrder {
+class MarketOrder {
   constructor(
     id,
     orderType,

@@ -1,7 +1,7 @@
 <template>
   <div v-if="asset">
     <StackNavigationBar @onBack="goBack">
-      {{ "New Proposal — " + asset.address }}
+      {{ 'New Proposal — ' + asset.address }}
     </StackNavigationBar>
 
     <div class="panel p-3 mt-4">
@@ -71,9 +71,9 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-import StackNavigationBar from "../layout/navigation/StackNavigationBar.vue";
-import Button from "../views/common/Button.vue";
+import { mapGetters, mapActions } from "vuex"
+import StackNavigationBar from "../layout/navigation/StackNavigationBar.vue"
+import Button from "../views/common/Button.vue"
 
 export default {
   name: "NewProposal",
@@ -91,7 +91,7 @@ export default {
     return {
       title: "",
       description: "",
-    };
+    }
   },
   computed: {
     ...mapGetters({
@@ -99,7 +99,7 @@ export default {
     }),
 
     asset() {
-      return this.assetMap.get(this.assetId);
+      return this.assetMap.get(this.assetId)
     },
   },
   methods: {
@@ -110,12 +110,12 @@ export default {
     }),
 
     goBack() {
-      this.$router.back();
+      this.$router.back()
     },
 
     publish() {
       if (this.title.length < 1 || this.description.length < 1) {
-        return;
+        return
       }
 
       this.createProposal({
@@ -123,12 +123,12 @@ export default {
         title: this.title,
         description: this.description,
         $toast: this.$toast,
-      });
+      })
     },
   },
   mounted() {
-    this.refresh({ assetId: this.assetId });
-    this.syncWallet();
+    this.refresh({ assetId: this.assetId })
+    this.syncWallet()
   },
-};
+}
 </script>

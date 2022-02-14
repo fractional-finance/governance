@@ -3,7 +3,7 @@
  * @property {string} address Address of the wallet
  * @property {number} ethBalance Balance of the wallet in ETH
  */
- class WalletState {
+class WalletState {
   constructor(
     address,
     ethBalance

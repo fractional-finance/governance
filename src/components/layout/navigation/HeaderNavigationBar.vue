@@ -49,11 +49,11 @@
 </template>
 
 <script>
-import SignerAddress from '../../views/address/SignerAddress.vue'
-import { useRoute } from 'vue-router'
-import { mapGetters, mapActions } from 'vuex'
+import SignerAddress from "../../views/address/SignerAddress.vue"
+import { useRoute } from "vue-router"
+import { mapGetters, mapActions } from "vuex"
 export default {
-  name: 'HeaderHavigationBar',
+  name: "HeaderHavigationBar",
   components: {
     SignerAddress,
   },
@@ -61,15 +61,15 @@ export default {
     return {
       navigation: {
         isOpen: false,
-        items: [{ name: 'Thread', path: '/dao/0/proposals' }],
+        items: [{ name: "Gov", path: "/dao/0/proposals" }],
       },
     }
   },
   computed: {
-    ...mapGetters(['currentNavigationItem']),
+    ...mapGetters(["currentNavigationItem"]),
   },
   methods: {
-    ...mapActions(['goBack']),
+    ...mapActions(["goBack"]),
     isItemCurrent(item) {
       return item.path == useRoute().path
     },

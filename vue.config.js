@@ -10,10 +10,10 @@ module.exports = {
     requireModuleExtension: true,
     loaderOptions: {
       sass: {
-        additionalData: globalSassFiles.map((src)=>'@import "' + src + '";').join('\n')
+        additionalData: globalSassFiles.map((src)=>"@import \"" + src + "\";").join("\n")
       }
     }
-},
+  },
   chainWebpack: (config) => {
     config
       .plugin("html")

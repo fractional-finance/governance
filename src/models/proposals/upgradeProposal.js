@@ -25,43 +25,55 @@ import BaseProposal from "./baseProposal";
 */
 
 class UpgradeProposal extends BaseProposal{
-  constructor(
-    id,
-    thread,
-    frabric,
-    creator,
-    type,
-    state,
-    votes,
-    supermajority,
-    startTimestamp,
-    endTimestamp,
-    description,
-    beacon,
-    instance,
-    version,
-    code,
-    data
-  ) {
-    super(
-      id,
-      thread,
-      frabric,
-      creator,
-      type,
-      state,
-      votes,
-      supermajority,
-      startTimestamp,
-      endTimestamp
-    );
-    this.description = description;
-    this.beacon = beacon;
-    this.instance = instance;
-    this.version = version;
-    this.code = code;
-    this.data = data;
+  defaults() {
+    return {
+      id: null,
+      frabric: [],
+      thread: [],
+      beacon: "",
+      instance: "",
+      version: null,
+      code: "",
+      data: ""
+    }
   }
+  // constructor(
+  //   id,
+  //   thread,
+  //   frabric,
+  //   creator,
+  //   type,
+  //   state,
+  //   votes,
+  //   supermajority,
+  //   startTimestamp,
+  //   endTimestamp,
+  //   description,
+  //   beacon,
+  //   instance,
+  //   version,
+  //   code,
+  //   data
+  // ) {
+  //   super(
+  //     id,
+  //     thread,
+  //     frabric,
+  //     creator,
+  //     type,
+  //     state,
+  //     votes,
+  //     supermajority,
+  //     startTimestamp,
+  //     endTimestamp
+  //   );
+  //   this.description = description;
+  //   this.beacon = beacon;
+  //   this.instance = instance;
+  //   this.version = version;
+  //   this.code = code;
+  //   this.data = data;
+  // }
 }
 
 

@@ -40,8 +40,7 @@
 
 // export default { BaseProposal }
 
-import { Model, Collection } from 'vue-mc'
-import { VoteDirection } from '../common.js'
+import { Model } from "vue-mc"
 
 /**
  * BaseProposal Model
@@ -49,48 +48,19 @@ import { VoteDirection } from '../common.js'
 class BaseProposal extends Model {
 
   // Default attributes that define the "empty" state.
-  default() {
+  defaults() {
     return {
-      id: '',
-      creatorAddress: '',
-      startTimestamp: null,
-      endTimestamp: null,
-      votes: VoteDirection.Abstain,
+      id: "",
+      creatorAddress: "",
+      type: null,
+      state: [],
+      votes: [],
+      info: "",
       supermajority: false,
+      startTimestamp: null,
+      endTimestamp: null,    
     }
   }
-
-  // Attribute mutations.
-  mutations() {
-    return {
-      id: String,
-      creatorAddress: String,
-      startTimestamp: Number(id) || null,
-      endTimestamp: Number(id) || null,
-      //missing votes (not sure how to make this model representation)
-      supermajority: Boolean,
-    }
-  }
-
-  // Attribute validation.
-  validation() {
-    return {
-      id: string.and(required),
-      creatorAddress: string.and(required),
-      startTimestamp: integer.and(min(1)).or(equal(null)),
-      endTimestamp: integer.and(min(1)).or(equal(null)),
-      //missing votes (not sure how to make this model representation)
-      supermajority: boolean,
-    }
-  }
-
-  // Route configuration. ( How does this route config relates with the main routing? )
-  // routes() {
-  //   return {
-  //     fetch: '',
-  //     save: '',
-  //   }
-  // }
 }
 
-export default { BaseProposal }
+export default BaseProposal

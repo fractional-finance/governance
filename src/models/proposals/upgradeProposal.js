@@ -79,4 +79,4 @@ class UpgradeProposal extends BaseProposal{
 
 
 
-export default {UpgradeProposal}
+export default UpgradeProposal

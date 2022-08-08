@@ -51,4 +51,4 @@ class PaperProposal extends BaseProposal{
 }
 
 
-export default {PaperProposal}
+export default PaperProposal

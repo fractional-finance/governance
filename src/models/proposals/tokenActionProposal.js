@@ -69,4 +69,4 @@ class TokenActionProposal extends BaseProposal{
 }
 
 
-export default {TokenActionProposal}
+export default TokenActionProposal

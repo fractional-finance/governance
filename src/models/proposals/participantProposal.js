@@ -55,4 +55,4 @@ class ParticipantProposal extends BaseProposal{
   // }
 }
 
-export default {ParticipantProposal}
+export default ParticipantProposal

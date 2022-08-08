@@ -24,7 +24,7 @@ import BaseProposal from "./baseProposal";
  * data: Bytes! 
 */
 
-class UpgradeProposal extends BaseProposal{
+export class UpgradeProposal extends BaseProposal{
   defaults() {
     return {
       id: null,
@@ -75,8 +75,3 @@ class UpgradeProposal extends BaseProposal{
   //   this.data = data;
   // }
 }
-
-
-
-
-export default UpgradeProposal

@@ -13,7 +13,7 @@ import BaseProposal from "./baseProposal";
  * @property {string} participant Address of the participant to propose
 */
 
-class ParticipantProposal extends BaseProposal{
+export class ParticipantProposal extends BaseProposal{
   defaults() {
     return {
       id: null,
@@ -54,5 +54,3 @@ class ParticipantProposal extends BaseProposal{
   //   this.participant = participant;
   // }
 }
-
-export default ParticipantProposal

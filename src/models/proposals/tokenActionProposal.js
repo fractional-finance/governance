@@ -16,7 +16,7 @@ import BaseProposal from "./baseProposal";
  * @property {number} amount
 */
 
-class TokenActionProposal extends BaseProposal{
+export class TokenActionProposal extends BaseProposal{
   defaults(){
     return {
       id: null,
@@ -67,6 +67,3 @@ class TokenActionProposal extends BaseProposal{
   //   this.amount = amount;
   // }
 }
-
-
-export default TokenActionProposal

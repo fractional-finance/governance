@@ -45,7 +45,7 @@ import { Model } from "vue-mc"
 /**
  * BaseProposal Model
  */
-class BaseProposal extends Model {
+export default class BaseProposal extends Model {
 
   // Default attributes that define the "empty" state.
   defaults() {
@@ -62,5 +62,3 @@ class BaseProposal extends Model {
     }
   }
 }
-
-export default BaseProposal

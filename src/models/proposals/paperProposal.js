@@ -12,7 +12,8 @@ import BaseProposal from "./baseProposal";
  * @property {string} description Description of the proposal
 */
 
-class PaperProposal extends BaseProposal{
+export class PaperProposal extends BaseProposal {
+  
   defaults() {
     return {
       id: null,
@@ -49,6 +50,3 @@ class PaperProposal extends BaseProposal{
   //   this.description = description;
   // }
 }
-
-
-export default PaperProposal

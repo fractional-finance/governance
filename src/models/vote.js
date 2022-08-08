@@ -1,15 +1,13 @@
-import { Model } from "vue-mc";
 import BaseProposal from "./proposals/baseProposal";
 
 /**
  * Vote model.
  * @property {string} proposalID ID of the proposal this vote belongs to
  * @property {string} voterAddress Address of the voter
- * @property {VoteType} type Type of the vote posted
  * @property {number} count Voting power of the voter
  */
 
-class Vote extends BaseProposal {
+export class Vote extends BaseProposal {
 
   // Default attributes that define the "empty" state.
   defaults() {
@@ -34,10 +32,10 @@ class Vote extends BaseProposal {
   // }
 }
 
-// const VoteType = {
-//   Yes: "Yes",
-//   No: "No",
-//   Abstain: "Abstain"
-// }
+const VoteType = {
+  Yes: "Yes",
+  No: "No",
+  Abstain: "Abstain"
+}
 
-export default Vote
+export { VoteType }

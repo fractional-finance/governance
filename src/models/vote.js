@@ -1,5 +1,5 @@
 import { Model } from "vue-mc";
-import baseProposal from "proposals/baseProposal";
+import BaseProposal from "./proposals/baseProposal";
 
 /**
  * Vote model.

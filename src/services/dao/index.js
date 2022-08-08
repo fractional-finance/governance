@@ -148,6 +148,70 @@ class DAO {
   }
 
   /**
+   * Create an upgrade proposal
+   * @param {String} assetAddress Asset's contract address   
+   * @param {String} beaconAddress Address of beacon handling upgrade
+   * @param {Number} version Version number (simple increment)
+   * @param {String} codeAddress Address of new contract
+   * @param {String} upgradeData Data to be passed to newly upgraded contract
+   * @param {String} title Proposal title
+   * @param {String} description Proposal description
+   * @returns {String} version Transaction status (true — mined; false - reverted)
+   */
+  // eslint-disable-next-line max-lines-per-function
+  async createUpgradeProposal(
+    assetAddress,
+    beaconAddress,
+    instanceAddress,
+    codeAddress,
+    title,
+    description,
+    version, // Required for validateUpgrade to run correctly
+  ) {
+    // Hardcoding these for simplicity
+    const ASSET_ADDRESS = assetAddress || "0x8C1a3931102f4D65c91f2DDA5166f8970f2760A8";
+    const THREAD_DEPLOYER_ADDRESS = "0xF78C9BCA95f98Eb8EB241Af0865946429a8A5050";
+    const BOND_ADDRESS = "0x20cf3b3A2dA25B726eE367e20F5659f1794994a2";
+    const DATA = ethers.utils.defaultAbiCoder.encode(
+      ["address", "address"],
+      [BOND_ADDRESS, THREAD_DEPLOYER_ADDRESS],
+    );
+  
+    const assetContract = new AssetContract(this.ethereumClient, ASSET_ADDRESS);
+
+    console.dir(assetContract);
+
+    const ipfsPathBytes = await this.storageNetwork
+      .uploadAndGetPathAsBytes(
+        {
+          title: title,
+          description: description
+        }
+      );
+
+    console.log({
+      beaconAddress,
+      instanceAddress,
+      version,
+      codeAddress,
+      DATA,
+      ipfsPathBytes,
+    })
+
+    const createUpgradeProposalTx = await assetContract.proposeUpgrade(
+      beaconAddress,
+      instanceAddress,
+      version,
+      codeAddress,
+      DATA,
+      ipfsPathBytes,
+    );
+
+    const txReciept = await createUpgradeProposalTx.wait();
+    return txReciept.status;
+  }
+
+  /**
    * Vote on a proposal
    * @param {Asset} asset Asset that the DAO controls
    * @param {Proposal} proposal Proposal to vote on

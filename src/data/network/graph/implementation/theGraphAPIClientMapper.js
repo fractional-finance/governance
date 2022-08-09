@@ -2,7 +2,7 @@ import GraphQLAPIMapper from "../graphQLAPIMapper"
 import Asset  from "../../../../models/asset"
 import {PaperProposal}  from "../../../../models/proposals"
 import { Vote }  from "../../../../models/vote"
-import { MarketOrder } from "../../../../models/marketOrder"
+// import { MarketOrder } from "../../../../models/marketOrder"
 
 class TheGraphAPIMapper extends GraphQLAPIMapper {
   mapAssets(rawAssets) {
@@ -20,7 +20,7 @@ class TheGraphAPIMapper extends GraphQLAPIMapper {
             ownersMap.set(ownership.owner, ownership.shares)
           })
 
-        let marketOrders = this.mapMarketOrders(rawAsset.marketOrders)
+        // let marketOrders = this.mapMarketOrders(rawAsset.marketOrders)
 
         return new Asset(
           rawAsset.id,
@@ -29,7 +29,7 @@ class TheGraphAPIMapper extends GraphQLAPIMapper {
           rawAsset.symbol,
           rawAsset.numOfShares,
           ownersMap,
-          marketOrders,
+          // marketOrders,
           proposals
         )
       })

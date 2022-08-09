@@ -51,7 +51,9 @@ export default class BaseProposal extends Model {
   defaults() {
     return {
       id: "",
-      creatorAddress: "",
+      thread: [],
+      frabric: [],
+      creator: "",
       type: null,
       state: [],
       votes: [],

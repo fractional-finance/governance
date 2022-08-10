@@ -1,32 +1,37 @@
-import BaseProposal from "./proposals/baseProposal";
+/* eslint-disable class-methods-use-this */
+import { Collection, Model } from "vue-mc";
+import { ethers } from "ethers";
 
 /**
  * Vote model.
  */
 
-export class Vote extends BaseProposal {
-
+export class Vote extends Model {
   // Default attributes that define the "empty" state.
   defaults() {
     return {
-      id: null,
+      id: "",
       voter: "",
-      voteDirection: [],
-      count: null
+      voteDirection: "",
+      count: 0,
     }
   }
 
-  // constructor(
-  //   proposalID,
-  //   voterAddress,
-  //   type,
-  //   count
-  // ) {
-  //   this.proposalID = proposalID
-  //   this.voterAddress = voterAddress
-  //   this.type = type
-  //   this.count = count
-  // }
+  mutations() {
+    return {
+      id: String,
+      voter: String,
+      voteDirection: String,
+      count: (count) => ethers.utils.parseEther(count),
+    }
+  }
+}
+
+
+export class Votes extends Collection {
+  model() {
+    return Vote;
+  }
 }
 
 export const VoteType = {

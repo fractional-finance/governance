@@ -1,10 +1,9 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable max-lines-per-function */
 import GraphQLAPIMapper from "../graphQLAPIMapper"
-import Asset  from "../../../../models/asset"
 import { getIpfsHashFromBytes32 } from "../../storage/ipfs/common"
 import { ProposalTypes } from "../../../../models/common"
-import { Vote }  from "../../../../models/vote"
+import { Vote, Votes }  from "../../../../models/vote"
 import { PaperProposal } from "../../../../models/proposals/paperProposal";
 import { UpgradeProposal } from "../../../../models/proposals/upgradeProposal";
 import { ParticipantProposal } from "../../../../models/proposals/participantProposal";
@@ -14,40 +13,13 @@ class TheGraphAPIMapper extends GraphQLAPIMapper {
 
   // TODO(bill): This is invalid with the current data model and needs to be rewritten
   mapAssets(rawAssets) {
-    if (!rawAssets || rawAssets.length < 1) {
-      return []
-    }
-
-    return rawAssets
-      .map(rawAsset => {
-        const proposals = this.mapProposals(rawAsset.proposals)
-
-        var ownersMap = new Map()
-        rawAsset.owners
-          .forEach(ownership => { 
-            ownersMap.set(ownership.owner, ownership.shares)
-          })
-
-        // let marketOrders = this.mapMarketOrders(rawAsset.marketOrders)
-
-        return new Asset(
-          rawAsset.id,
-          rawAsset.mintedAsset.dataURI,
-          rawAsset.contract,
-          rawAsset.symbol,
-          rawAsset.numOfShares,
-          ownersMap,
-          [], // marketOrders
-          proposals
-        )
-      })
+    console.log(rawAssets)
   }
 
   // Map all proposal kinds
   mapProposals(rawProposals) {
-    if (!rawProposals || rawProposals.length < 1) {
-      return [];
-    }
+    console.log(rawProposals);
+    if (!rawProposals || rawProposals.length < 1) return [];
   
     const paperProposals = this.mapPaperProposals(rawProposals.paperProposals);
     const upgradeProposals = this.mapUpgradeProposals(rawProposals.upgradeProposals);
@@ -69,7 +41,7 @@ class TheGraphAPIMapper extends GraphQLAPIMapper {
       paperProposals = rawPaperProposals.map(({
         id,
         baseProposal: {
-          creator: creatorAddress,
+          creator,
           endTimestamp,
           info,
           startTimestamp,
@@ -80,7 +52,7 @@ class TheGraphAPIMapper extends GraphQLAPIMapper {
       }) => {
         return new PaperProposal({
           id,
-          creatorAddress,
+          creator,
           endTimestamp,
           startTimestamp,
           votes: this.mapVotes(votes),
@@ -109,7 +81,7 @@ class TheGraphAPIMapper extends GraphQLAPIMapper {
         instance,
         version,
         baseProposal: {
-          creator: creatorAddress,
+          creator,
           endTimestamp,
           info,
           startTimestamp,
@@ -124,7 +96,7 @@ class TheGraphAPIMapper extends GraphQLAPIMapper {
           code,
           data,
           instance,
-          creatorAddress,
+          creator,
           endTimestamp,
           startTimestamp,
           votes: this.mapVotes(votes),
@@ -151,7 +123,7 @@ class TheGraphAPIMapper extends GraphQLAPIMapper {
         participant,
         proposer,
         baseProposal: {
-          creator: creatorAddress,
+          creator,
           endTimestamp,
           info,
           startTimestamp,
@@ -162,7 +134,7 @@ class TheGraphAPIMapper extends GraphQLAPIMapper {
       }) => {
         return new ParticipantProposal({
           id,
-          creatorAddress,
+          creator,
           participant,
           proposer,
           endTimestamp,
@@ -193,7 +165,7 @@ class TheGraphAPIMapper extends GraphQLAPIMapper {
         target,
         token,
         baseProposal: {
-          creator: creatorAddress,
+          creator,
           endTimestamp,
           info,
           startTimestamp,
@@ -204,7 +176,7 @@ class TheGraphAPIMapper extends GraphQLAPIMapper {
       }) => {
         return new TokenActionProposal({
           id,
-          creatorAddress,
+          creator,
           amount,
           mint,
           price,
@@ -228,8 +200,23 @@ class TheGraphAPIMapper extends GraphQLAPIMapper {
 
   // Map raw vote array to array of vue-mc models 
   mapVotes(rawVotes) {
-    return rawVotes.map(rawVote => new Vote(rawVote)) || [];
+    console.log(rawVotes);
+    const votes = new Votes();
+    rawVotes.forEach(({
+      id,
+      voter,
+      voteDirection,
+      count,
+    }) => {
+      votes.add(new Vote({
+        id,
+        voter,
+        voteDirection,
+        count,
+      }))
+    });
+    return votes;
   }
 }
 
-export default TheGraphAPIMapper
+export default TheGraphAPIMapper;

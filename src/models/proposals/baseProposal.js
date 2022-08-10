@@ -13,7 +13,7 @@ export default class BaseProposal extends Model {
       frabric: [],
       creator: "",
       type: null,
-      state: [],
+      state: "",
       votes: [],
       info: "",
       supermajority: false,

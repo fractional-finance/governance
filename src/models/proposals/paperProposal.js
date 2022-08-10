@@ -1,8 +1,45 @@
 /* eslint-disable class-methods-use-this */
 import BaseProposal from "./baseProposal";
 
-export class PaperProposal extends BaseProposal {
+/**
+ * Paper Proposal model.
+*/
+
+export default class PaperProposal extends BaseProposal {
+  
   defaults() {
-    return {}
+    return {
+      id: null,
+      frabric: []
+    }
   }
+  // constructor(
+  //   id,
+  //   thread,
+  //   frabric,
+  //   creator,
+  //   type,
+  //   state,
+  //   votes,
+  //   supermajority,
+  //   startTimestamp,
+  //   endTimestamp,
+  //   title,
+  //   description
+  // ) {
+  //   super(
+  //     id,
+  //     thread,
+  //     frabric,
+  //     creator,
+  //     type,
+  //     state,
+  //     votes,
+  //     supermajority,
+  //     startTimestamp,
+  //     endTimestamp
+  //   );
+  //   this.title = title;
+  //   this.description = description;
+  // }
 }

@@ -1,19 +1,32 @@
-/* eslint-disable class-methods-use-this */
-import { Model } from "vue-mc";
+import BaseProposal from "./proposals/baseProposal";
+
 /**
  * Vote model.
- * @property {string} voterAddress Address of the voter
- * @property {VoteType} voteDirection Type of the vote posted
- * @property {number} count Voting power of the voter
  */
-export class Vote extends Model {
+
+export class Vote extends BaseProposal {
+
+  // Default attributes that define the "empty" state.
   defaults() {
     return {
+      id: null,
       voter: "",
-      voteDirection: null,
-      count: null,
+      voteDirection: [],
+      count: null
     }
   }
+
+  // constructor(
+  //   proposalID,
+  //   voterAddress,
+  //   type,
+  //   count
+  // ) {
+  //   this.proposalID = proposalID
+  //   this.voterAddress = voterAddress
+  //   this.type = type
+  //   this.count = count
+  // }
 }
 
 export const VoteType = {

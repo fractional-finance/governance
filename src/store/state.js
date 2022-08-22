@@ -5,10 +5,13 @@ import { bigIntMax, bigIntMin } from "../utils/common"
 import router from "../router/index"
 import { Vote } from "../models/vote"
 import { CommonProposalType, FrabricProposalType, ThreadProposalType } from "@/models/common.js"
+import { TOKEN_ADDRESS } from "../services/constants"
+import { ethers } from "ethers";
 
 const wallet = ServiceProvider.wallet()
 const market = ServiceProvider.market()
 const dao = ServiceProvider.dao()
+const token = ServiceProvider.token();
 
 function state() {
   return {
@@ -37,6 +40,10 @@ function state() {
 const getters = {
   userWalletAddress(state) {
     return state.user.wallet.address
+  },
+
+  userTokenBalance(state) {
+    return state.user.wallet.tokenBalance;
   },
 
   userEthBalance(state) {
@@ -112,7 +119,7 @@ const getters = {
     Array.from(state.platform.proposals.values())
       .flatMap(p => { return p })
       .forEach(p => { proposalsMap.set(p.id, p) })
-  
+
     return proposalsMap
   },
 
@@ -123,8 +130,13 @@ const getters = {
 
 const actions = {
   async syncWallet(context) {
-    const walletState = await wallet.getState()
-    context.commit("setWallet", walletState)
+    const walletState = await wallet.getState();
+    const tokenBalance = await token.getTokenBalance(
+      TOKEN_ADDRESS,
+      walletState.address,
+    );
+    context.commit("setWallet", walletState);
+    context.commit("setTokenBalance", ethers.utils.formatEther(tokenBalance.toString()));
   },
 
   // TODO (bill) This needs to be reimplemented
@@ -172,13 +184,13 @@ const actions = {
     SUGGESTION: GET THE ADDRESS FROM ID IN THE COMPONENT-SPECIFIC PROPOSAL
   */
   async createPaperProposal(context, props) {
-    let { assetAddr, proposalType, title, description} = props
-    console.log("assetAddr: ", assetAddr,props);
+    let { assetAddr, proposalType, title, description } = props
+    console.log("assetAddr: ", assetAddr, props);
     // params.$toast.show("Confirming transaction...", {
     //   duration: false
     // });
     // const x = await dao.vote("0", "0", "Yes");
-    
+
     const status = await dao.createPaperProposal(assetAddr, title, description);
 
     // params.$toast.clear();
@@ -194,11 +206,11 @@ const actions = {
   },
 
   async createParticipantProposal(context, props) {
-    let {assetId, participantType, participant, info} = props
-    
+    let { assetId, participantType, participant, info } = props
+
     console.log(props)
-    console.log('OBJ: \t', participantType, participant, info); 
-   
+    console.log('OBJ: \t', participantType, participant, info);
+
     console.log("STATE 1", " ", assetId);
     const status = await dao.createParticipantProposal(assetId, participantType, participant, info);
     console.log(status);
@@ -283,27 +295,27 @@ const actions = {
   },
 
   async vouchParticipant(context, props) {
-    let { assetAddr, participant} = props
-    console.log("assetAddr: ", assetAddr,props);
+    let { assetAddr, participant } = props
+    console.log("assetAddr: ", assetAddr, props);
     const status = await dao.vouch(
-      assetAddr, 
+      assetAddr,
       {
-            name: 'Frabric Protocol',
-            version: '2',
-            chainId: 4,
-          
+        name: 'Frabric Protocol',
+        version: '2',
+        chainId: 4,
+
       },
       participant)
-  // async vouch(params) {
-  //   console.log("PARAMS: ", params);
-  //   const domain = {
-  //     name: 'Frabric Protocol',
-  //     version: '1',
-  //     chainId: 4,
-  //   }
-  //   // const status = await this.dao.vouch(contractAddress, domain, "0x4C3D84E96EB3c7dEB30e136f5150f0D4b58C7bdB")
-  //   console.log("STATE: ", status);  
-  // },
+    // async vouch(params) {
+    //   console.log("PARAMS: ", params);
+    //   const domain = {
+    //     name: 'Frabric Protocol',
+    //     version: '1',
+    //     chainId: 4,
+    //   }
+    //   // const status = await this.dao.vouch(contractAddress, domain, "0x4C3D84E96EB3c7dEB30e136f5150f0D4b58C7bdB")
+    //   console.log("STATE: ", status);  
+    // },
   }
 }
 
@@ -326,6 +338,10 @@ const mutations = {
 
   setAlert(state, alert) {
     state.interface.alert = alert
+  },
+
+  setTokenBalance(state, balance) {
+    state.user.wallet.tokenBalance = balance;
   }
 }
 

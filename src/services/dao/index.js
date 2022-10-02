@@ -1,5 +1,11 @@
+import * as CommonUtils from "../../utils/common";
 import StorageNetwork from "../../data/network/storage/storageNetwork";
+import { Proposal } from "../../models/proposal";
+import { VoteType } from "../../models/vote";
 import {
+  GraphQLAPIClient,
+  ALL_ASSETS_QUERY,
+  PARTICIPANTS_PER_DAO,
   ALL_PROPOSALS,
   VOUCHES_PER_PARTICIPANT,
 } from "../../data/network/graph/graphQLAPIClient";

@@ -36,10 +36,10 @@ export default {
           id: "tokenProposal",
           name: "Token Action Proposal"
         },
-        // {
-        //   id: "threadProposal",
-        //   name: "Thread Proposal",
-        // }
+        {
+          id: "threadProposal",
+          name: "Thread Proposal",
+        }
       ],
     }
   },

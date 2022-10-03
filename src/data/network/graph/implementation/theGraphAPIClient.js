@@ -5,7 +5,8 @@ import {
 import { GraphQLAPIClient } from "../graphQLAPIClient"
 
 const client = new ApolloClient({
-  uri: "https://api.studio.thegraph.com/query/33141/weavr-test/v0.0.5",
+  
+  uri: process.env.VUE_APP_GRAPH_DEV,
   cache: new InMemoryCache()
 })
 
@@ -18,6 +19,7 @@ class TheGraphAPIClient extends GraphQLAPIClient {
   }
 
   async query(query, vars = {}, mappingCallback) {
+    console.log(this.client.link.options.uri == process.env.VUE_APP_GRAPH_DEV ? "DEV ENV" : "PROD ENV")
     return new Promise((resolve) => {
       this.client
         .query({

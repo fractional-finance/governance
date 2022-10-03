@@ -60,7 +60,7 @@
 import { mapGetters, mapActions } from "vuex";
 import { MintType } from "@/models/common.js";
 import {ethers} from "ethers";
-import { TOKEN_ADDRESS } from "../../services/constants";
+import { TOKEN_ADDRESS, DAO } from "../../services/constants";
 
 export default {
   name: "newTokenAction",
@@ -104,10 +104,11 @@ export default {
         amount: this.amount,
         title: this.title,
         description: this.description,
+        $toast: this.$toast
       });
     },
     onCancel() {
-      this.$router.push("/frabric");
+      this.$router.push("/".concat(DAO));
     }
   }
 }

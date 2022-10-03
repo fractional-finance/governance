@@ -20,6 +20,9 @@
 <script>
 import { mapActions } from "vuex";
 import { CommonProposalType } from "@/models/common.js"
+import { ethers } from 'ethers';
+import { DAO } from "../../services/constants"
+
 export default {
 
   name: "newPaperProposal",
@@ -41,20 +44,24 @@ export default {
     ...mapActions({
       refresh: "refreshProposalsDataForAsset",
       syncWallet: "syncWallet",
-      vouchParticipant: "vouchParticipant",
+      vouch: "vouchParticipant"
     }),
     async publish() {
-      // if (this.title.length < 1 || this.description.length < 1) {
-      //   return;
-      // }
-      
-      const assetAddr = this.assetId;
       
       const participant = this.participant;
-      await this.vouchParticipant({assetAddr, participant})
+      if(!ethers.utils.isAddress(participant)) {
+        this.$toast.error("Address not valid",
+           {
+            position: "top"
+          });
+        this.participant = "";
+        return
+      }
+      // await this.vouchParticipant({assetAddr, participant})
+      await this.vouch({participant: participant})
     },
     onCancel() {
-      this.$router.push("/frabric");
+      this.$router.push("/".concat(DAO));
     }
   },
   mounted() {

@@ -4,8 +4,8 @@
 @import "../../node_modules/bulma/sass/utilities/functions";
 
 
-// Add font family
 $family-sans-serif: "Poppins Sans", "sans";
+
 
 //####################################
 //#          FRABRIC THEME           #
@@ -29,6 +29,7 @@ $darkBlue-invert: findColorInvert($darkBlue);
 $mediumBlue-invert: findColorInvert($mediumBlue);
 $lightBlue-invert: findColorInvert($lightBlue);
 $darkGray-invert: findColorInvert($darkGray);
+$mediumDarkGray-invert: findColorInvert($mediumDarkGray);
 $mediumGray-invert: findColorInvert($mediumGray);
 $lightGray-invert: findColorInvert($lightGray);
 $magenta-invert: findColorInvert($magenta);
@@ -61,6 +62,13 @@ $card-radius: 0.50rem;
 $tiny-radius: 5px;
 $small-radius: 10px;
 
+
+$modal-content-width: min(100%, 1000px);
+
+body {
+  font-family: 'Open Sans', sans-serif;
+}
+
 input {
   border: $mediumBlue solid 1px !important;
 }
@@ -91,6 +99,7 @@ $addColors: (
   "lightBlue": ($lightBlue, $lightBlue-invert),
   "darkGray": ($darkGray, $darkGray-invert),
   "mediumGray": ($mediumGray, $mediumGray-invert),
+  "mediumDarkGray": ($mediumDarkGray, $mediumDarkGray-invert),
   "lightGray": ($lightGray, $lightGray-invert),
   "transprent": ($transparent, $transparent),
   "cyan": ($cyan, $cyan-invert),
@@ -137,3 +146,6 @@ $colors: map-merge($colors, $addColors);
   border-color: $mediumBlue  !important;
   border-radius: $tiny-radius;
 }
+
+
+@import "./markdown.scss";

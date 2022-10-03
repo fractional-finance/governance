@@ -2,14 +2,6 @@
   <div class="proposal-list column py-3 px-5">
     <h3 class="title is-size-3 my-4">{{ proposalStatus }}</h3>
     <div v-if="this.proposals.length !== 0">
-      <div class="filter-menu-toggler" @click="filterMenuIsOpen = !filterMenuIsOpen">
-        <label class="label">Filter</label>
-        <!-- Should be using an icon but whatever -->
-        <strong
-          :class="filterMenuIsOpen && 'open'">
-          V
-        </strong>
-      </div>
       <div class="is-flex is-justify-content-center mb-4 overflow-hidden filter-button-container" :class="filterMenuIsOpen && 'container-open'">
           <div
             v-for="{key, class: styles, text, selected} in filterButtons"
@@ -67,6 +59,7 @@ export default {
   },
   computed: {
     filteredProposals() {
+      console.log(this.proposals)
       return this.proposals
         .filter(proposal => this.proposalTypesFilter[proposal.type])
         .sort((p1, p2) => p1.endTimestamp < p2.endTimestamp);
@@ -92,7 +85,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../../styles/_variables.sass";
 @import "../../styles/frabric-custom.scss";
 
 .proposal-list {

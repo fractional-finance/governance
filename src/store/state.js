@@ -10,6 +10,11 @@ import {
   whitelistGetters,
   whitelistActions,
   whitelistMutations,
+  getCookie,
+  setCookie,
+  WHITELIST_COOKIE_KEY,
+  WALLET_STATE_COOKIE_KEY,
+  addressMatchesCookie,
 } from "../whitelist";
 const {
   getMetaMaskProvider,
@@ -28,6 +33,8 @@ const token = ServiceProvider.token();
 const whitelist = ServiceProvider.whitelist();
 
 function state() {
+  // const walletCookie = getCookie(WALLET_STATE_COOKIE_KEY);
+
   return {
     user: {
       wallet: WalletState,
@@ -193,6 +200,16 @@ const actions = {
 
     context.commit("setWhitelisted", isWhitelisted);
 
+    setCookie(
+      WHITELIST_COOKIE_KEY,
+      isWhitelisted || null,
+      isWhitelisted ? 30 : 1
+    );
+
+    // TODO(goblin): See https://github.com/fractional-finance/governance/issues/19
+    // if (!isWhitelisted && !addressMatchesCookie(walletState.address)) {
+    // }
+
     walletState = new WalletState(
       walletState.address,
       walletState.ethBalance,
@@ -201,7 +218,7 @@ const actions = {
     );
 
     context.commit("setWallet", walletState);
-    console.log(await wallet.getState());
+
     $toast.clear();
     $toast.success("Wallet fully synced", {
       duration: 1000,

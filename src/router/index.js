@@ -49,11 +49,11 @@ const router = new createRouter({
           component: Modal,
           props: { assetId: "", component: newPaperProposal },
         },
-        {
-          path: "participantProposal",
-          component: Modal,
-          props: { assetId: "", component: newParticipantProposal },
-        },
+        // {
+        //   path: "participantProposal",
+        //   component: Modal,
+        //   props: { assetId: "", component: newParticipantProposal },
+        // },
         {
           path: "upgradeProposal",
           component: Modal,
@@ -64,11 +64,11 @@ const router = new createRouter({
         //   component: Modal,
         //   props: { assetId: "", component: newTokenAction },
         // },
-        {
-          path: "vouch",
-          component: Modal,
-          props: { assetId: "", component: vouch },
-        },
+        // {
+        //   path: "vouch",
+        //   component: Modal,
+        //   props: { assetId: "", component: vouch },
+        // },
         // {
         //   path: "threadProposal",
         //   component: Modal,

@@ -47,10 +47,7 @@ const startBlock = 0; // TODO: Inject the actual contract deployment block inste
  */
 class AssetContract {
   constructor(ethereumClient, contractAddress) {
-    this.contract = ethereumClient.getContract(
-      contractAddress,
-      contractArtifact.abi
-    );
+    this.contract = ethereumClient.getContract(contractAddress, contractAbi);
     this.mutableContract = ethereumClient.getMutableContract(this.contract);
   }
 

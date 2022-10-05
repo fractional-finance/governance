@@ -32,10 +32,10 @@ export default {
           id: "upgradeProposal",
           name: "Upgrade Proposal",
         },
-        {
-          id: "threadProposal",
-          name: "Thread Proposal",
-        }
+        // {
+        //   id: "threadProposal",
+        //   name: "Thread Proposal",
+        // }
       ],
     }
   },

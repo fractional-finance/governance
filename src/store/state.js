@@ -466,7 +466,7 @@ const actions = {
     const domain = customDomain || {
       name: "Protocol",
       version: "1",
-      chainId: networks.arbitrum,
+      chainId: networks.goerli,
       verifyingContract: CONTRACTS.WEAVR,
     };
     const types = {

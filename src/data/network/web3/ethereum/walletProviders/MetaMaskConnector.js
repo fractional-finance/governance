@@ -1,8 +1,8 @@
 const { ethers } = require("ethers");
 
-export class CoinbaseConnector {
-  constructor(coinbaseWeb3Provider) {
-    this.provider = coinbaseWeb3Provider;
+export class MetaMaskConnector {
+  constructor(metaMaskProvider) {
+    this.provider = metaMaskProvider;
     // this.getCoinbaseEthereumAddress()
     // this.getChainId()
   }
@@ -58,4 +58,4 @@ export class CoinbaseConnector {
   };
 }
 
-export default CoinbaseConnector;
+export default MetaMaskConnector;

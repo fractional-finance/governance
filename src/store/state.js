@@ -5,7 +5,22 @@ import { params } from "stylus/lib/utils";
 import ServiceProvider from "../services/provider";
 import WalletState from "../models/walletState";
 import { CONTRACTS, DAO } from "../services/constants";
-const {getMetaMaskProvider, getCoinbaseWalletProvider, getBraveProvider} = require("../data/network/web3/ethereum/providers.js")
+import {
+  whitelistState,
+  whitelistGetters,
+  whitelistActions,
+  whitelistMutations,
+  getCookie,
+  setCookie,
+  WHITELIST_COOKIE_KEY,
+  WALLET_STATE_COOKIE_KEY,
+  addressMatchesCookie,
+} from "../whitelist";
+const {
+  getMetaMaskProvider,
+  getCoinbaseWalletProvider,
+  getBraveProvider,
+} = require("../data/network/web3/ethereum/providers.js");
 
 /**
  * TODO - Abstrucked -
@@ -15,8 +30,11 @@ const {getMetaMaskProvider, getCoinbaseWalletProvider, getBraveProvider} = requi
 const wallet = ServiceProvider.wallet();
 const dao = ServiceProvider.dao();
 const token = ServiceProvider.token();
+const whitelist = ServiceProvider.whitelist();
 
 function state() {
+  // const walletCookie = getCookie(WALLET_STATE_COOKIE_KEY);
+
   return {
     user: {
       wallet: WalletState,
@@ -31,6 +49,7 @@ function state() {
       alert: null,
       isLoading: false,
     },
+    ...whitelistState(),
   };
 }
 
@@ -125,6 +144,8 @@ const getters = {
   activeAlert(state) {
     return state.interface.alert;
   },
+
+  ...whitelistGetters,
 };
 
 const actions = {
@@ -139,43 +160,16 @@ const actions = {
   },
   async connectWallet(context, params) {
     console.log("into connectwallet: ", params.wallet);
-    let provider, walletState
-    
-    const symbol = await token.getTokenSymbol(CONTRACTS.FRBC);
-    const balance = await token.getTokenBalance(
-      CONTRACTS.FRBC,
-      walletState.address
-    );
-    Promise.all([symbol, balance]).then(
-      (res) => {
-        console.log(res)
-      }
-    )
-    walletState = new WalletState(
-    walletState.address,
-    walletState.ethBalance,
-    ethers.utils.formatEther(balance).toString(),
-    symbol
-    );
-    context.commit("setWallet", walletState);
-},
+    let provider, walletState;
 
-  async syncWallet(context, params) {
-    console.log("SYNC");
-    let { $toast} = params
-    // const toast = createToaster({});
-    let walletState = await wallet.getState(params.wallet);
     const symbol = await token.getTokenSymbol(CONTRACTS.FRBC);
     const balance = await token.getTokenBalance(
       CONTRACTS.FRBC,
       walletState.address
     );
-    Promise.all([walletState, symbol, balance]).then(
-      (val) => {
-        console.log(val);
-      }
-    )
-    
+    Promise.all([symbol, balance]).then((res) => {
+      console.log(res);
+    });
     walletState = new WalletState(
       walletState.address,
       walletState.ethBalance,
@@ -183,7 +177,48 @@ const actions = {
       symbol
     );
     context.commit("setWallet", walletState);
-    console.log(await wallet.getState());
+  },
+
+  async syncWallet(context, params) {
+    console.log("SYNC");
+    let { $toast } = params;
+    // const toast = createToaster({});
+    let walletState = await wallet.getState(params.wallet);
+    const symbol = await token.getTokenSymbol(CONTRACTS.FRBC);
+    const balance = await token.getTokenBalance(
+      CONTRACTS.FRBC,
+      walletState.address
+    );
+    Promise.all([walletState, symbol, balance]).then((val) => {
+      console.log(val);
+    });
+
+    const isWhitelisted = await whitelist.checkWhitelistedStatus(
+      CONTRACTS.WEAVR,
+      walletState.address
+    );
+
+    context.commit("setWhitelisted", isWhitelisted);
+
+    setCookie(
+      WHITELIST_COOKIE_KEY,
+      isWhitelisted || null,
+      isWhitelisted ? 30 : 1
+    );
+
+    // TODO(goblin): See https://github.com/fractional-finance/governance/issues/19
+    // if (!isWhitelisted && !addressMatchesCookie(walletState.address)) {
+    // }
+
+    walletState = new WalletState(
+      walletState.address,
+      walletState.ethBalance,
+      ethers.utils.formatEther(balance).toString(),
+      symbol
+    );
+
+    context.commit("setWallet", walletState);
+
     $toast.clear();
     $toast.success("Wallet fully synced", {
       duration: 1000,
@@ -431,7 +466,7 @@ const actions = {
     const domain = customDomain || {
       name: "Protocol",
       version: "1",
-      chainId: networks.arbitrum,
+      chainId: networks.goerli,
       verifyingContract: CONTRACTS.WEAVR,
     };
     const types = {
@@ -458,6 +493,8 @@ const actions = {
       console.log("Transaction failed. See details in MetaMask.");
     }
   },
+
+  ...whitelistActions(whitelist),
 };
 
 const mutations = {
@@ -494,9 +531,10 @@ const mutations = {
   },
 
   setWalletConnetected(state) {
-    if(state.user.wallet.connected != null)
-    !state.user.wallet.connected;
-  }
+    if (state.user.wallet.connected != null) !state.user.wallet.connected;
+  },
+
+  ...whitelistMutations,
 };
 
 export default {

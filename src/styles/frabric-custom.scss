@@ -3,9 +3,12 @@
 @import "../../node_modules/bulma/sass/utilities/initial-variables.sass";
 @import "../../node_modules/bulma/sass/utilities/functions";
 
-
+@font-face {
+  font-family: 'Poppins';
+  src: 'Poppins-Regular.woff2' format('woff2');
+}
 // Add font family
-$family-sans-serif: "Poppins Sans", "sans";
+$family-sans-serif: "Poppins", "sans";
 
 //####################################
 //#          FRABRIC THEME           #
@@ -102,7 +105,6 @@ $colors: map-merge($colors, $addColors);
 
 // Importing the rest of Bulma
 @import "../../node_modules/bulma/bulma.sass";
-
 
 // Explicit Bulma class overrides
 

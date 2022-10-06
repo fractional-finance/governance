@@ -23,6 +23,7 @@ export default {
 
 .modal-content {
   border-radius: $card-radius;
+  width: min(100%, 1400px) !important;
 }
 
 </style>

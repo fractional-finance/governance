@@ -137,3 +137,5 @@ $colors: map-merge($colors, $addColors);
   border-color: $mediumBlue  !important;
   border-radius: $tiny-radius;
 }
+
+@import "./markdown.scss";

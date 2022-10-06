@@ -81,7 +81,7 @@
 
     <label class="label">Description</label>
     <div class="description-container p-3">
-      <p class="has-text-white">{{ proposal.description }}</p>
+      <vue-markdown class="content markdown-body" :options="{html: true}"  :source="proposal.description" />
     </div>
     <label class="label">Consensus</label>
     <div class="votes-container">
@@ -164,6 +164,8 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import slider from "vue3-slider"
+import VueMarkdown from "vue-markdown-render";
+
 import {
   getProposalTypeStyling,
   padWithZeroes,
@@ -182,6 +184,7 @@ export default {
   components: {
     Address,
     slider,
+    VueMarkdown,
   },
   data () {
     return {
@@ -309,7 +312,11 @@ export default {
 
 <style lang="scss" scoped>
 @import "../../styles/frabric-custom.scss";
+@import "../../styles/markdown.scss";
 
+.container {
+  min-width: 80% !important;
+}
 .relative {
   position: relative;
 }
@@ -367,10 +374,16 @@ export default {
   color: #D841DE;
 }
 
-.description-container {
-  background: $mediumDarkGray;
-  border-radius: $tiny-radius;
+.thread {
+  border-color: yellow;
+  color: yellow;
+}
 
+.description-container {
+  background: transparent;
+  padding: 25px;
+  border-radius: $tiny-radius;
+  
   p {
     max-width: 56ch;
   }
@@ -420,10 +433,8 @@ export default {
 .loading-container {
   padding: 100px 0;
   gap: 50px;
-
   span {
-    font-size: 1.2rem;
-  }
+    font-size: 1.2rem; }
 }
 
 @keyframes fade {
@@ -437,4 +448,5 @@ export default {
   opacity: 0;
   animation: fade 2.5s ease-in-out infinite;
 }
+
 </style>

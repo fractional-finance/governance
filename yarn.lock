@@ -9992,7 +9992,7 @@ vue-loader@^15.9.2, vue-loader@^15.9.7:
 
 vue-markdown-render@^2.0.0:
   version "2.0.0"
-  resolved "https://registry.npmjs.org/vue-markdown-render/-/vue-markdown-render-2.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/vue-markdown-render/-/vue-markdown-render-2.0.0.tgz#67534073eb896d946174d10b5668ad2449de8282"
   integrity sha512-t11tT8PdOe43GGDq7LSJVzy6hVPw8JX2YI5IXKEakfTZnHxSw/8pHeLrihCHxn4KP3+Xz+pxeM5LxUNpHFjn8Q==
   dependencies:
     markdown-it "^12.3.0"

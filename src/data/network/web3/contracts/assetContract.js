@@ -24,6 +24,9 @@ const contractAbi = [
   // Vote on a proposal
   "function vote(uint256[] ids, int112[] votes)",
 
+  // Get ERC20 address of asset
+  "function erc20() view returns (address)",
+
   // Propose a thread dissolution
   "function proposeDissolution(string info, address purchaser, address token, uint256 purchaseAmount)",
 
@@ -232,6 +235,11 @@ class AssetContract {
     );
 
     return (await tx.wait()).status;
+  }
+
+  async erc20() {
+    const address = await this.contract.erc20();
+    return address;
   }
 }
 

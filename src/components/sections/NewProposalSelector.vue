@@ -32,6 +32,10 @@ export default {
           id: "upgradeProposal",
           name: "Upgrade Proposal",
         },
+        {
+          id: "tokenProposal",
+          name: "Token Action Proposal"
+        },
         // {
         //   id: "threadProposal",
         //   name: "Thread Proposal",

@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import router from "../router/index";
 import { ethers } from "ethers";
 import { createToaster } from "@meforma/vue-toaster";
@@ -344,7 +345,6 @@ const actions = {
     const toast = params.$toast || createToaster({});
 
     const {
-      tokenAddress,
       targetAddress,
       mint,
       price,
@@ -360,12 +360,16 @@ const actions = {
       position: "top",
     });
 
+    const tokenAddress = await dao.getTokenAddress(CONTRACTS.WEAVR);
+
+    const atomicAmount = ethers.utils.formatEther(amount);
+
     const status = await dao.createTokenActionProposal(
       tokenAddress,
       targetAddress,
       mint,
       price,
-      amount,
+      atomicAmount,
       title,
       description,
       tradeToken,

@@ -1,11 +1,5 @@
-import * as CommonUtils from "../../utils/common";
 import StorageNetwork from "../../data/network/storage/storageNetwork";
-import { Proposal } from "../../models/proposal";
-import { VoteType } from "../../models/vote";
 import {
-  GraphQLAPIClient,
-  ALL_ASSETS_QUERY,
-  PARTICIPANTS_PER_DAO,
   ALL_PROPOSALS,
   VOUCHES_PER_PARTICIPANT,
 } from "../../data/network/graph/graphQLAPIClient";
@@ -13,8 +7,6 @@ import EthereumClient from "../../data/network/web3/ethereum/ethereumClient";
 import { CONTRACTS } from "../constants";
 import AssetContract from "../../data/network/web3/contracts/assetContract";
 import { ethers } from "ethers";
-import { getBytes32FromIpfsHash } from "../../data/network/storage/ipfs/common";
-import { ProposalTypes } from "../../models/common";
 import { createToaster } from "@meforma/vue-toaster";
 // TODO: Should there be a single service instance per proposal?
 
@@ -342,6 +334,17 @@ class DAO {
     const assetContract = new AssetContract(this.ethereumClient, assetAddress);
     const status = await assetContract.vote(proposalId, votes);
     return status;
+  }
+
+  async getTokenAddress(frabricAddress) {
+    const assetContract = new AssetContract(
+      this.ethereumClient,
+      frabricAddress
+    );
+
+    const erc20Address = await assetContract.erc20();
+
+    return erc20Address;
   }
 }
 

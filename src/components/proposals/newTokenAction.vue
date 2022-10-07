@@ -3,13 +3,13 @@
     <div class="tag has-background-mediumBlue has-text-white  mb-5 is-medium">New Token Action Proposal</div>
     <!-- Token Action Form -->
     <div class="field">
-      <label class="label">Token Address</label>
+      <label class="label">Target Address</label>
       <div class="control">
-        <input class="input" v-model="tokenAddress" type="text" placeholder="New contract address">
+        <input class="input" v-model="targetAddress" type="text" placeholder="Token address">
       </div>
     </div>
-  
-    <div class="field">
+    <!-- <div class="field">
+      not enabled currently
       <label class="label">Minting Proposal?</label>
         <select class="select has-background-darkGray has-text-white px-3" v-model="mintType">
           <option 
@@ -18,7 +18,7 @@
             {{name}}
           </option>
         </select>
-    </div>
+    </div> -->
   
     <div class="field">
       <label class="label">Price</label>
@@ -60,13 +60,14 @@
 import { mapGetters, mapActions } from "vuex";
 import { MintType } from "@/models/common.js";
 import {ethers} from "ethers";
-import { TOKEN_ADDRESS, DAO } from "../../services/constants";
+import { CONTRACTS } from "../../services/constants";
 
 export default {
   name: "newTokenAction",
   data(){
     return {
-      tokenAddress: TOKEN_ADDRESS,
+      tokenAddress: CONTRACTS.TOKEN_ADDRESS,
+      targetAddress: "",
       price: 0,
       amount: 0,
       title: "",
@@ -97,9 +98,8 @@ export default {
         return;
       }
       await this.createTokenActionProposal({
-        tokenAddress: this.tokenAddress,
-        targetAddress: this.assetId,
-        mint: this.mintTypes[this.mintType],
+        targetAddress: this.targetAddress,
+        mint: false,
         price: this.price,
         amount: this.amount,
         title: this.title,
@@ -108,7 +108,7 @@ export default {
       });
     },
     onCancel() {
-      this.$router.push("/".concat(DAO));
+      this.$router.push("/".concat(CONTRACTS.DAO));
     }
   }
 }

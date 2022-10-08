@@ -244,7 +244,7 @@ const actions = {
   },
 
   async createPaperProposal(context, props) {
-    const { assetAddr, daoResolution, title, description } = props;
+    const { assetAddr, daoResolution, title, description, forumLink } = props;
     const toast = params.$toast || createToaster({});
 
     toast.clear();
@@ -254,7 +254,7 @@ const actions = {
     });
 
     const status = await dao
-      .createPaperProposal(assetAddr, title, description, daoResolution)
+      .createPaperProposal(assetAddr, title, description, forumLink, daoResolution)
       .then(() => {
         props.$toast.clear();
       });
@@ -305,6 +305,7 @@ const actions = {
       codeAddress,
       title,
       description,
+      forumLink,
       signer,
       governor,
     } = props;
@@ -320,6 +321,7 @@ const actions = {
       codeAddress,
       title,
       description,
+      forumLink,
       version,
       signer,
       governor
@@ -350,6 +352,7 @@ const actions = {
       amount,
       title,
       description,
+      forumLink,
     } = props;
 
     toast.show("Confirming transaction...", {
@@ -370,6 +373,7 @@ const actions = {
       atomicAmount,
       title,
       description,
+      forumLink,
     );
     router.push(DAO);
     toast.clear();
@@ -394,6 +398,7 @@ const actions = {
       descriptor,
       title,
       description,
+      forumLink,
       symbol,
       tradeToken,
       target,
@@ -405,6 +410,7 @@ const actions = {
       descriptor,
       title,
       description,
+      forumLink,
       symbol,
       tradeToken,
       target

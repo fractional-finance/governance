@@ -15,13 +15,16 @@
       <textarea class="textarea" v-model="description" @change="updateMarkdown" placeholder="Enter description here"></textarea>
       
       
-        <div class="button" @click="!preview">Preview</div>
-      
+        <!-- <div class="button" @click="!preview">Preview</div> -->
       
     </div>
     <!-- <div class="control markdown">
       <vue-markdown ref="markdownSource" v-show="preview" class="textarea" :source="description" placeholder="Enter description here"></vue-markdown>
     </div> -->
+  </div>
+  <div class="field">
+    <label class="label">Forum link</label>
+    <input v-model="forumLink" type="text" class="input" />
   </div>
   <div class="field">
     <label class="label">DAO resolution</label>
@@ -73,8 +76,8 @@ export default {
       daoResolution: false,
       proposalType: CommonProposalType.Paper,
       preview: false,
-      markdownSource: null
-
+      markdownSource: null,
+      forumLink: "",
     }
   },
   methods: {
@@ -98,7 +101,8 @@ export default {
       const description = this.description;
       const proposalType = this.proposalType
       const daoResolution = this.daoResolution
-      const proposal = await this.createPaperProposal({assetAddr, proposalType, title, description, daoResolution,  $toast: this.$toast} );
+      const forumLink = this.forumLink;
+      const proposal = await this.createPaperProposal({assetAddr, proposalType, title, description, forumLink, daoResolution,  $toast: this.$toast} );
       this.$emit("proposed");
     },
     onCancel() {

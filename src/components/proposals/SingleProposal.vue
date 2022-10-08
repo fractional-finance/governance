@@ -21,6 +21,7 @@
       {{ proposal.supermajority ? 'Supermajority consensus required' : 'Supermajority consensus not required' }}
     </strong>
   </p>
+  <a :href="proposal.forumLink" target="_blank" rel="noopener" class="button has-background-mediumBlue has-text-white mt-3">Forum link</a>
   <!-- Upgrade Proposal Information -->
   <div v-if="proposal.code">
     <label class="label">New Code Address</label>

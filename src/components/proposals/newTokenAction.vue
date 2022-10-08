@@ -47,7 +47,10 @@
         <textarea class="textarea" v-model="description" type="text" placeholder="Description"></textarea>
       </div>
     </div>
-  
+    <div class="field">
+      <label class="label">Forum link</label>
+      <input v-model="forumLink" type="text" class="input" />
+    </div>
     <div class="is-flex is-justify-content-space-between mt-5">
       <button @click="publish" class="button has-background-mint has-text-white has-text-weight-bold">Submit Proposal</button>
       <button @click="onCancel" class="button has-background-red has-text-white has-text-weight-bold">Cancel</button>
@@ -72,6 +75,7 @@ export default {
       amount: 0,
       title: "",
       description: "",
+      forumLink: "",
       mintType: "No",
       mintTypes: MintType,
     }
@@ -103,6 +107,7 @@ export default {
         amount: this.amount,
         title: this.title,
         description: this.description,
+        forumLink: this.forumLink,
         $toast: this.$toast
       });
     },

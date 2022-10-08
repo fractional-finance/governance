@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import * as CommonUtils from "../../utils/common";
 import StorageNetwork from "../../data/network/storage/storageNetwork";
 import { Proposal } from "../../models/proposal";
@@ -14,6 +15,7 @@ import { CONTRACTS } from "../constants";
 import AssetContract from "../../data/network/web3/contracts/assetContract";
 import { ethers } from "ethers";
 import { createToaster } from "@meforma/vue-toaster";
+import { getIpfsHashFromBytes32 } from "../../data/network/storage/ipfs/common";
 // TODO: Should there be a single service instance per proposal?
 
 /**
@@ -76,9 +78,9 @@ class DAO {
       );
       for (let i = 0; i < proposals.length; i++) {
         if (descriptorData[i] && descriptorData[i].value) {
-          proposals[i].title = descriptorData[i].value.descriptor || "Untitled";
+          proposals[i].descriptor = descriptorData[i].value.descriptor || "Could not load descriptor";
         } else {
-          proposals[i].descriptor = "No descriptor";
+          proposals[i].descriptor = "Could not load descriptor";
         }
       }
     } catch (e) {

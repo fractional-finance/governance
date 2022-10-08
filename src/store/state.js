@@ -345,14 +345,11 @@ const actions = {
     const toast = params.$toast || createToaster({});
 
     const {
-      targetAddress,
       mint,
       price,
       amount,
       title,
       description,
-      tradeToken,
-      target,
     } = props;
 
     toast.show("Confirming transaction...", {
@@ -361,8 +358,9 @@ const actions = {
     });
 
     const tokenAddress = await dao.getTokenAddress(CONTRACTS.WEAVR);
+    const targetAddress = CONTRACTS.WEAVR;
 
-    const atomicAmount = ethers.utils.formatEther(amount);
+    const atomicAmount = ethers.utils.parseEther(String(amount));
 
     const status = await dao.createTokenActionProposal(
       tokenAddress,
@@ -372,20 +370,14 @@ const actions = {
       atomicAmount,
       title,
       description,
-      tradeToken,
-      target
     );
-
+    router.push(DAO);
     toast.clear();
     if (status) {
       toast.success("Transaction confirmed...", {
         duration: 2000,
         position: "top",
       });
-      context.dispatch("refreshProposalsDataForAsset", {
-        assetId: params.assetId,
-      });
-      router.push("/" + DAO + "/" + params.assetId);
     } else {
       toast.error("Transaction failed. See details in MetaMask.");
       console.log("Transaction failed. See details in MetaMask.");
@@ -425,7 +417,7 @@ const actions = {
       context.dispatch("refreshProposalsDataForAsset", {
         assetId: params.assetId,
       });
-      router.push("/" + DAO + "/" + params.assetId);
+      router.push(`/${DAO}/${params.assetId}`);
     } else {
       toast.error("Transaction failed. See details in MetaMask.");
       console.log("Transaction failed. See details in MetaMask.");

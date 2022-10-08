@@ -4,7 +4,6 @@ import EthereumClient from "../ethereum/ethereumClient";
 import { ParticipantType } from "@/models/common";
 import { base58 } from "ethers/lib/utils";
 const contractArtifact = require("./abi/Frabric.json");
-console.log(contractArtifact);
 const contractAbi = [
   // Make a buy order
   "function buy(uint256 amount, uint256 price) payable",
@@ -122,7 +121,7 @@ class AssetContract {
 
   async proposeThread(variant, name, symbol, descriptorHash, data, infoHash) {
     console.log("Creating thread proposal...");
-    console.dir({
+    console.log({
       variant,
       name,
       symbol,
@@ -139,16 +138,20 @@ class AssetContract {
       infoHash
     );
 
+    // console.log(variant, ethers.BigNumber.from(0));
+    // console.log(name, "THREAD4");
+    // console.log(symbol, "SYMBL");
+    // console.log(descriptorHash, "0xb0c16bad9e73e9744fd75e73e344b895e718b61438d0c83ba8727b5442c8160f");
+    // console.log(data, "0x000000000000000000000000d87ba7a50b2e7e660f678a895e4b72e7cb4ccd9c00000000000000000000000000000000000000000000000000000000000003e8");
+    // console.log(infoHash, "0x5a3c1b7907feb4653b1ed39fde329e28db7b958d2e3bf92e48d448c9d1914900");
+
     // const tx = await this.mutableContract.proposeThread(
     //   ethers.BigNumber.from(0),
-    //   'THREAD4',
+    //   "THREAD4",
     //   "SYMBL",
     //   "0xb0c16bad9e73e9744fd75e73e344b895e718b61438d0c83ba8727b5442c8160f",
     //   "0x000000000000000000000000d87ba7a50b2e7e660f678a895e4b72e7cb4ccd9c00000000000000000000000000000000000000000000000000000000000003e8",
-    //   "0x5a3c1b7907feb4653b1ed39fde329e28db7b958d2e3bf92e48d448c9d1914900",
-    //   {
-    //     gasLimit: 4000000,
-    //   }
+    //   "0x5a3c1b7907feb4653b1ed39fde329e28db7b958d2e3bf92e48d448c9d1914900"
     // );
     const status = (await tx.wait()).status;
     return status;

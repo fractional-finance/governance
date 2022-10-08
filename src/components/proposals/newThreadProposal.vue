@@ -56,7 +56,7 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import {ethers} from "ethers";
-import { WEAVR_ADDRESS, DAO } from "../../services/constants";
+import { CONTRACTS, DAO } from "../../services/constants";
 
 export default {
 
@@ -68,8 +68,8 @@ export default {
       symbol: "",
       title: "",
       description: "",
-      tradeToken: "0xd87ba7a50b2e7e660f678a895e4b72e7cb4ccd9c",
-      target: "",
+      tradeToken: "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8", // Arb1 USDC
+      target: 0,
     }
   },
   props: {
@@ -91,26 +91,35 @@ export default {
     }),
     async publish() {
       if (!ethers.utils.isAddress(this.tradeToken)) {
+        this.$toast.warning("Invalid trade token address", {
+          duration: 2000,
+          position: "bottom",
+        });
         return;
       }
 
-      console.dir({
-        assetId: this.assetId,
-        name: this.name,
-        descriptor: this.descriptor,     
-        description: this.description,
-        symbol: this.symbol,
-        title: this.title,
-        tradeToken: this.tradeToken,
-        target: this.target,
-      })
+      if (this.name.length < 6 || this.name.length > 64 ) {
+        this.$toast.warning("Name must be between 6 and 64 characters", {
+          duration: 2000,
+          position: "bottom",
+        });
+        return;
+      }
+
+      if (this.symbol.length < 2 || this.symbol.length > 5 ) {
+        this.$toast.warning("Symbol must be between 2 and 5 characters", {
+          duration: 2000,
+          position: "bottom",
+        });
+        return;
+      }
 
       await this.createThreadProposal({
-        assetId: this.assetId || WEAVR_ADDRESS,
+        assetId: this.assetId || CONTRACTS.WEAVR,
         name: this.name,
         descriptor: this.descriptor,     
         description: this.description,
-        symbol: this.symbol,
+        symbol: String(this.symbol).toUpperCase(),
         title: this.title,
         tradeToken: this.tradeToken,
         target: this.target,

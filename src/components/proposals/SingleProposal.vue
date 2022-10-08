@@ -66,7 +66,7 @@
   </div>
   <div v-if="proposal.amount">
     <label class="label">Amount</label>
-    <p><strong>{{proposal.amount}}</strong></p>
+    <p><strong>{{formatEther(proposal.amount)}}</strong></p>
   </div>
   <!-- End Token Action Proposal -->
 
@@ -167,6 +167,7 @@ import { PASSED } from "../../models/common";
 import Address from "../views/address/Address.vue";
 import { DAO } from "../../services/constants"
 import VueMarkdown from "vue-markdown-render";
+import { ethers } from "ethers";
 
 export default {
   // (bill) TODO: Make this reload data if loaded directly
@@ -288,6 +289,9 @@ export default {
         votes: -this.voteAmount,
         $toast: this.$toast
       })
+    },
+    formatEther(amount) {
+      return ethers.utils.formatEther(amount);
     }
   },
   mounted() {

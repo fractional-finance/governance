@@ -69,11 +69,11 @@ const router = new createRouter({
         //   component: Modal,
         //   props: { assetId: "", component: vouch },
         // },
-        // {
-        //   path: "threadProposal",
-        //   component: Modal,
-        //   props: { assetId: "", component: newThreadProposal },
-        // },
+        {
+          path: "threadProposal",
+          component: Modal,
+          props: { assetId: "", component: newThreadProposal },
+        },
         {
           path: "proposal/:proposalId",
           component: Modal,

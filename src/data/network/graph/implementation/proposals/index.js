@@ -226,12 +226,12 @@ export function mapThreadProposals(rawThreadProposals) {
       const mappedVotes = mapVotes(votes);
       const infoPath = getIpfsHashFromBytes32(info);
       const descriptorPath = getIpfsHashFromBytes32(descriptor);
-      return new ThreadProposal(
+      const threadProposal = new ThreadProposal(
         parseInt(id, 16),
         null, // thread
         null, // frabric
         creator,
-        ProposalTypes.TokenAction,
+        ProposalTypes.Thread,
         state,
         mappedVotes,
         supermajority,
@@ -243,6 +243,8 @@ export function mapThreadProposals(rawThreadProposals) {
         symbol,
         descriptorPath,
       )
+      console.log(threadProposal);
+      return threadProposal;
     })
   } catch (e) {
     console.log("Issue parsing thread proposals");

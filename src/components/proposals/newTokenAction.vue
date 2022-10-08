@@ -2,12 +2,12 @@
   <div class="container p-5">
     <div class="tag has-background-mediumBlue has-text-white  mb-5 is-medium">New Token Action Proposal</div>
     <!-- Token Action Form -->
-    <div class="field">
+    <!-- <div class="field">
       <label class="label">Target Address</label>
       <div class="control">
         <input class="input" v-model="targetAddress" type="text" placeholder="Token address">
       </div>
-    </div>
+    </div> -->
     <!-- <div class="field">
       not enabled currently
       <label class="label">Minting Proposal?</label>
@@ -98,7 +98,6 @@ export default {
         return;
       }
       await this.createTokenActionProposal({
-        targetAddress: this.targetAddress,
         mint: false,
         price: this.price,
         amount: this.amount,

@@ -153,6 +153,8 @@ query ALL_PROPOSALS($id: String!) {
       symbol
       descriptor
       baseProposal {
+        startTimestamp
+        endTimestamp
         creator
         state
         votes {

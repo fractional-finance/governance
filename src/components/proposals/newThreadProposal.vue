@@ -45,9 +45,57 @@
         <textarea class="textarea" v-model="descriptor" type="text" placeholder="Descriptor"></textarea>
       </div>
     </div>
+    <div class="file">
+      <label class="file-label has-background-mediumBlue mt-3">
+        <input
+          class="file-input has-text-white has-background-mediumBlue"
+          type="file"
+          name="images"
+          v-on:change="onChangeImages"
+          multiple="multiple"
+          accept=".png,.jpg,.jpeg,.webp,.tiff,image/*">
+        <span class="file-cta has-text-white has-background-mediumBlue">
+          <span class="file-icon mt-1 mr-3">
+            <unicon name="camera" fill="white" />
+          </span>
+          <span class="file-label">
+            Choose images
+          </span>
+        </span>
+      </label>
+    </div>
+    <div class="files-container">
+      <div v-for="image in images" v-bind:key="image.name">
+        {{ image.name }}
+      </div>
+    </div>
+    <div class="file">
+      <label class="file-label has-background-mediumBlue mt-3">
+        <input
+          class="file-input has-text-white has-background-mediumBlue"
+          type="file"
+          name="images"
+          v-on:change="onChangeDocuments"
+          multiple="multiple"
+          accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+        <span class="file-cta has-text-white has-background-mediumBlue">
+          <span class="file-icon mt-1 mr-3">
+            <unicon name="file-plus-alt" fill="white" />
+          </span>
+          <span class="file-label">
+            Choose documents
+          </span>
+        </span>
+      </label>
+    </div>
+    <div class="files-container">
+      <p v-for="document in documents" v-bind:key="document.name">
+        {{ document.name }}
+      </p>
+    </div>
     <div class="field">
       <label class="label">Forum link</label>
-      <input v-model="forumLink" type="text" class="input" />
+      <input v-model="forumLink" type="text" class="input"/>
     </div>
     <div class="is-flex is-justify-content-space-between mt-5">
       <button @click="publish" class="button has-background-mint has-text-white has-text-weight-bold">Submit Proposal</button>
@@ -75,6 +123,8 @@ export default {
       tradeToken: "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8", // Arb1 USDC
       target: 0,
       forumLink: "",
+      images: null,
+      documents: null,
     }
   },
   props: {
@@ -129,8 +179,16 @@ export default {
         title: this.title,
         tradeToken: this.tradeToken,
         target: this.target,
+        images: this.images,
+        documents: this.documents,
         $toast: this.$toast
       });
+    },
+    onChangeImages({ target: { files } }) {
+      this.images = files;
+    },
+    onChangeDocuments({ target: { files } }) {
+      this.documents = files;
     },
     onCancel() {
       this.$router.push("/".concat(DAO));
@@ -140,4 +198,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../styles/_variables.sass";
+@import "../../styles/frabric-custom.scss";
+
+.files-container {
+  border-left: 4px solid $mediumBlue;
+  border-radius: 4px;
+  margin: 8px;
+  margin-top: 14px;
+  padding-left: 8px;
+}
+
+.file-input {
+  outline-color: transparent !important;
+}
 </style>

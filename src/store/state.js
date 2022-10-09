@@ -402,7 +402,14 @@ const actions = {
       symbol,
       tradeToken,
       target,
+      images,
+      documents,
     } = props;
+
+    toast.info("Uploading files to IPFS (this may take some time)", {
+      duration: 10000,
+      position: "bottom",
+    });
 
     const status = await dao.createThreadProposal(
       assetId,
@@ -413,7 +420,9 @@ const actions = {
       forumLink,
       symbol,
       tradeToken,
-      target
+      target,
+      images,
+      documents,
     );
     if (status) {
       toast.success("Transaction confirmed...", {

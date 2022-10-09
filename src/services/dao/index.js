@@ -114,14 +114,36 @@ class DAO {
     forumLink,
     symbol,
     tradeToken,
-    target
+    target,
+    images,
+    documents,
   ) {
     const assetContract = new AssetContract(this.ethereumClient, assetId);
 
+    let imagesHashes;
+    try {
+      imagesHashes = await Promise.all(Array.from(images).map(
+        async (image) => (await this.storageNetwork.addArbitraryFile(image))
+      ));
+    } catch(e) {
+      console.log("Error uploading images");
+    }
+
+    let documentHashes;
+    try {
+      documentHashes = await Promise.all(Array.from(documents).map(
+        async (document) => (await this.storageNetwork.addArbitraryFile(document))
+      ));
+    } catch(e) {
+      console.log("Error uploading documents");
+    }
+  
     const infoHash = await this.storageNetwork.uploadAndGetPathAsBytes({
       title,
       description,
       forumLink,
+      imagesHashes,
+      documentHashes,
     });
 
     const descriptorHash = await this.storageNetwork.uploadAndGetPathAsBytes(

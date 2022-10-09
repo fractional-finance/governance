@@ -22,7 +22,6 @@ class IPFSStorageNetwork extends StorageNetwork {
 
   async addFile(file) {
     let jsonString = JSON.stringify(file, null, 2);
-    console.log("JSON: ", jsonString);
     const test = await this.ipfsAPIClient.add(jsonString, { pin: true });
     return test;
   }
@@ -30,6 +29,11 @@ class IPFSStorageNetwork extends StorageNetwork {
   async addImage(imageFile) {
     const image = await this.ipfsAPIClient.add(imageFile, { pin: true });
     return image;
+  }
+
+  async addArbitraryFile(file) {
+    const { path } = await this.ipfsAPIClient.add(file, { pin: true });
+    return path;
   }
 
   getFile = (name) =>

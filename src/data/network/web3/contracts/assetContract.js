@@ -151,9 +151,10 @@ class AssetContract {
   /**
    * Vouch a participant
    */
-  async vouch(participant, signature) {
+  async vouch(data) {
+    let { participant, signature } = data;
     // const bytesSignature = ethers.utils.id(signature);
-    console.log("ASSETCONTRACT: ", participant, signature);
+    console.log("ASSETCONTRACT: ", signature);
     let tx = this.mutableContract.vouch(participant, signature);
     // this.mutableContract.signer
 

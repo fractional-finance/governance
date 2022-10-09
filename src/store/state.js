@@ -459,26 +459,36 @@ const actions = {
   async vouchParticipant(context, props) {
     const toast = params.$toast || createToaster({});
     const { customDomain, participant } = props;
+    
     const networks = {
       goerli: 5,
       arbitrum: 42161,
+      arb_goerli: 421613
     };
-    const domain = customDomain || {
-      name: "Protocol",
-      version: "1",
-      chainId: networks.goerli,
-      verifyingContract: CONTRACTS.WEAVR,
+    const domain = {
+      name: "Weavr Protocol",
+        version: "1",
+        chainId: 42161,
+        verifyingContract: "0x43240c0f5dedb375afd28206e02110e8fed8cFc0"
     };
     const types = {
       Vouch: [{ type: "address", name: "participant" }],
     };
     const data = { participant: participant };
     toast.info("Waiting for signature..", { position: "top" });
-    const signature = await wallet.getSignature(domain, types, data);
-    Promise.all([signature]).then(() => {
-      console.log(signature[0]);
-    });
-    const status = await dao.vouch(participant, signature[0]);
+    const signatures = await wallet.getSignature(domain, types, data);
+    Promise.all([signatures])
+    //.then(() => {
+    //   // console.log(signature[0]);
+    //   const expectedSignerAddress = context.state.user.wallet.address;
+    //   const recoveredAddress = ethers.utils.verifyTypedData(domain, types, data, signature[0]);
+    //   console.log("Signer Address CHECK______\n", recoveredAddress, "\n", expectedSignerAddress);
+    //   console.log(recoveredAddress.toLowerCase() === expectedSignerAddress.toLowerCase());
+    // });
+    console.log(signatures[0])
+    const signature = signatures[0]
+    console.log(signature);
+    const status = await dao.vouch(participant, signature);
     if (status) {
       toast.success("Transaction confirmed...", {
         duration: 2000,

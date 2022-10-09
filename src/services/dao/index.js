@@ -321,14 +321,14 @@ class DAO {
     return status;
   }
 
-  async vouch(participant, data) {
+  async vouch(participant, signature) {
     const assetContract = new AssetContract(
       this.ethereumClient,
       CONTRACTS.WEAVR
     );
-
-    const status = await assetContract.vouch(participant, data);
-
+    console.log("DAO__", signature)
+    const status = await assetContract.vouch({participant, signature});
+    console.log(signature)
     return status;
   }
   /**

@@ -40,6 +40,7 @@ class Wallet {
     }
   }
   async getSignature (domain, types, data) {
+    console.log({domain, types, data})
     const signature = await this.client.getSignature(domain, types, data);
     const sig = Promise.all([signature]);
     return sig;

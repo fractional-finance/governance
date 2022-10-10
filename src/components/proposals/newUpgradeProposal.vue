@@ -26,6 +26,18 @@
         <input class="input" v-model="version" type="number" placeholder="0x...">
       </div>
     </div>
+    <!-- <div class="field">
+      <label class="label">Governor</label>
+      <div class="control">
+        <input class="input" v-model="title" type="text" placeholder="Title">
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Verifier</label>
+      <div class="control">
+        <input class="input" v-model="title" type="text" placeholder="Title">
+      </div>
+    </div> -->
     <div class="field">
       <label class="label">Proposal Title</label>
       <div class="control">

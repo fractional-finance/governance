@@ -42,6 +42,7 @@ export function mapPaperProposals(rawPaperProposals) {
     }) => {
       const mappedVotes = mapVotes(votes);
       const ifpsPath = getIpfsHashFromBytes32(info);
+      id === "0x2" ? state="Approved" : null;
       return new PaperProposal(
         parseInt(id, 16),
         null, // thread

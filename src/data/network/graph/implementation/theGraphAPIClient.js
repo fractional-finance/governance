@@ -6,7 +6,7 @@ import { GraphQLAPIClient } from "../graphQLAPIClient"
 
 const client = new ApolloClient({
   uri: process.env.VUE_APP_GRAPH_PROD,
-  // uri: "https://api.thegraph.com/subgraphs/name/0xnshuman/frabric-goerli"7,
+  // uri: "https://api.thegraph.com/subgraphs/name/0xnshuman/frabric-goerli",
   cache: new InMemoryCache()
 })
 

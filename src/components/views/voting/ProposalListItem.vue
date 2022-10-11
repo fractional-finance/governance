@@ -193,6 +193,11 @@ export default {
   color: #D841DE;
 }
 
+.thread {
+  border-color: yellow;
+  color: yellow;
+}
+
 .outcome-box {
   color: white;
   font-weight: 600;
@@ -211,9 +216,6 @@ export default {
   text-overflow: ellipsis;
 }
 
-
-
-
 .markdown-body {
   background: transparent;
   max-height: 15ch;
@@ -221,7 +223,6 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
 
 	@media (max-width: 767px) {
 		.markdown-body {

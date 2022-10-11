@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import * as CommonUtils from "../../utils/common";
 import StorageNetwork from "../../data/network/storage/storageNetwork";
 import { Proposal } from "../../models/proposal";
@@ -13,9 +14,8 @@ import EthereumClient from "../../data/network/web3/ethereum/ethereumClient";
 import { CONTRACTS } from "../constants";
 import AssetContract from "../../data/network/web3/contracts/assetContract";
 import { ethers } from "ethers";
-import { getBytes32FromIpfsHash } from "../../data/network/storage/ipfs/common";
-import { ProposalTypes } from "../../models/common";
 import { createToaster } from "@meforma/vue-toaster";
+import { getIpfsHashFromBytes32 } from "../../data/network/storage/ipfs/common";
 // TODO: Should there be a single service instance per proposal?
 
 /**
@@ -61,15 +61,17 @@ class DAO {
             offChainData[i].value.description || "No description";
           proposals[i].daoResolution =
             offChainData[i].value.daoResolution || false;
+          proposals[i].forumLink = offChainData[i].value.forumLink || "https://forum.weavr.org";
         } else {
           proposals[i].title = "Untitled";
           proposals[i].description = "No description";
           proposals[i].daoResolution = false;
+          proposals[i].forumLink = offChainData[i].forumLink || "https://forum.weavr.org";
         }
       }
       toast.clear();
     } catch (e) {
-      console.log(e);
+      // No-op
     }
 
     try {
@@ -78,15 +80,15 @@ class DAO {
       );
       for (let i = 0; i < proposals.length; i++) {
         if (descriptorData[i] && descriptorData[i].value) {
-          proposals[i].title = descriptorData[i].value.descriptor || "Untitled";
+          proposals[i].descriptor = descriptorData[i].value.descriptor || "Could not load descriptor";
         } else {
-          proposals[i].descriptor = "No descriptor";
+          proposals[i].descriptor = "Could not load descriptor";
         }
       }
     } catch (e) {
-      console.log(e);
+      // No-op
     }
-
+    console.log(proposals.filter(proposal => proposal.id === 64));
     return proposals;
   }
 
@@ -109,33 +111,44 @@ class DAO {
     descriptor,
     title,
     description,
+    forumLink,
     symbol,
     tradeToken,
-    target
+    target,
+    images,
+    documents,
   ) {
     const assetContract = new AssetContract(this.ethereumClient, assetId);
 
+    let imagesHashes;
+    try {
+      imagesHashes = await Promise.all(Array.from(images).map(
+        async (image) => (await this.storageNetwork.addArbitraryFile(image))
+      ));
+    } catch(e) {
+      console.log("Error uploading images");
+    }
+
+    let documentHashes;
+    try {
+      documentHashes = await Promise.all(Array.from(documents).map(
+        async (document) => (await this.storageNetwork.addArbitraryFile(document))
+      ));
+    } catch(e) {
+      console.log("Error uploading documents");
+    }
+  
     const infoHash = await this.storageNetwork.uploadAndGetPathAsBytes({
       title,
       description,
+      forumLink,
+      imagesHashes,
+      documentHashes,
     });
 
     const descriptorHash = await this.storageNetwork.uploadAndGetPathAsBytes(
       descriptor
     );
-
-    console.dir({
-      assetId,
-      name,
-      descriptor,
-      title,
-      description,
-      symbol,
-      tradeToken,
-      target,
-    });
-
-    console.log(tradeToken, target);
 
     const data = new ethers.utils.AbiCoder().encode(
       ["address", "uint112"],
@@ -162,12 +175,13 @@ class DAO {
    * @param {string} description Proposal body
    * @returns {Boolean} Transaction status (true — mined; false - reverted)
    */
-  async createPaperProposal(asset, title, description, daoResolution) {
+  async createPaperProposal(asset, title, description, forumLink, daoResolution) {
     const assetContract = new AssetContract(this.ethereumClient, asset);
 
     const infoHash = await this.storageNetwork.uploadAndGetPathAsBytes({
       title,
       description,
+      forumLink,
       daoResolution,
     });
     if (!infoHash) return;
@@ -224,6 +238,7 @@ class DAO {
     codeAddress,
     title,
     description,
+    forumLink,
     version,
     signer,
     governor
@@ -246,6 +261,7 @@ class DAO {
         codeAddress,
         title,
         description,
+        forumLink,
         version,
         signer,
         governor,
@@ -269,8 +285,9 @@ class DAO {
       );
 
       const ipfsPathBytes = await this.storageNetwork.uploadAndGetPathAsBytes({
-        title: title,
-        description: description,
+        title,
+        description,
+        forumLink,
       });
 
       const status = await assetContract
@@ -294,19 +311,22 @@ class DAO {
   }
 
   async createTokenActionProposal(
+    assetId,
     tokenAddress,
     targetAddress,
     mint,
     price,
     amount,
     title,
-    description
+    description,
+    forumLink,
   ) {
-    const assetContract = new AssetContract(this.ethereumClient, targetAddress);
+    const assetContract = new AssetContract(this.ethereumClient, assetId);
 
     const ipfsPathBytes = await this.storageNetwork.uploadAndGetPathAsBytes({
       title,
       description,
+      forumLink,
     });
 
     const status = await assetContract.proposeTokenAction(
@@ -342,6 +362,17 @@ class DAO {
     const assetContract = new AssetContract(this.ethereumClient, assetAddress);
     const status = await assetContract.vote(proposalId, votes);
     return status;
+  }
+
+  async getTokenAddress(frabricAddress) {
+    const assetContract = new AssetContract(
+      this.ethereumClient,
+      frabricAddress
+    );
+
+    const erc20Address = await assetContract.erc20();
+
+    return erc20Address;
   }
 }
 

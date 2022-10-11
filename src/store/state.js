@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import router from "../router/index";
 import { ethers } from "ethers";
 import { createToaster } from "@meforma/vue-toaster";
@@ -243,7 +244,7 @@ const actions = {
   },
 
   async createPaperProposal(context, props) {
-    const { assetAddr, daoResolution, title, description } = props;
+    const { assetAddr, daoResolution, title, description, forumLink } = props;
     const toast = params.$toast || createToaster({});
 
     toast.clear();
@@ -253,7 +254,7 @@ const actions = {
     });
 
     const status = await dao
-      .createPaperProposal(assetAddr, title, description, daoResolution)
+      .createPaperProposal(assetAddr, title, description, forumLink, daoResolution)
       .then(() => {
         props.$toast.clear();
       });
@@ -304,6 +305,7 @@ const actions = {
       codeAddress,
       title,
       description,
+      forumLink,
       signer,
       governor,
     } = props;
@@ -319,6 +321,7 @@ const actions = {
       codeAddress,
       title,
       description,
+      forumLink,
       version,
       signer,
       governor
@@ -343,16 +346,17 @@ const actions = {
   async createTokenActionProposal(context, props) {
     const toast = params.$toast || createToaster({});
 
+    console.log("Calling!");
+
     const {
-      tokenAddress,
-      targetAddress,
+      assetId,
       mint,
+      target,
       price,
       amount,
       title,
       description,
-      tradeToken,
-      target,
+      forumLink,
     } = props;
 
     toast.show("Confirming transaction...", {
@@ -360,28 +364,28 @@ const actions = {
       position: "top",
     });
 
+    const tokenAddress = await dao.getTokenAddress(CONTRACTS.WEAVR);
+
+    const atomicAmount = ethers.utils.parseEther(String(amount));
+
     const status = await dao.createTokenActionProposal(
+      assetId,
       tokenAddress,
-      targetAddress,
+      target,
       mint,
       price,
-      amount,
+      atomicAmount,
       title,
       description,
-      tradeToken,
-      target
+      forumLink,
     );
-
+    router.push(DAO);
     toast.clear();
     if (status) {
       toast.success("Transaction confirmed...", {
         duration: 2000,
         position: "top",
       });
-      context.dispatch("refreshProposalsDataForAsset", {
-        assetId: params.assetId,
-      });
-      router.push("/" + DAO + "/" + params.assetId);
     } else {
       toast.error("Transaction failed. See details in MetaMask.");
       console.log("Transaction failed. See details in MetaMask.");
@@ -398,10 +402,18 @@ const actions = {
       descriptor,
       title,
       description,
+      forumLink,
       symbol,
       tradeToken,
       target,
+      images,
+      documents,
     } = props;
+
+    toast.info("Uploading files to IPFS (this may take some time)", {
+      duration: 10000,
+      position: "bottom",
+    });
 
     const status = await dao.createThreadProposal(
       assetId,
@@ -409,9 +421,12 @@ const actions = {
       descriptor,
       title,
       description,
+      forumLink,
       symbol,
       tradeToken,
-      target
+      target,
+      images,
+      documents,
     );
     if (status) {
       toast.success("Transaction confirmed...", {
@@ -421,7 +436,7 @@ const actions = {
       context.dispatch("refreshProposalsDataForAsset", {
         assetId: params.assetId,
       });
-      router.push("/" + DAO + "/" + params.assetId);
+      router.push(`/${DAO}/${params.assetId}`);
     } else {
       toast.error("Transaction failed. See details in MetaMask.");
       console.log("Transaction failed. See details in MetaMask.");

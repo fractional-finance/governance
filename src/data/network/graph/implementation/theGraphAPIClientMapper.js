@@ -1,11 +1,14 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable max-lines-per-function */
+
 import GraphQLAPIMapper from "../graphQLAPIMapper"
 import {
   mapPaperProposals,
   mapUpgradeProposals,
   mapParticipantProposals,
   mapTokenActionProposals,
+  mapThreadProposals,
+  mapVouchers
 } from "./proposals";
 
 class TheGraphAPIMapper extends GraphQLAPIMapper {
@@ -15,9 +18,17 @@ class TheGraphAPIMapper extends GraphQLAPIMapper {
     console.log(rawAssets)
   }
 
+  mapVouchers(rawVouchers) {
+    console.log(rawVouchers);
+    if (!rawVouchers || !rawVouchers.length < 1) return [];
+
+    return  rawVouchers.length
+  }
+
   // Map all proposal types to a single array to be written to global state
   mapProposals(rawProposals) {
-    console.log(rawProposals)
+    console.log("RAW")
+    console.log(rawProposals);
     if (!rawProposals || rawProposals.length < 1) return [];
 
     return [
@@ -25,6 +36,7 @@ class TheGraphAPIMapper extends GraphQLAPIMapper {
       ...mapUpgradeProposals(rawProposals.upgradeProposals),
       ...mapParticipantProposals(rawProposals.participantProposals),
       ...mapTokenActionProposals(rawProposals.tokenActionProposals),
+      ...mapThreadProposals(rawProposals.threadProposals),
     ];
   }
 }

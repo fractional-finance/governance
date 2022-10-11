@@ -9,7 +9,7 @@
         :assetId="assetId"
         :proposalStatus="`Active Proposals`"/>
       <ProposalList
-        :proposals="pastProposals"
+        :proposals="pastProposals.concat(cancelledProposals)"
         :assetId="assetId"
         :proposalStatus="`Past Proposals`"/>
     </div>
@@ -112,7 +112,7 @@ export default {
       return this.assetProposalMap.filter((proposal) => {
         const endTime = new Date(proposal.endTimestamp * 1000);
         const currentTime = new Date();
-        return currentTime < endTime;
+        return (currentTime < endTime) && proposal.state != "Cancelled";
       });
     },
 
@@ -120,9 +120,16 @@ export default {
       return this.assetProposalMap.filter((proposal) => {
         const endTime = new Date(proposal.endTimestamp * 1000);
         const currentTime = new Date();
-        return currentTime > endTime;
+        return (currentTime > endTime );
       });
-    },  
+    },
+    cancelledProposals() {
+      return this.assetProposalMap.filter((proposal) => {
+        console.log(proposal.state)
+        return proposal.state == "Cancelled";
+      });
+      
+    }  
   },
 
   methods: {
@@ -202,8 +209,8 @@ export default {
   },
 
   mounted() {
-    this.refresh({ assetId: this.assetId });
-    this.syncWallet();
+    this.refresh({ assetId: this.assetId, $toast: this.$toast });
+    // this.syncWallet();
   },
 };
 </script>

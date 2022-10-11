@@ -2,36 +2,39 @@ import gql from "graphql-tag";
 
 export const THREAD_PROPOSAL_QUERY = gql`
   query ThreadProposals {
-    threadProposals {
-        id
-        governor
-        name
-        symbol
-        descriptor
-        data
-        baseProposal {
-          id
-          thread {
-            id
-          }
-          frabric {
-            id
-          }
-          creator
-          type
-          state
-          votes {
-            id
-            voter
-            voteDirection
-            count
-          }
-          info
+		threadProposals{
+			id
+      governor
+      name
+      symbol
+      descriptor
+      baseProposal {
+        creator
+        state
+        votes {
+					voter
+          voteDirection
+          count
         }
+        supermajority
+        info
       }
+    }
   }
 `;
 
+export const VOUCHES_PER_PARTICIPANT = gql`
+  query Frabric($id: String!, $signer: String!) {
+    frabric(id: $id) {
+      id
+      voucher(signer: $signer) {
+        id
+        signer
+        participant
+      }
+    }
+}
+`
 export const ALL_ASSETS_QUERY = gql`
   query Frabric
   {
@@ -141,6 +144,26 @@ query ALL_PROPOSALS($id: String!) {
           voteDirection
           voter
         }
+      }
+    }
+    threadProposals(orderBy: id, orderDirection: desc) {
+			id
+      governor
+      name
+      symbol
+      descriptor
+      baseProposal {
+        startTimestamp
+        endTimestamp
+        creator
+        state
+        votes {
+					voter
+          voteDirection
+          count
+        }
+        supermajority
+        info
       }
     }
   }

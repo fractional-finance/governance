@@ -11,19 +11,17 @@
   <h2 class="is-size-5 has-text-mediumBlue">
     {{ this.startDate }}
   </h2>
+  <h3 :class="[proposal.state=='Cancelled' || proposal.state=='Failed' ? 'has-text-red' : 'has-text-success', 'p-2',]">{{proposal.state}}</h3>
   <h1 class="title has-text-white mb-5">{{ proposal.title }}</h1>
   <label class="label">Creator</label>
   <Address :value="proposal.creator" />
-  <p
-    class="mt-2"
-    :class="proposal.supermajority ? 'has-text-red' : 'has-text-mint'">
-    {{ proposal.supermajority ? 'Supermajority consensus required' : 'Supermajority consensus not required'
-  }}</p>
-  <div v-if="proposal.version">
-    <label class="label">Proposed Version</label>
-    <p><strong>{{proposal.version}}</strong></p>
-  </div>
-
+  <p class="mt-2">
+    <strong
+      :class="proposal.supermajority ? 'has-text-red' : 'has-text-mint'">
+      {{ proposal.supermajority ? 'Supermajority consensus required' : 'Supermajority consensus not required' }}
+    </strong>
+  </p>
+  <a :href="proposal.forumLink" target="_blank" rel="noopener" class="button has-background-mediumBlue has-text-white mt-3">Forum link</a>
   <!-- Upgrade Proposal Information -->
   <div v-if="proposal.code">
     <label class="label">New Code Address</label>
@@ -32,11 +30,6 @@
   <div v-if="proposal.instance">
     <label class="label">Instance Address</label>
     <Address :value="proposal.instance" />
-    <p
-      v-if="proposal.instance === '0x0000000000000000000000000000000000000000'"
-      class="has-text-red">
-      <strong class="has-text-red">Warning: </strong> Accepting this proposal will break the ability to upgrade this contract in the future. (Implementation address should be the current contract implementation)
-    </p>
   </div>
   <div v-if="proposal.version">
     <label class="label">Proposed Version</label>
@@ -64,9 +57,9 @@
       <label class="label">Target Address</label>
       <Address :value="proposal.target" />
     </div>
-    <div v-if="proposal.mint">
-    <label class="label">Mint</label>
-    <p><strong>{{proposal.mint}}</strong></p>
+    <div v-if="proposal.mint !== undefined">
+    <label class="label">Mint?</label>
+    <p>{{proposal.mint ? 'Yes': 'No'}}</p>
   </div>
   <div v-if="proposal.price">
     <label class="label">Price</label>
@@ -74,13 +67,23 @@
   </div>
   <div v-if="proposal.amount">
     <label class="label">Amount</label>
-    <p><strong>{{proposal.amount}}</strong></p>
+    <p><strong>{{formatEther(proposal.amount)}}</strong></p>
   </div>
   <!-- End Token Action Proposal -->
 
   <label class="label">Description</label>
   <div class="description-container p-3">
-    <p class="has-text-white">{{ proposal.description }}</p>
+    <vue-markdown class="content markdown-body" :options="{html: true}"  :source="proposal.description" />
+  </div>
+  <label class="label">DAO Resolution</label>
+  <div  :class="['p-3'].concat(proposal.daoResolution ? ['has-text-warning'] : ['has-text-success'])">
+  <div> 
+    {{ 
+      proposal.daoResolution==true 
+        ? "This proposal will influence the DAO" 
+        : "This proposal will not influence the DAO" 
+      }}
+    </div>
   </div>
   <label class="label">Consensus</label>
   <div class="votes-container">
@@ -134,9 +137,9 @@
             <button @click="voteAmount = Number(balance)" class="button">100%</button>
           </div>
       </div>
-      <div class="is-flex is-justify-content-space-between is-align-items-center mt-5">
-        <button @click="submitYesVote" :disabled="!address" class="button has-text-white has-background-mint has-text-weight-semibold">VOTE FOR</button>
-        <button @click="submitNoVote" :disabled="!address" class="button has-text-white has-background-red has-text-weight-semibold">VOTE AGAINST</button>
+      <div class="is-flex is-justify-content-space-between is-align-items-center mt-5" v-if="!cancelled || !ended">
+        <button @click="submitYesVote" :disabled="!address" class="button has-text-white has-background-mint has-text-weight-semibold">VOTE FOR </button>
+        <button @click="submitNoVote" :disabled="!address"  class="button has-text-white has-background-red has-text-weight-semibold">VOTE AGAINST</button>
       </div>
       <div class="mt-5">
         <p>Voting ends on <strong>{{ endDateString }}</strong></p> 
@@ -163,6 +166,9 @@ import {
 } from "../../data/helpers";
 import { PASSED } from "../../models/common";
 import Address from "../views/address/Address.vue";
+import { DAO } from "../../services/constants"
+import VueMarkdown from "vue-markdown-render";
+import { ethers } from "ethers";
 
 export default {
   // (bill) TODO: Make this reload data if loaded directly
@@ -171,6 +177,7 @@ export default {
   components: {
     Address,
     slider,
+    VueMarkdown
   },
   data () {
     return {
@@ -208,6 +215,9 @@ export default {
     passed() {
       return getResult(this.proposal);
     },
+    cancelled() {
+      return this.proposal.state === "Cancelled"
+    },
     startDate() {
       const startDate = new Date(this.proposal.startTimestamp * 1000);
       return `${padWithZeroes(startDate.getDate())}/${padWithZeroes(startDate.getMonth() + 1)}`;
@@ -222,19 +232,25 @@ export default {
       if (!this.address) return null;
       // Select user vote by matching voter address to user address
       const vote = this.proposal.votes.find(vote => vote.voter.toLowerCase() === this.address.toLowerCase());
-      return {
-        ...vote,
-        count: Number(vote.count).toFixed(1),
+
+      if(vote) {
+        return {
+          ...vote,
+          count: Number(vote.count).toFixed(1),
+        }
+      } else {
+        return null;
       }
+
     },
   },
   methods: {
     ...mapActions({
       vote: "vote",
-      loadProposalData: "refreshProposalsDataForAsset",
+      refresh: "refreshProposalsDataForAsset",
     }), // Voting action
     routeToHome() {
-      this.$router.push("/frabric");
+      this.$router.push("/".concat(DAO));
     },
     setTimeRemainingCountdown() {
       clearInterval(this.countdownRef);
@@ -264,6 +280,7 @@ export default {
         assetAddress: this.assetId,
         proposalId: this.$route.params.proposalId,
         votes: +this.voteAmount,
+        $toast: this.$toast
       })
     },
     submitNoVote() {
@@ -271,12 +288,17 @@ export default {
         assetAddress: this.assetId,
         proposalId: this.$route.params.proposalId,
         votes: -this.voteAmount,
+        $toast: this.$toast
       })
+    },
+    formatEther(amount) {
+      return ethers.utils.formatEther(amount);
     }
   },
   mounted() {
     this.setTimeRemainingCountdown();
-    this.loadProposalData();
+    this.refresh({ assetId: this.assetId, $toast: this.$toast });
+    console.log(this.proposal)
   },
   created() {
     if(this.balance) {
@@ -288,7 +310,11 @@ export default {
 
 <style lang="scss" scoped>
 @import "../../styles/frabric-custom.scss";
+@import "../../styles/markdown.scss";
 
+.container {
+  min-width: 80% !important;
+}
 .relative {
   position: relative;
 }
@@ -346,10 +372,16 @@ export default {
   color: #D841DE;
 }
 
-.description-container {
-  background: $mediumDarkGray;
-  border-radius: $tiny-radius;
+.thread {
+  border-color: yellow;
+  color: yellow;
+}
 
+.description-container {
+  background: transparent;
+  padding: 25px;
+  border-radius: $tiny-radius;
+  
   p {
     max-width: 56ch;
   }

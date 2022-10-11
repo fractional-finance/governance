@@ -5,28 +5,25 @@
     <div class="field">
       <label class="label">New Contract Address</label>
       <div class="control">
-        <input class="input" v-model="codeAddress" type="text" placeholder="New contract address">
+        <input class="input" v-model="codeAddress" type="text" placeholder="0x...">
       </div>
     </div>
      <div class="field">
       <label class="label">Instance Address</label>
       <div class="control">
-        <input class="input" v-model="instanceAddress" type="text" placeholder="New contract address">
-        <p
-          class="has-text-red mt-2"
-          v-if="instanceAddress === '0x0000000000000000000000000000000000000000'"><strong class="has-text-red">Warning: </strong>Passing this instance address may cause the upgrade process to become stuck.</p>
+        <input class="input" v-model="instanceAddress" type="text" placeholder="0x...">
       </div>
     </div>
     <div class="field">
       <label class="label">Beacon</label>
       <div class="control">
-        <input class="input" v-model="beaconAddress" type="text">
+        <input class="input" v-model="beaconAddress" type="text" placeholder="0x...">
       </div>
     </div>
     <div class="field">
       <label class="label">Version</label>
       <div class="control">
-        <input class="input" v-model="version" type="number">
+        <input class="input" v-model="version" type="number" placeholder="0x...">
       </div>
     </div>
     <div class="field">
@@ -41,6 +38,10 @@
         <textarea class="textarea" v-model="description" type="text" placeholder="Description"></textarea>
       </div>
     </div>
+    <div class="field">
+      <label class="label">Forum link</label>
+      <input v-model="forumLink" type="text" class="input" />
+    </div>
     <div class="is-flex is-justify-content-space-between mt-5">
       <button @click="publish" class="button has-background-mint has-text-white has-text-weight-bold">Submit Proposal</button>
       <button @click="onCancel" class="button has-background-red has-text-white has-text-weight-bold">Cancel</button>
@@ -51,21 +52,35 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import {ethers} from "ethers";
+import { ethers } from "ethers";
+import { ProposalTypes } from "@/models/common"
+import { CONTRACTS, DAO } from "../../services/constants" 
+const GOERLI_TEST = {
+  governor: "0xDba4eF785E003F7efc80Ba3900e260FA893804BC",
+  signer: "0x4C3D84E96EB3c7dEB30e136f5150f0D4b58C7bdB"
+}
 
 export default {
 
   name: "newUpgradeProposal",
+  props: {
+    assetId: {
+      type: String,
+      required: true,
+    }
+  },
   data(){
     return {
-      assetId: "0",
-      beaconAddress: "0xc4cad6434a405a3d9c89cbcb0d1a77b6eceb4bf7",
-      instanceAddress: ethers.constants.AddressZero,
-      codeAddress: ethers.constants.AddressZero,
-      version: 4,
+      beaconAddress: CONTRACTS.BEACON,
+      instanceAddress:ethers.constants.AddressZero,
+      codeAddress: CONTRACTS.FRABRIC_CODE,
+      version: 2,
       title: "",
       description: "",
-      selectedType: "Null"
+      forumLink: "",
+      selectedType: "upgradeProposal",
+      governor: CONTRACTS.GOVERNOR || "",
+      signer: CONTRACTS.SIGNER || "",
     }
   },
   computed: {
@@ -78,28 +93,37 @@ export default {
       refresh: "refreshProposalsDataForAsset",
       syncWallet: "syncWallet",
       createUpgradeProposal: "createUpgradeProposal",
+      addressList: "platformContractAddresses"
     }),
     async publish() {
       if (!ethers.utils.isAddress(this.codeAddress)) {
         return;
       }
-      
-      const assetAddress = await this.assetMap.get(this.assetId);
-
+      console.log(this.signerAddress);
+      let assetAddress = this.assetId
+      console.log("#ASSET_ID: ", this.assetId);
       await this.createUpgradeProposal({
         assetAddress,
-        instanceAddress: this.instanceAddress,
         beaconAddress: this.beaconAddress,
         codeAddress: this.codeAddress,
+        instanceAddress: this.instanceAddress,
         title: this.title,
         description: this.description,
+        forumLink: this.forumLink,
         version: this.version,
+        signer: this.signer,
+        governor: this.governor,
+        $toast: this.$toast
       });
     },
     onCancel() {
-      this.$router.push("/frabric");
+      this.$router.push("/".concat(DAO));
     }
-  }
+  },
+  mounted() {
+    this.refresh({ assetId: this.assetId});
+    this.syncWallet();
+  },
 }
 </script>
 

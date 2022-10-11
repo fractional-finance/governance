@@ -1,4 +1,3 @@
-import { ethers } from "ethers";
 <template>
   <section @click="openProposal" class="proposal has-radius-md mb-5" aria-labelledby="proposal">
     <span class="proposal-type" :class="this.typeStylingData.class">
@@ -9,10 +8,13 @@ import { ethers } from "ethers";
         <h2 class="is-size-5 has-text-mediumBlue">
           {{ this.startDate }}
         </h2>
+        <h1 :class="[proposal.state=='Cancelled' || proposal.state=='Failed' ? 'has-text-red' : 'has-text-success', 'p-2', 'is-title']">{{proposal.state}}</h1>
         <h2 id="proposal-title" class="is-size-5 has-text-white mb-4">
           {{ proposal.title }}
         </h2>
-        <p class="description"> {{ proposal.description }}</p>
+        <div class="description-container p-3">
+          <vue-markdown  class="content markdown-body" :options="{html: true }"  :source="proposal.description" />
+        </div>
       </div>
       <dl class="mt-5 mb-0 pb-0">
         <dt class="mt-2 mb-1 help">Creator:</dt>
@@ -40,6 +42,7 @@ import { ethers } from "ethers";
 <script>
 import Address from "../address/Address.vue";
 import Button from "../common/Button.vue";
+import VueMarkdown from "vue-markdown-render"
 import {
   getProposalTypeStyling,
   padWithZeroes,
@@ -49,12 +52,14 @@ import {
   hasEnded,
 } from "@/data/helpers";
 import { PASSED } from "@/models/common";
+import { DAO } from '../../../services/constants';
 
 export default {
   name: "ProposalListItem",
   components: {
     Address,
     Button,
+    VueMarkdown
   },
   props: {
     assetId: {
@@ -133,7 +138,7 @@ export default {
     },
 
     openProposal() {
-      this.$router.push(`/frabric/proposal/${this.proposal.id}`);
+      this.$router.push(`/${DAO}/proposal/${this.proposal.id}`);
     },
   },
 
@@ -143,7 +148,7 @@ export default {
 
   routeToProposal() {
     console.log("opening proposal")
-    this.$router.push(`/frabric/proposal/${this.proposal.id}`);
+    this.$router.push(`/${DAO}/proposal/${this.proposal.id}`);
   },
 };
 </script>
@@ -151,6 +156,7 @@ export default {
 <style scoped lang="scss">
 @import "../../../styles/frabric-custom.scss";
 @import "../../../styles/_variables.sass";
+@import "../../../styles/markdown.scss";
 
 .proposal {
   background-color: $darkGray;
@@ -187,6 +193,11 @@ export default {
   color: #D841DE;
 }
 
+.thread {
+  border-color: yellow;
+  color: yellow;
+}
+
 .outcome-box {
   color: white;
   font-weight: 600;
@@ -199,10 +210,25 @@ export default {
   line-height: 1.2rem;
   max-height: 7.2rem;
   white-space: nowrap;
-  max-width: 56ch;
+  max-width: min(10ch, 56ch);
+        
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.markdown-body {
+  background: transparent;
+  max-height: 15ch;
+   max-width: min(56ch, 100ch);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+	@media (max-width: 767px) {
+		.markdown-body {
+			padding: 15px;
+		}
+	}
 
 .bottom-right-corner {
   position: absolute;

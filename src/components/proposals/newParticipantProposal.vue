@@ -22,6 +22,10 @@
         <input class="input" v-model="address" type="text" placeholder="Text input">
       </div>
     </div>
+    <div class="field">
+      <label class="label">Forum link</label>
+      <input v-model="forumLink" type="text" class="input" />
+    </div>
     <div class="is-flex is-justify-content-space-between mt-5">
       <button @click="publish" class="button has-background-mint has-text-white has-text-weight-bold">Submit Proposal</button>
       <button @click="onCancel" class="button has-background-red has-text-white has-text-weight-bold">Cancel</button>
@@ -33,6 +37,7 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import {ParticipantType} from "@/models/common.js";
+import { DAO } from "../../services/constants"
 import {ethers} from "ethers";
 export default {
 
@@ -43,11 +48,13 @@ export default {
       required: true,
     },
   },
+  emits: ['submited', "proposed"],
   data(){
     return {
       address: "",
       title: "",
       description: "",
+      forumLink: "",
       pTypeList: ParticipantType,
       selectedType: "Individual"
     }
@@ -61,28 +68,38 @@ export default {
       createProposal: "createParticipantProposal",
     }),
     async publish() {
-      if (this.address.length < 1) {
-        return;
+      if(!ethers.utils.isAddress(this.address)) {
+        this.$toast.error("Address not valid", {
+          position: "top"
+        });
+        this.address=""
+        return
       }
       
-      const  assetId = this.assetId;
-      // const  title = this.title;
-      const  description = this.description;
+      this.$emit("submited");
+      const assetId = this.assetId;
+      const description = this.description;
       const isAddr = ethers.utils.isAddress(this.address);
       const participant = this.address
       const props = {
         assetId: this.assetId,
         participantType: this.pTypeList[this.selectedType],
         participant: this.address,
-        info: this.description
+        info: this.description,
+        $toast: this.$toast
       }
 
-      console.log("PArticipantType:  ", props['participantType']);
+      console.log("ParticipantType:  ", props['participantType']);
       await this.createProposal(props);
+      this.$emit("proposed");
     },
     onCancel() {
-      this.$router.push("/frabric");
+      this.$router.push("/".concat(DAO));
     }
+  },
+  mounted() {
+    this.refresh({ assetId: this.assetId});
+
   }
 }
 </script>

@@ -467,7 +467,7 @@ const actions = {
     };
     
     const domain = {
-      name: "Protocol",
+      name: "Weavr Protocol",
       version: "1",
       chainId: networks.arb_goerli,
       verifyingContract: CONTRACTS.WEAVR

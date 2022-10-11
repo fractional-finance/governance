@@ -49,31 +49,31 @@ const router = new createRouter({
           component: Modal,
           props: { assetId: "", component: newPaperProposal },
         },
-        // {
-        //   path: "participantProposal",
-        //   component: Modal,
-        //   props: { assetId: "", component: newParticipantProposal },
-        // },
+        {
+          path: "participantProposal",
+          component: Modal,
+          props: { assetId: "", component: newParticipantProposal },
+        },
         {
           path: "upgradeProposal",
           component: Modal,
           props: { assetId: "", component: newUpgradeProposal },
         },
-        // {
-        //   path: "tokenProposal",
-        //   component: Modal,
-        //   props: { assetId: "", component: newTokenAction },
-        // },
+        {
+          path: "tokenProposal",
+          component: Modal,
+          props: { assetId: "", component: newTokenAction },
+        },
         {
           path: "vouch",
           component: Modal,
           props: { assetId: "", component: vouch },
         },
-        // {
-        //   path: "threadProposal",
-        //   component: Modal,
-        //   props: { assetId: "", component: newThreadProposal },
-        // },
+        {
+          path: "threadProposal",
+          component: Modal,
+          props: { assetId: "", component: newThreadProposal },
+        },
         {
           path: "proposal/:proposalId",
           component: Modal,

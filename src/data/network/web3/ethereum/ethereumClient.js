@@ -2,6 +2,7 @@ import { createToaster } from "@meforma/vue-toaster";
 const {
   getCoinbaseWalletProvider,
   getMetaMaskProvider,
+  getLedgerWalletProvider,
   DEFAULT_CHAIN_ID,
 } = require("./providers");
 import { CoinbaseConnector } from "./walletProviders/CoinbaseConnector.js";
@@ -73,6 +74,9 @@ class EthereumClient {
         });
         return;
       }
+    }
+    if(wallet == "ledger") {
+      await getLedgerWalletProvider()
     }
   }
 

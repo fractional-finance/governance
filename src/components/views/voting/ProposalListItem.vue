@@ -12,7 +12,9 @@ import { ethers } from "ethers";
         <h2 id="proposal-title" class="is-size-5 has-text-white mb-4">
           {{ proposal.title }}
         </h2>
-        <p class="description"> {{ proposal.description }}</p>
+        <div class="description-container p-3">
+          <vue-markdown  class="content markdown-body" :options="{html: true }"  :source="proposal.description" />
+        </div>
       </div>
       <dl class="mt-5 mb-0 pb-0">
         <dt class="mt-2 mb-1 help">Creator:</dt>
@@ -21,25 +23,13 @@ import { ethers } from "ethers";
         </dd>
       </dl>
     </div>
-    <div v-if="!ended" class="is-flex is-justify-content-flex-end">
-      <Button
-        v-if="!embedded"
-        label="Details"
-        extraClasses="p-5 is-mediumBlue m-2"
-        @click="openProposal"
-      />
-    </div>
-    <div v-else class="is-flex is-justify-content-flex-end">
-      <div class="outcome-box bottom-right-corner passed" v-if="this.passed == this.PASSED.Yes">PASSED</div>
-      <div class="outcome-box bottom-right-corner failed" v-else-if="this.passed == this.PASSED.No">FAILED</div>
-      <div class="outcome-box bottom-right-corner tie" v-else>TIE</div>
-    </div>
   </section>
 </template>
 
 <script>
 import Address from "../address/Address.vue";
 import Button from "../common/Button.vue";
+import VueMarkdown from "vue-markdown-render"
 import {
   getProposalTypeStyling,
   padWithZeroes,
@@ -54,7 +44,7 @@ export default {
   name: "ProposalListItem",
   components: {
     Address,
-    Button,
+    VueMarkdown,
   },
   props: {
     assetId: {
@@ -133,7 +123,7 @@ export default {
     },
 
     openProposal() {
-      this.$router.push(`/frabric/proposal/${this.proposal.id}`);
+      this.$router.push(`/proposal/${this.proposal.id}`);
     },
   },
 
@@ -142,8 +132,7 @@ export default {
   },
 
   routeToProposal() {
-    console.log("opening proposal")
-    this.$router.push(`/frabric/proposal/${this.proposal.id}`);
+    this.$router.push(`/proposal/${this.proposal.id}`);
   },
 };
 </script>
@@ -151,6 +140,7 @@ export default {
 <style scoped lang="scss">
 @import "../../../styles/frabric-custom.scss";
 @import "../../../styles/_variables.sass";
+@import "../../../styles/markdown.scss";
 
 .proposal {
   background-color: $darkGray;
@@ -199,10 +189,26 @@ export default {
   line-height: 1.2rem;
   max-height: 7.2rem;
   white-space: nowrap;
-  max-width: 56ch;
+  max-width: min(10ch, 56ch);
+        
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.markdown-body {
+  background: transparent;
+  max-height: 15ch;
+   max-width: min(56ch, 100ch);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+	@media (max-width: 767px) {
+		.markdown-body {
+			padding: 15px;
+		}
+	}
 
 .bottom-right-corner {
   position: absolute;

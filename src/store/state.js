@@ -464,9 +464,9 @@ const actions = {
       arbitrum: 42161,
     };
     const domain = customDomain || {
-      name: "Protocol",
+      name: "Weavr Protocol",
       version: "1",
-      chainId: networks.goerli,
+      chainId: networks.arbitrum,
       verifyingContract: CONTRACTS.WEAVR,
     };
     const types = {

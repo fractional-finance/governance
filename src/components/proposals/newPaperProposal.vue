@@ -8,7 +8,6 @@
       <input class="input" v-model="title" type="text" placeholder="Enter title here">
     </div>
   </div>
-  
   <div class="field">
     <label class="label">Description</label>
     <div class="control">
@@ -47,7 +46,7 @@ import { mapGetters, mapActions } from "vuex";
 
 import { CommonProposalType } from "@/models/common.js"
 import VueMarkdown from "vue-markdown-render";
-import AppVue from '../../App.vue';
+import { ethers } from 'ethers';
 import { createApp } from '@vue/runtime-dom';
 
 
@@ -107,7 +106,7 @@ export default {
     },
     onCancel() {
       this.$router.push("/");
-    }
+    },
   },
   mounted() {
     this.refresh({ assetId: this.assetId, $toast: this.$toast });

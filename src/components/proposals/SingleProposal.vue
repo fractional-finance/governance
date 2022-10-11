@@ -57,9 +57,9 @@
       <label class="label">Target Address</label>
       <Address :value="proposal.target" />
     </div>
-    <div v-if="proposal.mint">
-    <label class="label">Mint</label>
-    <p><strong>{{proposal.mint}}</strong></p>
+    <div v-if="proposal.mint !== undefined">
+    <label class="label">Mint?</label>
+    <p>{{proposal.mint ? 'Yes': 'No'}}</p>
   </div>
   <div v-if="proposal.price">
     <label class="label">Price</label>
@@ -298,6 +298,7 @@ export default {
   mounted() {
     this.setTimeRemainingCountdown();
     this.refresh({ assetId: this.assetId, $toast: this.$toast });
+    console.log(this.proposal)
   },
   created() {
     if(this.balance) {

@@ -2,14 +2,15 @@
   <div class="container p-5">
     <div class="tag has-background-mediumBlue has-text-white  mb-5 is-medium">New Token Action Proposal</div>
     <!-- Token Action Form -->
-    <!-- <div class="field">
+    <div v-if="price === 0" class="field">
       <label class="label">Target Address</label>
       <div class="control">
-        <input class="input" v-model="targetAddress" type="text" placeholder="Token address">
+        <input class="input" v-model="targetAddress" type="text" placeholder="Target address">
       </div>
-    </div> -->
-    <!-- <div class="field">
-      not enabled currently
+      <span class="has-text-mediumBlue ml-3" v-if="isTargetingSelf">This contract</span>
+      <span class="has-text-mediumBlue ml-3" v-if="isTargetingUser">You</span>
+    </div>
+    <div class="field">
       <label class="label">Minting Proposal?</label>
         <select class="select has-background-darkGray has-text-white px-3" v-model="mintType">
           <option 
@@ -18,13 +19,14 @@
             {{name}}
           </option>
         </select>
-    </div> -->
+    </div>
   
     <div class="field">
       <label class="label">Price</label>
       <div class="control">
         <input class="input" v-model="price" type="number">
       </div>
+      <p class="has-text-mediumBlue" v-if="price !== 0">Token actions with a price will target the DAO contract</p>
     </div>
   
     <div class="field">
@@ -69,12 +71,11 @@ export default {
   name: "newTokenAction",
   data(){
     return {
-      tokenAddress: CONTRACTS.TOKEN_ADDRESS,
-      targetAddress: "",
-      price: 0,
       amount: 0,
       title: "",
+      price: 0,
       description: "",
+      targetAddress: CONTRACTS.WEAVR,
       forumLink: "",
       mintType: "No",
       mintTypes: MintType,
@@ -89,7 +90,14 @@ export default {
   computed: {
     ...mapGetters({
       assetMap: "assetsById",
+      userWalletAddress: "userWalletAddress"
     }),
+    isTargetingSelf() {
+      return this.targetAddress === CONTRACTS.WEAVR;
+    },
+    isTargetingUser() {
+      return this.targetAddress === this.userWalletAddress;
+    },
   },
   methods: {
     ...mapActions({
@@ -98,11 +106,17 @@ export default {
       createTokenActionProposal: "createTokenActionProposal",
     }),
     async publish() {
-      if (!ethers.utils.isAddress(this.tokenAddress)) {
+      if (!ethers.utils.isAddress(this.targetAddress)) {
+        this.$toast.warning("Invalid target address", {
+          position: "bottom",
+        });
         return;
       }
+  
       await this.createTokenActionProposal({
-        mint: false,
+        assetId: this.assetId || CONTRACTS.WEAVR,
+        mint: this.mintTypes[this.mintType],
+        target: this.price === 0 ? this.targetAddress : this.assetId,
         price: this.price,
         amount: this.amount,
         title: this.title,

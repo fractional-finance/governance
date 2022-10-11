@@ -346,8 +346,12 @@ const actions = {
   async createTokenActionProposal(context, props) {
     const toast = params.$toast || createToaster({});
 
+    console.log("Calling!");
+
     const {
+      assetId,
       mint,
+      target,
       price,
       amount,
       title,
@@ -361,13 +365,13 @@ const actions = {
     });
 
     const tokenAddress = await dao.getTokenAddress(CONTRACTS.WEAVR);
-    const targetAddress = CONTRACTS.WEAVR;
 
     const atomicAmount = ethers.utils.parseEther(String(amount));
 
     const status = await dao.createTokenActionProposal(
+      assetId,
       tokenAddress,
-      targetAddress,
+      target,
       mint,
       price,
       atomicAmount,

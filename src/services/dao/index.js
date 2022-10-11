@@ -311,6 +311,7 @@ class DAO {
   }
 
   async createTokenActionProposal(
+    assetId,
     tokenAddress,
     targetAddress,
     mint,
@@ -320,7 +321,7 @@ class DAO {
     description,
     forumLink,
   ) {
-    const assetContract = new AssetContract(this.ethereumClient, targetAddress);
+    const assetContract = new AssetContract(this.ethereumClient, assetId);
 
     const ipfsPathBytes = await this.storageNetwork.uploadAndGetPathAsBytes({
       title,

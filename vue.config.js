@@ -5,7 +5,7 @@ const globalSassFiles = [
 
 ]
 module.exports = {
-  publicPath: "./", 
+  publicPath: "./",
   css: {
     requireModuleExtension: true,
     loaderOptions: {
@@ -67,7 +67,8 @@ module.exports = {
         }
       })
       .end()
-
+      config.resolve.alias
+      .set("@ledgerhq/devices", "@ledgerhq/devices/lib-es")
     // config.module
     //   .rule("sass")
     //   .test(/\.sass$/)

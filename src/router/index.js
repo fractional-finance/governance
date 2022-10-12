@@ -64,19 +64,11 @@ const router = new createRouter({
           component: Modal,
           props: { assetId: "", component: newTokenAction },
         },
-<<<<<<< HEAD
         {
           path: "vouch",
           component: Modal,
           props: { assetId: "", component: vouch },
         },
-=======
-        // {
-        //   path: "vouch",
-        //   component: Modal,
-        //   props: { assetId: "", component: vouch },
-        // },
->>>>>>> preLaunch
         {
           path: "threadProposal",
           component: Modal,

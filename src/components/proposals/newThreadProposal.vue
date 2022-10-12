@@ -45,6 +45,58 @@
         <textarea class="textarea" v-model="descriptor" type="text" placeholder="Descriptor"></textarea>
       </div>
     </div>
+    <div class="file">
+      <label class="file-label has-background-mediumBlue mt-3">
+        <input
+          class="file-input has-text-white has-background-mediumBlue"
+          type="file"
+          name="images"
+          v-on:change="onChangeImages"
+          multiple="multiple"
+          accept=".png,.jpg,.jpeg,.webp,.tiff,image/*">
+        <span class="file-cta has-text-white has-background-mediumBlue">
+          <span class="file-icon mt-1 mr-3">
+            <unicon name="camera" fill="white" />
+          </span>
+          <span class="file-label">
+            Choose images
+          </span>
+        </span>
+      </label>
+    </div>
+    <div class="files-container">
+      <div v-for="image in images" v-bind:key="image.name">
+        {{ image.name }}
+      </div>
+    </div>
+    <div class="file">
+      <label class="file-label has-background-mediumBlue mt-3">
+        <input
+          class="file-input has-text-white has-background-mediumBlue"
+          type="file"
+          name="images"
+          v-on:change="onChangeDocuments"
+          multiple="multiple"
+          accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+        <span class="file-cta has-text-white has-background-mediumBlue">
+          <span class="file-icon mt-1 mr-3">
+            <unicon name="file-plus-alt" fill="white" />
+          </span>
+          <span class="file-label">
+            Choose documents
+          </span>
+        </span>
+      </label>
+    </div>
+    <div class="files-container">
+      <p v-for="document in documents" v-bind:key="document.name">
+        {{ document.name }}
+      </p>
+    </div>
+    <div class="field">
+      <label class="label">Forum link</label>
+      <input v-model="forumLink" type="text" class="input"/>
+    </div>
     <div class="is-flex is-justify-content-space-between mt-5">
       <button @click="publish" class="button has-background-mint has-text-white has-text-weight-bold">Submit Proposal</button>
       <button @click="onCancel" class="button has-background-red has-text-white has-text-weight-bold">Cancel</button>
@@ -56,7 +108,7 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import {ethers} from "ethers";
-import { WEAVR_ADDRESS, DAO } from "../../services/constants";
+import { CONTRACTS, DAO } from "../../services/constants";
 
 export default {
 
@@ -68,8 +120,11 @@ export default {
       symbol: "",
       title: "",
       description: "",
-      tradeToken: "0xd87ba7a50b2e7e660f678a895e4b72e7cb4ccd9c",
-      target: "",
+      tradeToken: "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8", // Arb1 USDC
+      target: 0,
+      forumLink: "",
+      images: null,
+      documents: null,
     }
   },
   props: {
@@ -91,31 +146,49 @@ export default {
     }),
     async publish() {
       if (!ethers.utils.isAddress(this.tradeToken)) {
+        this.$toast.warning("Invalid trade token address", {
+          duration: 2000,
+          position: "bottom",
+        });
         return;
       }
 
-      console.dir({
-        assetId: this.assetId,
-        name: this.name,
-        descriptor: this.descriptor,     
-        description: this.description,
-        symbol: this.symbol,
-        title: this.title,
-        tradeToken: this.tradeToken,
-        target: this.target,
-      })
+      if (this.name.length < 6 || this.name.length > 64 ) {
+        this.$toast.warning("Name must be between 6 and 64 characters", {
+          duration: 2000,
+          position: "bottom",
+        });
+        return;
+      }
+
+      if (this.symbol.length < 2 || this.symbol.length > 5 ) {
+        this.$toast.warning("Symbol must be between 2 and 5 characters", {
+          duration: 2000,
+          position: "bottom",
+        });
+        return;
+      }
 
       await this.createThreadProposal({
-        assetId: this.assetId || WEAVR_ADDRESS,
+        assetId: this.assetId || CONTRACTS.WEAVR,
         name: this.name,
-        descriptor: this.descriptor,     
+        descriptor: this.descriptor,
+        forumLink: this.forumLink,
         description: this.description,
-        symbol: this.symbol,
+        symbol: String(this.symbol).toUpperCase(),
         title: this.title,
         tradeToken: this.tradeToken,
         target: this.target,
+        images: this.images,
+        documents: this.documents,
         $toast: this.$toast
       });
+    },
+    onChangeImages({ target: { files } }) {
+      this.images = files;
+    },
+    onChangeDocuments({ target: { files } }) {
+      this.documents = files;
     },
     onCancel() {
       this.$router.push("/".concat(DAO));
@@ -125,4 +198,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../styles/_variables.sass";
+@import "../../styles/frabric-custom.scss";
+
+.files-container {
+  border-left: 4px solid $mediumBlue;
+  border-radius: 4px;
+  margin: 8px;
+  margin-top: 14px;
+  padding-left: 8px;
+}
+
+.file-input {
+  outline-color: transparent !important;
+}
 </style>

@@ -21,6 +21,7 @@
       {{ proposal.supermajority ? 'Supermajority consensus required' : 'Supermajority consensus not required' }}
     </strong>
   </p>
+  <a :href="proposal.forumLink" target="_blank" rel="noopener" class="button has-background-mediumBlue has-text-white mt-3">Forum link</a>
   <!-- Upgrade Proposal Information -->
   <div v-if="proposal.code">
     <label class="label">New Code Address</label>
@@ -56,9 +57,9 @@
       <label class="label">Target Address</label>
       <Address :value="proposal.target" />
     </div>
-    <div v-if="proposal.mint">
-    <label class="label">Mint</label>
-    <p><strong>{{proposal.mint}}</strong></p>
+    <div v-if="proposal.mint !== undefined">
+    <label class="label">Mint?</label>
+    <p>{{proposal.mint ? 'Yes': 'No'}}</p>
   </div>
   <div v-if="proposal.price">
     <label class="label">Price</label>
@@ -66,7 +67,7 @@
   </div>
   <div v-if="proposal.amount">
     <label class="label">Amount</label>
-    <p><strong>{{proposal.amount}}</strong></p>
+    <p><strong>{{formatEther(proposal.amount)}}</strong></p>
   </div>
   <!-- End Token Action Proposal -->
 
@@ -167,6 +168,7 @@ import { PASSED } from "../../models/common";
 import Address from "../views/address/Address.vue";
 import { DAO } from "../../services/constants"
 import VueMarkdown from "vue-markdown-render";
+import { ethers } from "ethers";
 
 export default {
   // (bill) TODO: Make this reload data if loaded directly
@@ -288,11 +290,15 @@ export default {
         votes: -this.voteAmount,
         $toast: this.$toast
       })
+    },
+    formatEther(amount) {
+      return ethers.utils.formatEther(amount);
     }
   },
   mounted() {
     this.setTimeRemainingCountdown();
     this.refresh({ assetId: this.assetId, $toast: this.$toast });
+    console.log(this.proposal)
   },
   created() {
     if(this.balance) {

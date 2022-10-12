@@ -22,6 +22,14 @@
         <input class="input" v-model="address" type="text" placeholder="Text input">
       </div>
     </div>
+    <div class="field">
+      <label class="label">Description</label>
+      <input v-model="description" type="text" class="input" />
+    </div>
+    <div class="field">
+      <label class="label">Forum link</label>
+      <input v-model="forumLink" type="text" class="input" />
+    </div>
     <div class="is-flex is-justify-content-space-between mt-5">
       <button @click="publish" class="button has-background-mint has-text-white has-text-weight-bold">Submit Proposal</button>
       <button @click="onCancel" class="button has-background-red has-text-white has-text-weight-bold">Cancel</button>
@@ -50,6 +58,7 @@ export default {
       address: "",
       title: "",
       description: "",
+      forumLink: "",
       pTypeList: ParticipantType,
       selectedType: "Individual"
     }
@@ -80,7 +89,10 @@ export default {
         assetId: this.assetId,
         participantType: this.pTypeList[this.selectedType],
         participant: this.address,
-        info: this.description,
+        info: {
+          description: this.description,
+          forumLink: this.forumLink
+        },
         $toast: this.$toast
       }
 

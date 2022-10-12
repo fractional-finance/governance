@@ -8,7 +8,7 @@ import newUpgradeProposal from "@/components/proposals/newUpgradeProposal.vue";
 import newTokenAction from "@/components/proposals/newTokenAction.vue";
 import newThreadProposal from "@/components/proposals/newThreadProposal.vue";
 import SingleProposal from "@/components/proposals/SingleProposal.vue";
-import vouch from "@/components/proposals/vouch";
+import Vouch from "@/components/proposals/Vouch";
 import tokenDetails from "@/components/sections/TokenDetails.vue";
 import walletConnect from "@/components/sections/WalletConnect.vue";
 import { WhitelistPage } from "../whitelist";
@@ -67,7 +67,7 @@ const router = new createRouter({
         {
           path: "vouch",
           component: Modal,
-          props: { assetId: "", component: vouch },
+          props: { assetId: "", component: Vouch },
         },
         {
           path: "threadProposal",

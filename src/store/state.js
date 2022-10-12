@@ -481,7 +481,7 @@ const actions = {
       arb_goerli: 421613
     };
     
-    const domain = {
+    const domain = customDomain || {
       name: "Weavr Protocol",
       version: "1",
       chainId: networks.arb_goerli,

@@ -24,7 +24,7 @@
     </div>
     <div class="field">
       <label class="label">Description</label>
-      <input v-model="description" type="text" class="input" />
+      <textarea v-model="description"  class="textarea" />
     </div>
     <div class="field">
       <label class="label">Forum link</label>

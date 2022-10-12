@@ -375,7 +375,7 @@ class DAO {
       CONTRACTS.WEAVR
     );
     console.log("DAO__", signature)
-    const status = await assetContract.vouch({participant, signature});
+    const status = await assetContract.vouch(participant, signature);
     console.log(signature)
     return status;
   }

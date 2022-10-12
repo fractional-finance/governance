@@ -16,7 +16,7 @@
         }}
       </div>
     </div>
-    <div class="m-0 p-0"><unicon class="m-0 p-0" :width="30" name="signout" fill="magenta"></unicon> </div>
+    <div class="m-0 p-0"><unicon class="m-0 p-0" :width="20" :height="40" name="signout" fill="darkGray"></unicon> </div>
   </div>
   <div
     v-else

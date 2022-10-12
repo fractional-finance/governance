@@ -1,5 +1,4 @@
 import CoinbaseWalletSDK from "@coinbase/wallet-sdk";
-import { listen } from "@ledgerhq/logs";
 import Eth from "@ledgerhq/hw-app-eth";
 import TransportWebHID from "@ledgerhq/hw-transport-webhid";
 

@@ -26,6 +26,18 @@
         <input class="input" v-model="version" type="number" placeholder="0x...">
       </div>
     </div>
+    <!-- <div class="field">
+      <label class="label">Governor</label>
+      <div class="control">
+        <input class="input" v-model="title" type="text" placeholder="Title">
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Verifier</label>
+      <div class="control">
+        <input class="input" v-model="title" type="text" placeholder="Title">
+      </div>
+    </div> -->
     <div class="field">
       <label class="label">Proposal Title</label>
       <div class="control">
@@ -56,8 +68,8 @@ import { ethers } from "ethers";
 import { ProposalTypes } from "@/models/common"
 import { CONTRACTS, DAO } from "../../services/constants" 
 const GOERLI_TEST = {
-  governor: "0xDba4eF785E003F7efc80Ba3900e260FA893804BC",
-  signer: "0x4C3D84E96EB3c7dEB30e136f5150f0D4b58C7bdB"
+  governor: "0xA28C6A770dC1E6DCd94Ea93B7464E3B3DF77689D",
+  signer: "0xFb3f5745dfD05bA3184156fcbd39D510136B0922"
 }
 
 export default {

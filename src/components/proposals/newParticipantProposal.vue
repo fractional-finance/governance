@@ -24,7 +24,7 @@
     </div>
     <div class="field">
       <label class="label">Description</label>
-      <input v-model="description" type="text" class="input" />
+      <textarea v-model="description"  class="textarea" />
     </div>
     <div class="field">
       <label class="label">Forum link</label>
@@ -89,10 +89,8 @@ export default {
         assetId: this.assetId,
         participantType: this.pTypeList[this.selectedType],
         participant: this.address,
-        info: {
-          description: this.description,
-          forumLink: this.forumLink
-        },
+        description: this.description,
+        forumLink: this.forumLink,
         $toast: this.$toast
       }
 

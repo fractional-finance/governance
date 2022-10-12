@@ -9,7 +9,7 @@
         :assetId="assetId"
         :proposalStatus="`Active Proposals`"/>
       <ProposalList
-        :proposals="pastProposals.concat(cancelledProposals)"
+        :proposals="pastProposals"
         :assetId="assetId"
         :proposalStatus="`Past Proposals`"/>
     </div>

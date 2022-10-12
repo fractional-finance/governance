@@ -105,6 +105,21 @@ class DAO {
     console.log(vouches);
     return vouches;
   }
+
+  /**
+   * Create a Paper Proposal
+   * @param {String} assetId Asset's contract address
+   * @param {String} name Chosen name for the thread
+   * @param {String} descriptor of the thread
+   * @param {String} title Proposal title
+   * @param {String} description Proposal body
+   * @param {String} forumLink Link to forum discussion
+   * @param {String} tradeToken addess of the token used for the crowdfund
+   * @param {Number} target amount to be raised through the crowdfund
+   * @param {String} images of the property
+   * @param {String} documents of the property
+   * @returns {Boolean} Transaction status (true — mined; false - reverted)
+   */
   async createThreadProposal(
     assetId,
     name,
@@ -169,10 +184,11 @@ class DAO {
   }
 
   /**
-   * Create a proposal
+   * Create a Paper Proposal
    * @param {String} asset Asset's contract address
    * @param {string} title Proposal title
    * @param {string} description Proposal body
+   * @param {string} forumLink Link to forum discussion
    * @returns {Boolean} Transaction status (true — mined; false - reverted)
    */
   async createPaperProposal(asset, title, description, forumLink, daoResolution) {
@@ -191,24 +207,36 @@ class DAO {
   }
 
   /**
-   * Create a proposal
+   * Create a Participant Proposal
    * @param {String} asset Asset's contract address
    * @param {number} participantType Proposal title
    * @param {string} description Proposal body
+   * @param {string} forumLink Link to forum discussion
    * @returns {Boolean} Transaction status (true — mined; false - reverted)
    */
   async createParticipantProposal(
     assetId,
     participantType,
     participant,
+    forumLink,
     description
   ) {
+
     const assetContract = new AssetContract(this.ethereumClient, assetId);
+    console.log({
+      title: `Proposing ${participant} for level ${participantType}`,
+      description,
+      forumLink
+    })
+    
     let infoHash = await this.storageNetwork.uploadAndGetPathAsBytes({
       title: `Proposing ${participant} for level ${participantType}`,
       description,
+      forumLink
     });
 
+    console.log(infoHash)
+    
     if (!infoHash) return;
 
     let status = await assetContract.proposeParticipant(

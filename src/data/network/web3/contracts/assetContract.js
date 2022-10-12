@@ -1,9 +1,8 @@
 /* global BigInt */
 import { ethers } from "ethers";
 import EthereumClient from "../ethereum/ethereumClient";
-import { ParticipantType } from "@/models/common";
-import { base58 } from "ethers/lib/utils";
-const contractArtifact = require("./abi/Frabric.json");
+
+
 const contractAbi = [
   // Make a buy order
   "function buy(uint256 amount, uint256 price) payable",
@@ -51,7 +50,7 @@ class AssetContract {
   constructor(ethereumClient, contractAddress) {
     this.contract = ethereumClient.getContract(
       contractAddress,
-      contractArtifact.abi
+      contractAbi
     );
     this.mutableContract = ethereumClient.getMutableContract(this.contract);
   }
@@ -145,8 +144,9 @@ class AssetContract {
    * Vouch a participant
    */
   async vouch(participant, signature) {
+    
     // const bytesSignature = ethers.utils.id(signature);
-    console.log("ASSETCONTRACT: ", participant, signature);
+    console.log("ASSETCONTRACT: ", signature);
     let tx = this.mutableContract.vouch(participant, signature);
     // this.mutableContract.signer
 

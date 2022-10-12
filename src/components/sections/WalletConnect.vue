@@ -57,7 +57,12 @@ export default {
           name: "coinbase",
           icon: require("@/assets/icons/coinbase-wallet.png"),
           disabled: false
-        }
+        },
+        //  ledger: {
+        //   name: "ledger",
+        //   icon: require("@/assets/icons/ledger-wallet.png"),
+        //   disabled: false
+        // }
       }
     }
   },

@@ -1,6 +1,6 @@
 <template>
 <div>
-  <!-- <div v-if="whitelisted && address" class="button is-warning mr-5" @click="onVouch"><span class="mr-1">{{vouches}}</span>Vouch</div> -->
+  <div v-if="whitelisted && address" class="button is-warning mr-5" @click="onVouch"><span class="mr-1">{{vouches}}</span>Vouch</div>
   <div @click="tokenDetails" style="cursor: pointer;" class="tag is-large is-flex is-address-container" v-if="address !=null">
     <div>
       <span >{{ balance }}</span>
@@ -16,7 +16,7 @@
         }}
       </div>
     </div>
-    <div class="m-0 p-0"><unicon class="m-0 p-0" :width="30" name="signout" fill="magenta"></unicon> </div>
+    <div class="m-0 p-0"><unicon class="m-0 p-0" :width="20" :height="40" name="signout" fill="darkGray"></unicon> </div>
   </div>
   <div
     v-else
@@ -60,7 +60,6 @@ export default {
       
     },
     onVouch() {
-      // this.vouch({participant: "0x403383c411c0eB14eA0Bd15E7c2AD5431a7410C2"})
       this.$router.push("/".concat(DAO).concat("/vouch"))
     },
     async tokenDetails() {

@@ -39,6 +39,10 @@ export default {
         {
           id: "threadProposal",
           name: "Thread Proposal",
+        },
+        {
+          id: "participantProposal",
+          name: "Participant Proposal",
         }
       ],
     }

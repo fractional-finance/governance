@@ -17,7 +17,9 @@ export class ParticipantProposal {
     info,
     participantType,
     participant,
-    proposer
+    proposer,
+    description,
+    forumLink
   ) {
     this.type = type;
     this.id = id;
@@ -34,5 +36,7 @@ export class ParticipantProposal {
     this.participantType = participantType;
     this.participant = participant;
     this.proposer = proposer;
+    this.description = description,
+    this.forumLink = forumLink
   }
 }

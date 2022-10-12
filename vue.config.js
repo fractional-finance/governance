@@ -5,7 +5,7 @@ const globalSassFiles = [
 
 ]
 module.exports = {
-  publicPath: "./", 
+  publicPath: "./",
   css: {
     requireModuleExtension: true,
     loaderOptions: {
@@ -68,33 +68,8 @@ module.exports = {
       })
       .end()
 
-    // config.module
-    //   .rule("sass")
-    //   .test(/\.sass$/)
-    //   .use("sass-loader")
-    //   .loader("sass-loader")
-    //   .loader("css-loader")
-    //   .loader("style-loader")
-    //   .tap((options) => {
-        
-    //     return {
-    //       ...options,
-    //       additionalData: `
-    //         @import "@/bulma/bulma.sass"
-    //       `
-    //     }
-    //   })
-    //   .end()
-
+      config.resolve.alias
+      .set("@ledgerhq/devices", "@ledgerhq/devices/lib-es")
+      .end()
   }
 };
-
-// module.exports = {
-//   css: {
-//     loaderOptions: {
-//       sass: {
-//         // additionalData: `@import "@/styles/variables.sass"`
-//       }
-//     }
-//   },
-// }

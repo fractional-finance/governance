@@ -1,5 +1,6 @@
 import CoinbaseWalletSDK from "@coinbase/wallet-sdk";
-// import WalletConnectProvider from "@walletconnect/web3-provider";
+import Eth from "@ledgerhq/hw-app-eth";
+import TransportWebHID from "@ledgerhq/hw-transport-webhid";
 
 const APP_NAME = "WeavrDAO";
 const APP_LOGO_URL = "@/assets/logo/new-logo.png";
@@ -10,6 +11,21 @@ const INFURA_ID = process.env.VUE_APP_INFURA_ID;
 const INFURA_RPC_URL = `https://mainnet.infura.io/v3/${INFURA_ID}`;
 export const DEFAULT_CHAIN_ID = 42161;
 
+
+// Ledger Provider
+export const getLedgerWalletProvider = async () => {
+  const transport = await TransportWebHID.create();
+  console.log(transport)
+  const eth = new Eth(transport)
+  let i;
+  for(i=0; i<10; i++){
+    const address = await eth.getAddress("44'/60'/"+i+"'/0/0").then(o => o.address)
+    console.log(address)
+  }
+  
+  
+  
+}
 // Coinbase Wallet Provider
 export const getCoinbaseWalletProvider = () => {
   const coinbaseWallet = new CoinbaseWalletSDK({

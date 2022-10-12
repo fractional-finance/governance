@@ -270,7 +270,7 @@ const actions = {
 
   async createParticipantProposal(context, props) {
     const toast = params.$toast || createToaster({});
-    const { assetId, participantType, participant, info } = props;
+    const { assetId, participantType, participant, description, forumLink } = props;
 
     toast.show("Confirming transaction...", {
       duration: 15000,
@@ -280,7 +280,8 @@ const actions = {
       assetId,
       participantType,
       participant,
-      info
+      description,
+      forumLink
     );
     toast.clear();
     if (status) {
@@ -474,26 +475,41 @@ const actions = {
   async vouchParticipant(context, props) {
     const toast = params.$toast || createToaster({});
     const { customDomain, participant } = props;
+    
     const networks = {
       goerli: 5,
       arbitrum: 42161,
+      arb_goerli: 421613
     };
+    
     const domain = customDomain || {
       name: "Weavr Protocol",
       version: "1",
-      chainId: networks.arbitrum,
-      verifyingContract: CONTRACTS.WEAVR,
+      chainId: networks.arb_goerli,
+      verifyingContract: CONTRACTS.WEAVR
     };
     const types = {
       Vouch: [{ type: "address", name: "participant" }],
     };
-    const data = { participant: participant };
+    const data = { 
+      participant: participant 
+    };
+    
     toast.info("Waiting for signature..", { position: "top" });
-    const signature = await wallet.getSignature(domain, types, data);
-    Promise.all([signature]).then(() => {
-      console.log(signature[0]);
-    });
-    const status = await dao.vouch(participant, signature[0]);
+    
+    const signatures = await wallet.getSignature(domain, types, data);
+    Promise.all([signatures])
+    //.then(() => {
+    //   // console.log(signature[0]);
+    //   const expectedSignerAddress = context.state.user.wallet.address;
+    //   const recoveredAddress = ethers.utils.verifyTypedData(domain, types, data, signature[0]);
+    //   console.log("Signer Address CHECK______\n", recoveredAddress, "\n", expectedSignerAddress);
+    //   console.log(recoveredAddress.toLowerCase() === expectedSignerAddress.toLowerCase());
+    // });
+    const signature = signatures[0]
+    console.log(signature);
+    const status = await dao.vouch(participant, signature);
+    
     if (status) {
       toast.success("Transaction confirmed...", {
         duration: 2000,

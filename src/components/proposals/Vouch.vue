@@ -1,7 +1,6 @@
 <template>
   <div class="container p-5">
     <div class="tag has-background-mediumBlue has-text-white mb-5 is-medium">Participant Vouch</div>
-    <!-- PAPER PROPOSAL FORM -->
     <div class="field">
       <label class="label">Participant</label>
       <div class="control">
@@ -19,13 +18,12 @@
 
 <script>
 import { mapActions } from "vuex";
-import { CommonProposalType } from "@/models/common.js"
 import { ethers } from 'ethers';
 import { DAO } from "../../services/constants"
 
 export default {
 
-  name: "newPaperProposal",
+  name: "Vouch",
   props: {
     assetId: {
       type: String,
@@ -57,7 +55,6 @@ export default {
         this.participant = "";
         return
       }
-      // await this.vouchParticipant({assetAddr, participant})
       await this.vouch({participant: participant})
     },
     onCancel() {

@@ -89,10 +89,8 @@ export default {
         assetId: this.assetId,
         participantType: this.pTypeList[this.selectedType],
         participant: this.address,
-        info: {
-          description: this.description,
-          forumLink: this.forumLink
-        },
+        description: this.description,
+        forumLink: this.forumLink,
         $toast: this.$toast
       }
 

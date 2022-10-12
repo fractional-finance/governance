@@ -53,7 +53,7 @@ class DAO {
       const offChainData = await this.storageNetwork.getFiles(
         proposals.map((p) => p.info)
       );
-
+      console.log(offChainData)
       for (let i = 0; i < proposals.length; i++) {
         if (offChainData[i].value) {
           proposals[i].title = offChainData[i].value.title || "Untitled";
@@ -218,8 +218,8 @@ class DAO {
     assetId,
     participantType,
     participant,
-    forumLink,
-    description
+    description,
+    forumLink
   ) {
 
     const assetContract = new AssetContract(this.ethereumClient, assetId);
@@ -235,7 +235,7 @@ class DAO {
       forumLink
     });
 
-    console.log(infoHash)
+    console.log("INFOHASH___", infoHash)
     
     if (!infoHash) return;
 

@@ -148,6 +148,7 @@ export function mapParticipantProposals(rawParticipantProposals) {
         participantType,
         participant,
         proposer,
+      
       )
     })
   } catch (e) {

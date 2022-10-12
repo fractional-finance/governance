@@ -147,5 +147,11 @@ $colors: map-merge($colors, $addColors);
   border-radius: $tiny-radius;
 }
 
+.image {
+  &.is-196x196 {
+    width: 196px;
+    height: 196px;
+  }
+}
 
 @import "./markdown.scss";

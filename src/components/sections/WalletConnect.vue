@@ -12,7 +12,7 @@
         </div>
         <div class="is-flex is-justify-content-space-evenly">
             <div :class='["wallet-box", "m-0", "p-0", wallet.disabled ? "disabled" : "is-clickable"]' v-for="wallet in wallets" :key="wallet.name" @click="!wallet.disabled ? onClick(wallet.name) : ''" :aria-disabled="wallet.disabled">
-                <div class="image m-0 p-5 has-radius-md" >
+                <div class="image is-196x196 m-0 p-5 has-radius-md" >
                     <img :src="wallet.icon"/>
                 </div>
             </div>
@@ -46,11 +46,11 @@ export default {
           icon: require("@/assets/icons/coinbase-wallet.png"),
           disabled: false
         },
-         ledger: {
-          name: "ledger",
-          icon: require("@/assets/icons/ledger-wallet.png"),
-          disabled: false
-        }
+        //  ledger: {
+        //   name: "ledger",
+        //   icon: require("@/assets/icons/ledger-wallet.png"),
+        //   disabled: false
+        // }
       }
     }
   },

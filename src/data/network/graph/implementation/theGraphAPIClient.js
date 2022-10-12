@@ -5,7 +5,7 @@ import {
 import { GraphQLAPIClient } from "../graphQLAPIClient"
 
 const client = new ApolloClient({
-  uri: process.env.VUE_APP_GRAPH_PROD,
+  uri: process.env.VUE_APP_GRAPH_TEST,
   cache: new InMemoryCache()
 })
 

@@ -101,9 +101,8 @@ let hasRedirectedAfterWhitelisting = false;
 
 router.beforeEach((to, from) => {
   if (!hasOriginalPathBeenSet) {
-    originalPath = to.fullPath;
+    originalPath = to.fullPath === "/whitelist" ? "/weavr" : to.fullPath;
     hasOriginalPathBeenSet = true;
-    console.log(originalPath);
   }
 
   if (to.fullPath === "/whitelist") {

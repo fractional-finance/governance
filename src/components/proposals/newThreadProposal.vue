@@ -23,7 +23,7 @@
     <div class="field">
       <label class="label">Symbol</label>
       <div class="control">
-        <input class="input" v-model="symbol" type="text" placeholder="FBRC">
+        <input class="input" v-model="symbol" type="text" placeholder="FBRC" maxlength="5">
       </div>
     </div>
     <div class="field">

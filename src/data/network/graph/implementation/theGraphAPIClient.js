@@ -5,7 +5,7 @@ import {
 import { GraphQLAPIClient } from "../graphQLAPIClient"
 
 const client = new ApolloClient({
-  uri: process.env.VUE_APP_GRAPH_TEST,
+  uri: "https://api.thegraph.com/subgraphs/name/abstrucked/weavr_goerli",
   cache: new InMemoryCache()
 })
 

@@ -9,6 +9,8 @@ import { CoinbaseConnector } from "./walletProviders/CoinbaseConnector.js";
 import { MetaMaskConnector } from "./walletProviders/MetaMaskConnector";
 import { toHex } from "@/utils/common.js";
 import { ERROR } from "../../../../services/errors/index.js";
+import {NETWORK} from "../../../../services/constants"
+
 require("dotenv").config();
 const { ethers } = require("ethers");
 const { CoinbaseWalletSDK } = require("@coinbase/wallet-sdk");
@@ -48,7 +50,7 @@ class EthereumClient {
         const metamask = getMetaMaskProvider();
         if(metamask.chainId !== ethers.utils.hexValue(DEFAULT_CHAIN_ID)) {
           const toast = createToaster({});
-          toast.error("Please connect to ArbitrumOne Network", {
+          toast.error(`Please connect to ${NETWORK.name} Network`, {
             position: "top",
 
           });

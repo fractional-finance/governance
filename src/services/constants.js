@@ -17,7 +17,7 @@ export const CONTRACTS = {
 };
 export const _NETWORKS = {
   arbitrum: { name: "Arbitrum One", id: 42161 },
-  arbitrum_goerli: { name: "arbitrum_goerli", id: 421613 },
+  arbitrum_goerli: { name: "Arbitrum Goerli Testnet", id: 421613 },
   ethereum: { name: "Ethereum", id: 1 },
   rinkeby: { name: "Rinkeby", id: 4 },
   goerli: { name: "Goerli", id: 5 },

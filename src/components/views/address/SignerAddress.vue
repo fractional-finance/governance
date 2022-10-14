@@ -1,10 +1,10 @@
 <template>
 <div>
-  <div v-if="whitelisted && address" class="button is-warning mr-5" @click="onVouch"><span class="mr-1">{{vouches}}</span>Vouch</div>
+  <div v-if="whitelisted && address" class="button is-warning mr-5" @click="onVouch"><span class="mr-1"></span>Vouch</div>
   <div @click="tokenDetails" style="cursor: pointer;" class="tag is-large is-flex is-address-container" v-if="address !=null">
     <div>
       <span >{{ balance }}</span>
-      <span class="has-text-medium-blue ml-1"> {{ symbol }}</span>
+      <span class="has-text-mediumBlue ml-1"> {{ symbol }}</span>
     </div>
     <div
       class="tag is-primary has-radius-xs is-large is-clickable"
@@ -16,7 +16,32 @@
         }}
       </div>
     </div>
-    <div class="m-0 p-0"><unicon class="m-0 p-0" :width="20" :height="40" name="signout" fill="darkGray"></unicon> </div>
+    <div class="dropdown is-right is-hoverable has-background-darkGray">
+      <div class="dropdown-trigger">
+        <button 
+          class="button is-primary is-dropdown-icon" 
+          role="button" ref="dropdownButton"
+          @click="toggleDropdown()"
+          aria-haspopup="true" aria-controls="dropdown-menu3">
+          <span><unicon class="mr-0" :width="25" :height="25" name="angle-down" fill="darkGray"></unicon></span>
+          <span class="icon is-small">
+            <i class="fas fa-angle-down" aria-hidden="true"></i>
+          </span>
+        </button>
+      </div>
+      <div class="dropdown-menu" id="dropdown-menu3" role="menu">
+        <div class="dropdown-content ">
+          <a href="#" class="dropdown-item is-disabled">
+            Token Overview
+          </a>
+          
+          <hr class="dropdown-divider">
+          <a href="#" class="dropdown-item">
+            Logout
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
   <div
     v-else
@@ -51,6 +76,9 @@ export default {
       sync: "syncWallet",
       tokenInfo: "tokenInfo"
     }),
+    toggleDropdown() {
+      
+    },
     onClick() {
       if(ethers.utils.isAddress(this.address)){
         this.sync({$toast: this.$toast})
@@ -105,8 +133,14 @@ export default {
     font-size: 1rem;
   }
 
-  .has-text-medium-blue {
-    color: $mediumBlue;
+  // .has-text-medium-blue {
+  //   color: $mediumBlue;
+  // }
+
+  .is-dropdown-icon {
+display: inline-flex !important;
+    background: $darkGray !important;
+    padding-right: 0px !important;
   }
 
   .connect {

@@ -14,18 +14,23 @@ class Wallet {
 
   async getState(provider) {
     await this.client.syncWallet(provider)
-
+    if(!this.client.walletProvider) {
+      return
+    }
     let values = await Promise.all([
       await this.client.getWalletAddress(),
-      await this.client.getWalletEthBalance()
+      await this.client.getWalletEthBalance(),
+      
     ])
+
     console.log(values);
     const state = new WalletState(
       values[0],
       values[1] / Math.pow(10, 18),
       0,
-      "_FRBC",
-      0
+      "_WEAV",
+      0,
+      this.getChainId()
     )
 
     return state
@@ -39,13 +44,19 @@ class Wallet {
       })
     }
   }
+
   async getSignature (domain, types, data) {
     console.log({domain, types, data})
     const signature = await this.client.getSignature(domain, types, data);
     const sig = Promise.all([signature]);
     return sig;
-    
   }
+
+  getChainId() {
+    console.log(this.client.getChainId());
+    return this.client.getChainId()
+  }
+
 }
 
 export default Wallet

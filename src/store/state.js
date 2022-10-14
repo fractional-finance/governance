@@ -71,6 +71,15 @@ const getters = {
     return state.user.wallet.address;
   },
 
+  connectedNetwork() {
+
+    return wallet.getChainId()
+  },
+  
+  isConnected(state) {
+    return ethers.utils.isAddress(state.user.wallet.address)
+  },
+
   userTokenBalance(state) {
     return state.user.wallet.tokenBalance;
   },
@@ -159,37 +168,17 @@ const actions = {
       totalSupply: ethers.utils.formatEther(supply),
     };
   },
-  async connectWallet(context, params) {
-    console.log("into connectwallet: ", params.wallet);
-    let provider, walletState;
-
-    const symbol = await token.getTokenSymbol(CONTRACTS.FRBC);
-    const balance = await token.getTokenBalance(
-      CONTRACTS.FRBC,
-      walletState.address
-    );
-    Promise.all([symbol, balance]).then((res) => {
-      console.log(res);
-    });
-    walletState = new WalletState(
-      walletState.address,
-      walletState.ethBalance,
-      ethers.utils.formatEther(balance).toString(),
-      symbol
-    );
-    context.commit("setWallet", walletState);
-  },
-
+ 
   async syncWallet(context, params) {
     console.log("SYNC");
     let { $toast } = params;
-    // const toast = createToaster({});
     let walletState = await wallet.getState(params.wallet);
     const symbol = await token.getTokenSymbol(CONTRACTS.FRBC);
     const balance = await token.getTokenBalance(
       CONTRACTS.FRBC,
       walletState.address
     );
+    
     Promise.all([walletState, symbol, balance]).then((val) => {
       console.log(val);
     });
@@ -206,7 +195,6 @@ const actions = {
       isWhitelisted || null,
       isWhitelisted ? 30 : 1
     );
-
     // TODO(goblin): See https://github.com/fractional-finance/governance/issues/19
     // if (!isWhitelisted && !addressMatchesCookie(walletState.address)) {
     // }
@@ -215,7 +203,8 @@ const actions = {
       walletState.address,
       walletState.ethBalance,
       ethers.utils.formatEther(balance).toString(),
-      symbol
+      symbol,
+      wallet.getChainId()
     );
 
     context.commit("setWallet", walletState);

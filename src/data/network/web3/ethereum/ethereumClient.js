@@ -8,6 +8,7 @@ const {
 import { CoinbaseConnector } from "./walletProviders/CoinbaseConnector.js";
 import { MetaMaskConnector } from "./walletProviders/MetaMaskConnector";
 import { toHex } from "@/utils/common.js";
+import { ERROR } from "../../../../services/errors/index.js";
 require("dotenv").config();
 const { ethers } = require("ethers");
 const { CoinbaseWalletSDK } = require("@coinbase/wallet-sdk");
@@ -20,6 +21,7 @@ const { CoinbaseWalletSDK } = require("@coinbase/wallet-sdk");
  */
 
 class EthereumClient {
+  _connector = 0;
   constructor() {}
 
   /* --- Blockchain state --- */
@@ -31,6 +33,10 @@ class EthereumClient {
     const number = await this.readProvider.getBlockNumber();
   }
 
+  changeAccount = new Event('accountChange', this.walletProvider?.on('accountsChanged', async (account) => {
+    console.log("AccountsChanged ", account)
+  }))
+
   /* --- Wallet access --- */
 
   async syncWallet(wallet) {
@@ -38,22 +44,42 @@ class EthereumClient {
     console.log("WALLET_PROVIDER 2:", wallet);
     if (wallet == "metamask") {
       try {
+        
         const metamask = getMetaMaskProvider();
-        this.walletProvider = new ethers.providers.Web3Provider(metamask);
-        const connector = new MetaMaskConnector(metamask);
-        this.account = await connector.getAddress();
-        this.walletSigner = await connector.getSigner(
-          await connector.getChainId()
+        if(metamask.chainId !== ethers.utils.hexValue(DEFAULT_CHAIN_ID)) {
+          const toast = createToaster({});
+          toast.error("Please connect to ArbitrumOne Network", {
+            position: "top",
+
+          });
+          return false
+        }
+        
+        this.walletProvider = metamask;
+        
+        
+        this._connector = new MetaMaskConnector(metamask);
+        this.account = await this._connector.getAddress();
+        await this._connector.getChainId()
+        metamask.on("accountsChanged", (log, event) => {
+          window.location.reload()
+        })
+        metamask.on("chainChanged", (log, event) => {
+          
+          window.location.reload()
+        })
+        console.log("CHAIN_ID___", this._connector.chainId)
+        this.walletSigner = await this._connector.getSigner(
+          this._connector.chainId
         );
-        console.log(this.account);
-        return;
+        return true;
       } catch (error) {
         console.log(error);
         const toast = createToaster({});
         toast.error("Something went wrong connecting to Metamask", {
           position: "top",
         });
-        return;
+        return false;
       }
     }
     if (wallet == "coinbase") {
@@ -79,6 +105,12 @@ class EthereumClient {
       await getLedgerWalletProvider()
     }
   }
+
+  getChainId() {
+    return this._connector.chainId
+  }
+
+  
 
   switchNetwork = async (network) => {
     try {

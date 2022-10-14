@@ -1,7 +1,7 @@
 import CoinbaseWalletSDK from "@coinbase/wallet-sdk";
 import Eth from "@ledgerhq/hw-app-eth";
 import TransportWebHID from "@ledgerhq/hw-transport-webhid";
-
+import {NETWORK} from "../../../../services/constants"
 const APP_NAME = "WeavrDAO";
 const APP_LOGO_URL = "@/assets/logo/new-logo.png";
 const DEFAULT_ETH_JSONRPC_URL =
@@ -9,7 +9,7 @@ const DEFAULT_ETH_JSONRPC_URL =
 
 const INFURA_ID = process.env.VUE_APP_INFURA_ID;
 const INFURA_RPC_URL = `https://mainnet.infura.io/v3/${INFURA_ID}`;
-export const DEFAULT_CHAIN_ID = 42161;
+export const DEFAULT_CHAIN_ID = NETWORK.id;
 
 
 // Ledger Provider
@@ -62,6 +62,8 @@ export const getBraveProvider = () => {
     window.ethereum?.providers?.find((p) => !!p.isBrave) ?? window.ethereum
   );
 };
+
+
 // WalletConnect Provider
 // export const getWalletConnectProvider = () => {
 //   return new WalletConnectProvider({

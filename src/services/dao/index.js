@@ -157,13 +157,14 @@ class DAO {
       title,
       description,
       forumLink,
+    });
+
+    const descriptorHash = await this.storageNetwork.uploadAndGetPathAsBytes({
+      descriptor,
+      name,
       imagesHashes,
       documentHashes,
     });
-
-    const descriptorHash = await this.storageNetwork.uploadAndGetPathAsBytes(
-      descriptor
-    );
 
     const data = new ethers.utils.AbiCoder().encode(
       ["address", "uint112"],
@@ -171,6 +172,7 @@ class DAO {
     );
 
     if (!infoHash) return;
+    if (!descriptorHash) return;
 
     const status = await assetContract.proposeThread(
       ethers.BigNumber.from(0), // Only valid "variant" number

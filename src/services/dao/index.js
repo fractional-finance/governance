@@ -394,6 +394,12 @@ class DAO {
     return status;
   }
 
+  async withdraw(assetAddress, proposalId) {
+    const assetContract = new AssetContract(this.ethereumClient, assetAddress);
+    const status = await assetContract.withdrawProposal(proposalId);
+    return status;
+  }
+
   async getTokenAddress(frabricAddress) {
     const assetContract = new AssetContract(
       this.ethereumClient,

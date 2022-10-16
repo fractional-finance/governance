@@ -31,6 +31,9 @@ const contractAbi = [
   // Can Propose
   "function canPropose(address proposer) returns (bool)",
 
+  // Withdraw proposal
+  "function withdrawProposal(uint256 id)",
+
   // Vouch a participant
   "function vouch(address participant, bytes signature)",
 
@@ -198,6 +201,11 @@ class AssetContract {
       [ethers.utils.parseEther(votes.toString())]
     );
 
+    return (await tx.wait()).status;
+  }
+
+  async withdrawProposal(proposalId) {
+    const tx = await this.mutableContract.withdrawProposal(proposalId);
     return (await tx.wait()).status;
   }
 

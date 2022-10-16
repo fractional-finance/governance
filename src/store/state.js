@@ -472,6 +472,28 @@ const actions = {
     console.log(status);
   },
 
+  async withdraw(context, props) {
+    const toast = params.$toast || createToaster({});
+
+    const { assetAddress, proposalId } = props;
+    
+    const status = await dao.withdraw(
+      assetAddress || CONTRACTS.WEAVR,
+      proposalId,
+    );
+
+    if (status) {
+      toast.success("Transaction confirmed...", {
+        duration: 2000,
+        position: "top",
+      });
+    } else {
+      toast.error("Transaction failed. See details in MetaMask.");
+      console.log("Transaction failed. See details in MetaMask.");
+    }
+    console.log(status);
+  },
+
   async vouchParticipant(context, props) {
     const toast = params.$toast || createToaster({});
     const { customDomain, participant } = props;

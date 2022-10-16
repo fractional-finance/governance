@@ -57,6 +57,17 @@ class Wallet {
     return this.client.getChainId()
   }
 
+  disconnect() {
+    return new WalletState(
+      "",
+      null,
+      null,
+      null,
+      null,
+      0
+    )
+  }
+
 }
 
 export default Wallet

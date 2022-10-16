@@ -1,6 +1,6 @@
 <template>
 <div>
-  <div v-if="whitelisted && address" class="button is-warning mr-5" @click="onVouch"><span class="mr-1"></span>Vouch</div>
+  <div v-if="whitelisted && isConnected" class="button is-warning mr-5" @click="onVouch"><span class="mr-1"></span>Vouch</div>
   <div @click="tokenDetails" style="cursor: pointer;" class="tag is-large is-flex is-address-container" v-if="address !=null">
     <div>
       <span >{{ balance }}</span>
@@ -31,12 +31,13 @@
       </div>
       <div class="dropdown-menu" id="dropdown-menu3" role="menu">
         <div class="dropdown-content ">
-          <a href="#" class="dropdown-item is-disabled">
+          <a  class="dropdown-item is-disabled has-text-mediumGray">
+            <!-- <span class="mr-1"><unicon name="eye-slash" fill="mediumGray" width="15" height="15"></unicon></span> -->
             Token Overview
           </a>
           
           <hr class="dropdown-divider">
-          <a href="#" class="dropdown-item">
+          <a @click="onLogout" class="dropdown-item">
             Logout
           </a>
         </div>
@@ -55,7 +56,6 @@
 </template>
 
 <script>
-import { createApp } from '@vue/runtime-dom';
 import { mapGetters, mapActions } from "vuex";
 import { DAO } from "../../../services/constants"
 import { Modal } from "../modal/Modal.vue"
@@ -70,11 +70,15 @@ export default {
       symbol: "assetTokenSymbol",
       vouches: "vouchesPerSigner"
     }),
+    isConnected() {
+      return ethers.utils.isAddress(this.address)
+    }
   },
   methods: {
     ...mapActions({
       sync: "syncWallet",
-      tokenInfo: "tokenInfo"
+      tokenInfo: "tokenInfo",
+      logout: "logout"
     }),
     toggleDropdown() {
       
@@ -85,10 +89,13 @@ export default {
       }else {
         this.$router.push("/walletConnect")
       }
-      
     },
     onVouch() {
       this.$router.push("/".concat(DAO).concat("/vouch"))
+    },
+    onLogout() {
+      this.logout()
+      this.$router.go('/')
     },
     async tokenDetails() {
      

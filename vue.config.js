@@ -68,7 +68,7 @@ module.exports = {
       })
       .end()
 
-      config.resolve.alias
+    config.resolve.alias
       .set("@ledgerhq/devices", "@ledgerhq/devices/lib-es")
       .end()
   }

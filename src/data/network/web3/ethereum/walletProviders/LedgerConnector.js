@@ -1,23 +1,22 @@
 const { ethers } = require("ethers");
 
-export class MetaMaskConnector {
-  constructor(metaMaskProvider) {
-    this.provider = metaMaskProvider;
+
+
+export class LedgerConnector {
+  constructor(ledgerApp) {
+    this.provider = ledgerApp;
     // this.getCoinbaseEthereumAddress()
     // this.getChainId()
   }
 
   getAddress = async () => {
     try {
-      return this.provider
-        .request({
-          method: "eth_requestAccounts",
-        })
-        .then((response) => {
-          const accounts = response;
-          console.log(`User's address is ${accounts[0]}`);
-          return accounts[0];
-        });
+      let i;
+      for(i=0; i<10; i++) {
+        const address = await this.provider.getAddress("44'/60'/"+i+"'/0/0").then(o => o.address)
+        console.log(address)
+      }
+      return await this.provider.getAddress("44'/60'/"+i+"'/0/0").then(o => o.address)
     } catch (error) {}
   };
 

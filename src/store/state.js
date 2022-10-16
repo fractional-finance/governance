@@ -5,7 +5,7 @@ import { createToaster } from "@meforma/vue-toaster";
 import { params } from "stylus/lib/utils";
 import ServiceProvider from "../services/provider";
 import WalletState from "../models/walletState";
-import { CONTRACTS, DAO } from "../services/constants";
+import { CONTRACTS, DAO, NETWORK } from "../services/constants";
 import {
   whitelistState,
   whitelistGetters,
@@ -69,6 +69,15 @@ const getters = {
   },
   userWalletAddress(state) {
     return state.user.wallet.address;
+  },
+
+  connectedNetwork() {
+
+    return wallet.getChainId()
+  },
+  
+  isConnected(state) {
+    return ethers.utils.isAddress(state.user.wallet.address)
   },
 
   userTokenBalance(state) {
@@ -159,37 +168,17 @@ const actions = {
       totalSupply: ethers.utils.formatEther(supply),
     };
   },
-  async connectWallet(context, params) {
-    console.log("into connectwallet: ", params.wallet);
-    let provider, walletState;
-
-    const symbol = await token.getTokenSymbol(CONTRACTS.FRBC);
-    const balance = await token.getTokenBalance(
-      CONTRACTS.FRBC,
-      walletState.address
-    );
-    Promise.all([symbol, balance]).then((res) => {
-      console.log(res);
-    });
-    walletState = new WalletState(
-      walletState.address,
-      walletState.ethBalance,
-      ethers.utils.formatEther(balance).toString(),
-      symbol
-    );
-    context.commit("setWallet", walletState);
-  },
-
+ 
   async syncWallet(context, params) {
     console.log("SYNC");
     let { $toast } = params;
-    // const toast = createToaster({});
     let walletState = await wallet.getState(params.wallet);
     const symbol = await token.getTokenSymbol(CONTRACTS.FRBC);
     const balance = await token.getTokenBalance(
       CONTRACTS.FRBC,
       walletState.address
     );
+    
     Promise.all([walletState, symbol, balance]).then((val) => {
       console.log(val);
     });
@@ -206,7 +195,6 @@ const actions = {
       isWhitelisted || null,
       isWhitelisted ? 30 : 1
     );
-
     // TODO(goblin): See https://github.com/fractional-finance/governance/issues/19
     // if (!isWhitelisted && !addressMatchesCookie(walletState.address)) {
     // }
@@ -215,7 +203,8 @@ const actions = {
       walletState.address,
       walletState.ethBalance,
       ethers.utils.formatEther(balance).toString(),
-      symbol
+      symbol,
+      wallet.getChainId()
     );
 
     context.commit("setWallet", walletState);
@@ -225,6 +214,11 @@ const actions = {
       duration: 1000,
       position: "top",
     });
+  },
+
+  async logout(context) {
+    const state = wallet.disconnect();
+    context.commit("setWallet", state)
   },
 
   async refreshProposalsDataForAsset(context, params) {
@@ -498,16 +492,10 @@ const actions = {
     const toast = params.$toast || createToaster({});
     const { customDomain, participant } = props;
     
-    const networks = {
-      goerli: 5,
-      arbitrum: 42161,
-      arb_goerli: 421613
-    };
-    
     const domain = customDomain || {
       name: "Weavr Protocol",
       version: "1",
-      chainId: networks.arb_goerli,
+      chainId: NETWORK.id,
       verifyingContract: CONTRACTS.WEAVR
     };
     const types = {
@@ -521,13 +509,13 @@ const actions = {
     
     const signatures = await wallet.getSignature(domain, types, data);
     Promise.all([signatures])
-    //.then(() => {
-    //   // console.log(signature[0]);
-    //   const expectedSignerAddress = context.state.user.wallet.address;
-    //   const recoveredAddress = ethers.utils.verifyTypedData(domain, types, data, signature[0]);
-    //   console.log("Signer Address CHECK______\n", recoveredAddress, "\n", expectedSignerAddress);
-    //   console.log(recoveredAddress.toLowerCase() === expectedSignerAddress.toLowerCase());
-    // });
+    .then(() => {
+      // console.log(signature[0]);
+      const expectedSignerAddress = context.state.user.wallet.address;
+      const recoveredAddress = ethers.utils.verifyTypedData(domain, types, data, signatures[0]);
+      console.log("Signer Address CHECK______\n", recoveredAddress, "\n", expectedSignerAddress);
+      console.log(recoveredAddress.toLowerCase() === expectedSignerAddress.toLowerCase());
+    });
     const signature = signatures[0]
     console.log(signature);
     const status = await dao.vouch(participant, signature);

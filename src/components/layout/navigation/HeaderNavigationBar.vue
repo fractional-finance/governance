@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar p-5" role="navigation" aria-label="main navigation">
+    <nav class="navbar p-5" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
       <a class="navbar-item" href="#">
         <div class="title has-text-white is-flex is-align-items-center">
@@ -52,6 +52,8 @@
 
 <script>
 import SignerAddress from '../../views/address/SignerAddress.vue'
+import { NETWORK } from '../../../services/constants'
+import {ERROR} from "../../../services/errors"
 import { useRoute } from 'vue-router'
 import { mapGetters, mapActions } from 'vuex'
 export default {
@@ -68,7 +70,19 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['currentNavigationItem']),
+    ...mapGetters({
+      currentNavigationItem: 'currentNavigationItem', 
+      connectedNetwork: 'connectedNetwork',
+      isConnected: 'isConnected'
+      
+    }),
+    networkId() {
+      console.log(NETWORK)
+      return NETWORK.id
+    },
+    networkName() {
+      return NETWORK.name
+    }
   },
   methods: {
     ...mapActions(['goBack']),

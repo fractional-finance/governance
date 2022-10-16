@@ -26,7 +26,7 @@
                     <h4>{{ wallet.name.charAt(0).toUpperCase() + wallet.name.slice(1) }}</h4>
                 </div>
               </div>
-              <p class="warning-message">Please ensure you are connected to Arbitrum One</p>
+              <p class="warning-message notification is-primary">Please ensure you are connected to {{networkName}}</p>
           </div>
       </div>
     </div>
@@ -36,7 +36,7 @@
 // import {mapActions}
 import { mapActions, mapGetters } from "vuex"
 import { DAO } from "@/services/constants.js"
-
+import { NETWORK } from "../../services/constants"
 export default {
   name: "WalletConnect",
   computed: {
@@ -44,6 +44,9 @@ export default {
       address: "userWalletAddress",
     }),
     hover: false,
+    networkName() {
+      return NETWORK.name
+    }
   },
   data() {
     return {

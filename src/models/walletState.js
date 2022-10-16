@@ -10,13 +10,15 @@ class WalletState {
     ethBalance,
     tokenBalance,
     tokenSymbol,
-    vouches
+    vouches,
+    network
   ) {
     this.address = address;
     this.ethBalance = ethBalance;
     this.tokenBalance = tokenBalance;
     this.tokenSymbol = tokenSymbol;
-    this.vouches = vouches
+    this.vouches = vouches,
+    this.network = network
   }
 }
 

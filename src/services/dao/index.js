@@ -6,7 +6,7 @@ import { VoteType } from "../../models/vote";
 import {
   GraphQLAPIClient,
   ALL_ASSETS_QUERY,
-  PARTICIPANTS_PER_DAO,
+  PARTICIPANTS_BY_TYPE,
   ALL_PROPOSALS,
   VOUCHES_PER_PARTICIPANT,
 } from "../../data/network/graph/graphQLAPIClient";
@@ -92,6 +92,18 @@ class DAO {
     return proposals;
   }
 
+  async getParticipantsByType(type) {
+    const participants = await this.graphQLAPIClient.query(
+      PARTICIPANTS_BY_TYPE,
+      {
+        type: type
+      },(mapper, response) => {
+        return mapper.mapParticipantsByType(response.data.frabric);
+      }
+    )
+
+    console.log("PARTICIPANTS____", participants)
+  }
   async getUserVouches(signer) {
     console.log("vouches");
     let vouches = await this.graphQLAPIClient.query(
@@ -377,6 +389,24 @@ class DAO {
     console.log("DAO__", signature)
     const status = await assetContract.vouch(participant, signature);
     console.log(signature)
+    return status;
+  }
+
+  /**
+   * 
+   * @param {*} pType 
+   * @param {*} approving 
+   * @param {*} kycHash 
+   * @param {*} signature 
+   */
+  async approve(
+    pType,
+    approving,
+    kycHash,
+    signature
+  ) {
+    const assetContract = new AssetContract(this.ethereumClient, CONTRACTS.WEAVR);
+    const status = await assetContract.approve(pType, approving, kycHash, signature);
     return status;
   }
   /**

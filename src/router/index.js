@@ -9,6 +9,7 @@ import newTokenAction from "@/components/proposals/newTokenAction.vue";
 import newThreadProposal from "@/components/proposals/newThreadProposal.vue";
 import SingleProposal from "@/components/proposals/SingleProposal.vue";
 import Vouch from "@/components/proposals/Vouch";
+import VerifyParticipant from "@/components/proposals/VerifyParticipant";
 import tokenDetails from "@/components/sections/TokenDetails.vue";
 import walletConnect from "@/components/sections/WalletConnect.vue";
 import { WhitelistPage } from "../whitelist";
@@ -44,6 +45,7 @@ const router = new createRouter({
           component: Modal,
           props: { assetId: "", component: tokenDetails },
         },
+
         {
           path: "paperProposal",
           component: Modal,
@@ -68,6 +70,11 @@ const router = new createRouter({
           path: "vouch",
           component: Modal,
           props: { assetId: "", component: Vouch },
+        },
+        {
+          path: "verify",
+          component: Modal,
+          props: { assetId: "", component: VerifyParticipant },
         },
         {
           path: "threadProposal",

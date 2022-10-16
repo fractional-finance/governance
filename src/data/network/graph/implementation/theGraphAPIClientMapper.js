@@ -8,6 +8,7 @@ import {
   mapParticipantProposals,
   mapTokenActionProposals,
   mapThreadProposals,
+  mapParticipantsByType,
   mapVouchers
 } from "./proposals";
 
@@ -23,6 +24,12 @@ class TheGraphAPIMapper extends GraphQLAPIMapper {
     if (!rawVouchers || !rawVouchers.length < 1) return [];
 
     return  rawVouchers.length
+  }
+
+  mapParticipantsByType(rawParticipants) {
+    console.log("RAW_PARTICIPANTS", rawParticipants)
+    return mapParticipantsByType(rawParticipants)
+    
   }
 
   // Map all proposal types to a single array to be written to global state

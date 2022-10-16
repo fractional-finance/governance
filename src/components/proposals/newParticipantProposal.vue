@@ -1,7 +1,7 @@
 <template>
   <div class="container p-5">
     <div class="tag has-background-mediumBlue has-text-white mb-5 is-medium">New Participant Proposal</div>
-    <!-- PAPER PROPOSAL FORM -->
+    <!-- PARTICIPANT PROPOSAL FORM -->
     <div class="field">
       <label class="label">Participant Type</label>
       <select

@@ -381,6 +381,29 @@ class DAO {
     console.log(signature)
     return status;
   }
+
+  async queue(proposalId) {
+    const assetContract = new AssetContract(
+      this.ethereumClient,
+      CONTRACTS.WEAVR
+    );
+    console.log("DAO__", proposalId)
+    const status = await assetContract.queueProposal(proposalId);
+    
+    return status;
+  }
+
+  async complete(proposalId, data) {
+    const assetContract = new AssetContract(
+      this.ethereumClient,
+      CONTRACTS.WEAVR
+    );
+    console.log("DAO__", proposalId)
+    const status = await assetContract.completeProposal(proposalId, data);
+    
+    return status;
+  }
+
   /**
    * Vote on a proposal
    * @param {Asset} asset Asset that the DAO controls

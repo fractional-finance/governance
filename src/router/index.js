@@ -10,6 +10,7 @@ import newThreadProposal from "@/components/proposals/newThreadProposal.vue";
 import SingleProposal from "@/components/proposals/SingleProposal.vue";
 import Vouch from "@/components/proposals/Vouch";
 import Queue from "@/components/proposals/Queue"
+import Complete from "@/components/proposals/Complete"
 import tokenDetails from "@/components/sections/TokenDetails.vue";
 import walletConnect from "@/components/sections/WalletConnect.vue";
 import { WhitelistPage } from "../whitelist";
@@ -94,6 +95,11 @@ const router = new createRouter({
           path: "proposal/:proposalId/queue",
           component: Modal,
           props: { assetId: "", component: Queue }
+        },
+        {
+          path: "proposal/:proposalId/complete",
+          component: Modal,
+          props: { assetId: "", component: Complete }
         }
       ]
     },

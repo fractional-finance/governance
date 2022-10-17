@@ -1,6 +1,6 @@
 <template>
   <div class="container p-5">
-    <div class="tag has-background-mediumBlue has-text-white mb-5 is-medium">Participant Vouch</div>
+    <div class="tag has-background-mediumBlue has-text-white mb-5 is-medium">Participant Approval</div>
     <div class="field">
       <label class="label">Participant Type</label>
       <select
@@ -24,7 +24,7 @@
     <div class="field">
       <label class="label">KYC-hash</label>
       <div class="control">
-        <input class="input" v-model="kycHash" type="text" placeholder="Address">
+        <input class="input" v-model="kycHash" type="text" placeholder="0x...">
       </div>
     </div>
     <div class="field">
@@ -34,7 +34,7 @@
       </div>
     </div>
     <div class="is-flex is-justify-content-space-between mt-5">
-      <button @click="publish" class="button has-background-mint has-text-white has-text-weight-bold">Vouch</button>
+      <button @click="publish" class="button has-background-mint has-text-white has-text-weight-bold">Approve</button>
       <button @click="onCancel" class="button has-background-red has-text-white has-text-weight-bold">Cancel</button>
     </div>
     <!-- End Form -->

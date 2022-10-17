@@ -3,6 +3,7 @@ class GraphQLAPIMapper {
   mapProposals(rawProposals) {}
   mapVotes(rawVotes) {}
   mapVouchers(rawVouchers) {}
+  mapParticipantsByType(rawVerifiers) {}
 }
 
 export default GraphQLAPIMapper

@@ -33,6 +33,12 @@ const contractAbi = [
 
   // Withdraw proposal
   "function withdrawProposal(uint256 id)",
+  
+  // Queue proposal
+  "function queueProposal(uint256 id)",
+
+  // Complete proposal
+  "function completeProposal(uint256 id, bytes data)",
 
   // Vouch a participant
   "function vouch(address participant, bytes signature)",
@@ -152,6 +158,30 @@ class AssetContract {
     console.log("ASSETCONTRACT: ", signature);
     let tx = this.mutableContract.vouch(participant, signature);
     // this.mutableContract.signer
+
+    console.log(tx);
+    return tx;
+  }
+
+  /**
+   * Queue a proposal
+   */
+  async queueProposal(proposalId) {
+    
+    console.log("ASSETCONTRACT: ", proposalId);
+    let tx = await this.mutableContract.queueProposal(proposalId);
+
+    console.log(tx);
+    return tx;
+  }
+
+  /**
+   * Complete a proposal
+   */
+  async completeProposal(proposalId, data) {
+    
+    console.log("ASSETCONTRACT: ", proposalId);
+    let tx = await this.mutableContract.completeProposal(proposalId, data);
 
     console.log(tx);
     return tx;

@@ -488,6 +488,23 @@ const actions = {
     console.log(status);
   },
 
+  async queueProposal(context, props) {
+    const toast = params.$toast || createToaster({});
+    const id = ethers.BigNumber.from(props.proposalId)
+    
+    const status = await dao.queue(id);
+    console.log(status)
+
+  },
+
+  async completeProposal(context, props) {
+    const toast = params.$toast || createToaster({});
+    const id = ethers.BigNumber.from(props.proposalId)
+    const DATA = params.data || "0x000000"
+    const status = await dao.complete(id, DATA);
+    console.log(status)
+  },
+
   async vouchParticipant(context, props) {
     const toast = params.$toast || createToaster({});
     const { customDomain, participant } = props;

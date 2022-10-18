@@ -46,7 +46,7 @@ export default {
       await this.complete({proposalId: id})
     },
     onCancel() {
-      this.$router.push("/".concat(DAO));
+      this.$router.go(-1);
     }
   },
   mounted() {

@@ -141,6 +141,9 @@
         <button @click="submitYesVote" :disabled="!address" class="button has-text-white has-background-mint has-text-weight-semibold">VOTE FOR </button>
         <button @click="submitNoVote" :disabled="!address"  class="button has-text-white has-background-red has-text-weight-semibold">VOTE AGAINST</button>
       </div>
+      <div v-if="userIsCreator && !ended" class="is-flex is-justify-content-flex-end mt-5">
+        <button class="button has-background-red has-text-white" @click="withdrawProposal">Withdraw Proposal</button>
+      </div>
       <div class="mt-5">
         <p>Voting ends on <strong>{{ endDateString }}</strong></p> 
         <p>( {{ timeRemainingString }} )</p>
@@ -243,11 +246,15 @@ export default {
       }
 
     },
+    userIsCreator() {
+      return this.address.toLowerCase() === this.proposal.creator.toLowerCase();
+    }
   },
   methods: {
     ...mapActions({
       vote: "vote",
       refresh: "refreshProposalsDataForAsset",
+      withdraw: "withdraw",
     }), // Voting action
     routeToHome() {
       this.$router.push("/".concat(DAO));
@@ -293,6 +300,13 @@ export default {
     },
     formatEther(amount) {
       return ethers.utils.formatEther(amount);
+    },
+    withdrawProposal() {
+      this.withdraw({
+        assetAddress: this.assetId,
+        proposalId: this.$route.params.proposalId,
+        $toast: this.$toast,
+      });
     }
   },
   mounted() {

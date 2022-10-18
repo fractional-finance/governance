@@ -77,7 +77,7 @@
           name="images"
           v-on:change="onChangeDocuments"
           multiple="multiple"
-          accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+          accept=".doc,.docx,.pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
         <span class="file-cta has-text-white has-background-mediumBlue">
           <span class="file-icon mt-1 mr-3">
             <unicon name="file-plus-alt" fill="white" />

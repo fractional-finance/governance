@@ -31,6 +31,15 @@ const contractAbi = [
   // Can Propose
   "function canPropose(address proposer) returns (bool)",
 
+  // Withdraw proposal
+  "function withdrawProposal(uint256 id)",
+  
+  // Queue proposal
+  "function queueProposal(uint256 id)",
+
+  // Complete proposal
+  "function completeProposal(uint256 id, bytes data)",
+
   // Vouch a participant
   "function vouch(address participant, bytes signature)",
 
@@ -158,6 +167,30 @@ class AssetContract {
   }
 
   /**
+   * Queue a proposal
+   */
+  async queueProposal(proposalId) {
+    
+    console.log("ASSETCONTRACT: ", proposalId);
+    let tx = await this.mutableContract.queueProposal(proposalId);
+
+    console.log(tx);
+    return tx;
+  }
+
+  /**
+   * Complete a proposal
+   */
+  async completeProposal(proposalId, data) {
+    
+    console.log("ASSETCONTRACT: ", proposalId);
+    let tx = await this.mutableContract.completeProposal(proposalId, data);
+
+    console.log(tx);
+    return tx;
+  }
+
+  /**
    * Approve a KYC vendor verified participant
    */
   async approve(
@@ -166,6 +199,7 @@ class AssetContract {
     kycHash,
     signature
   ) {
+    console.log({pType, approving, kycHash, signature})
     const tx = await this.mutableContract.approve(pType, approving, kycHash, signature);
     let status = (await tx.wait()).status;
     return status;
@@ -216,6 +250,11 @@ class AssetContract {
       [ethers.utils.parseEther(votes.toString())]
     );
 
+    return (await tx.wait()).status;
+  }
+
+  async withdrawProposal(proposalId) {
+    const tx = await this.mutableContract.withdrawProposal(proposalId);
     return (await tx.wait()).status;
   }
 

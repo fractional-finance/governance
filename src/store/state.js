@@ -466,6 +466,45 @@ const actions = {
     console.log(status);
   },
 
+  async withdraw(context, props) {
+    const toast = params.$toast || createToaster({});
+
+    const { assetAddress, proposalId } = props;
+    
+    const status = await dao.withdraw(
+      assetAddress || CONTRACTS.WEAVR,
+      proposalId,
+    );
+
+    if (status) {
+      toast.success("Transaction confirmed...", {
+        duration: 2000,
+        position: "top",
+      });
+    } else {
+      toast.error("Transaction failed. See details in MetaMask.");
+      console.log("Transaction failed. See details in MetaMask.");
+    }
+    console.log(status);
+  },
+
+  async queueProposal(context, props) {
+    const toast = params.$toast || createToaster({});
+    const id = ethers.BigNumber.from(props.proposalId)
+    
+    const status = await dao.queue(id);
+    console.log(status)
+
+  },
+
+  async completeProposal(context, props) {
+    const toast = params.$toast || createToaster({});
+    const id = ethers.BigNumber.from(props.proposalId)
+    const DATA = params.data || "0x000000"
+    const status = await dao.complete(id, DATA);
+    console.log(status)
+  },
+
   async vouchParticipant(context, props) {
     const toast = params.$toast || createToaster({});
     const { customDomain, participant } = props;
@@ -551,7 +590,7 @@ const actions = {
     });
     const signature = signatures[0]
     console.log(signature);
-    const status = await dao.approve(participant, signature);
+    const status = await dao.approve(data.participantType, data.participant, data.kyc, signature);
     
     if (status) {
       toast.success("Transaction confirmed...", {

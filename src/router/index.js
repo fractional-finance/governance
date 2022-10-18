@@ -9,12 +9,13 @@ import newTokenAction from "@/components/proposals/newTokenAction.vue";
 import newThreadProposal from "@/components/proposals/newThreadProposal.vue";
 import SingleProposal from "@/components/proposals/SingleProposal.vue";
 import Vouch from "@/components/proposals/Vouch";
+import Queue from "@/components/proposals/Queue"
+import Complete from "@/components/proposals/Complete"
 import VerifyParticipant from "@/components/proposals/VerifyParticipant";
 import tokenDetails from "@/components/sections/TokenDetails.vue";
 import walletConnect from "@/components/sections/WalletConnect.vue";
 import { WhitelistPage } from "../whitelist";
 import { CONTRACTS, DAO } from "../services/constants";
-import { createToaster } from "@meforma/vue-toaster";
 import store from "../store";
 import { ethers } from "ethers";
 
@@ -94,9 +95,19 @@ const router = new createRouter({
             }
             // clear toast
             return true;
-          },
+          }
         },
-      ],
+        {
+          path: "proposal/:proposalId/queue",
+          component: Modal,
+          props: { assetId: "", component: Queue }
+        },
+        {
+          path: "proposal/:proposalId/complete",
+          component: Modal,
+          props: { assetId: "", component: Complete }
+        }
+      ]
     },
     { path: "/:pathMatch(.*)*", name: "not-found", component: PageNotFound },
   ],

@@ -2,6 +2,7 @@ import {
   ApolloClient,
   InMemoryCache
 } from "@apollo/client/core"
+import { ethers } from "ethers"
 import { GraphQLAPIClient } from "../graphQLAPIClient"
 
 const client = new ApolloClient({

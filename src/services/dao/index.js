@@ -169,13 +169,14 @@ class DAO {
       title,
       description,
       forumLink,
+    });
+
+    const descriptorHash = await this.storageNetwork.uploadAndGetPathAsBytes({
+      descriptor,
+      name,
       imagesHashes,
       documentHashes,
     });
-
-    const descriptorHash = await this.storageNetwork.uploadAndGetPathAsBytes(
-      descriptor
-    );
 
     const data = new ethers.utils.AbiCoder().encode(
       ["address", "uint112"],
@@ -183,6 +184,7 @@ class DAO {
     );
 
     if (!infoHash) return;
+    if (!descriptorHash) return;
 
     const status = await assetContract.proposeThread(
       ethers.BigNumber.from(0), // Only valid "variant" number
@@ -392,6 +394,29 @@ class DAO {
     return status;
   }
 
+  async queue(proposalId) {
+    const assetContract = new AssetContract(
+      this.ethereumClient,
+      CONTRACTS.WEAVR
+    );
+    console.log("DAO__", proposalId)
+    const status = await assetContract.queueProposal(proposalId);
+    
+    return status;
+  }
+
+  async complete(proposalId, data) {
+    const assetContract = new AssetContract(
+      this.ethereumClient,
+      CONTRACTS.WEAVR
+    );
+    console.log("DAO__", proposalId)
+    const status = await assetContract.completeProposal(proposalId, data);
+    
+    return status;
+  }
+
+
   /**
    * 
    * @param {*} pType 
@@ -406,6 +431,7 @@ class DAO {
     signature
   ) {
     const assetContract = new AssetContract(this.ethereumClient, CONTRACTS.WEAVR);
+    console.log("DAO____",{pType, approving, kycHash, signature})
     const status = await assetContract.approve(pType, approving, kycHash, signature);
     return status;
   }
@@ -419,6 +445,12 @@ class DAO {
   async vote(assetAddress, proposalId, votes) {
     const assetContract = new AssetContract(this.ethereumClient, assetAddress);
     const status = await assetContract.vote(proposalId, votes);
+    return status;
+  }
+
+  async withdraw(assetAddress, proposalId) {
+    const assetContract = new AssetContract(this.ethereumClient, assetAddress);
+    const status = await assetContract.withdrawProposal(proposalId);
     return status;
   }
 

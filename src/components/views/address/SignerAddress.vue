@@ -78,7 +78,8 @@ export default {
     ...mapActions({
       sync: "syncWallet",
       tokenInfo: "tokenInfo",
-      logout: "logout"
+      logout: "logout",
+      participantsList: "participantsByType"
     }),
     toggleDropdown() {
       
@@ -117,6 +118,7 @@ export default {
     }
   },
   mounted() {
+    this.participantsList({type: "GENESIS"})
   }
   
 };

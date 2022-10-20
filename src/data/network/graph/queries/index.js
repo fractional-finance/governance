@@ -47,6 +47,20 @@ export const ALL_ASSETS_QUERY = gql`
   }  
 `;
 
+export const PARTICIPANTS_BY_TYPE = gql`
+  query Frabric($type: String!) 
+  {
+    frabrics {
+      id
+      participants(type: $type) {
+        id
+        address
+        type
+      }
+    }
+  }
+`;
+
 export const PARTICIPANTS_PER_DAO = gql`
   query Frabric
   {

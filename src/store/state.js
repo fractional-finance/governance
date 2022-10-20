@@ -552,6 +552,65 @@ const actions = {
     }
   },
 
+  async verifyParticipant(context, props) {
+    const toast = params.$toast || createToaster({});
+    const { customDomain, participant, pType, kycHash, nonce } = props;
+    console.log({ customDomain, participant, pType, kycHash, nonce })
+    const domain = customDomain || {
+      name: "Weavr Protocol",
+      version: "1",
+      chainId: NETWORK.id,
+      verifyingContract: CONTRACTS.WEAVR
+    };
+    const types = {
+      KYCVerification: [
+        { type: "uint8",   name: "participantType" },
+        { type: "address", name: "participant" },
+        { type: "bytes32", name: "kyc" },
+        { type: "uint256", name: "nonce" }
+    ]
+    };
+    const data = { 
+      participantType: pType,
+      participant: participant,
+      kyc: ethers.utils.id(kycHash),
+      nonce: ethers.BigNumber.from(nonce) 
+    };
+    
+    toast.info("Waiting for signature..", { position: "top" });
+    
+    const signatures = await wallet.getSignature(domain, types, data);
+    Promise.all([signatures])
+    .then(() => {
+      // // console.log(signature[0]);
+      // const expectedSignerAddress = context.state.user.wallet.address;
+      // const recoveredAddress = ethers.utils.verifyTypedData(domain, types, data, signatures[0]);
+      // console.log("Signer Address CHECK______\n", recoveredAddress, "\n", expectedSignerAddress);
+      // console.log(recoveredAddress.toLowerCase() === expectedSignerAddress.toLowerCase());
+    });
+    const signature = signatures[0]
+    console.log(signature);
+    const status = await dao.approve(data.participantType, data.participant, data.kyc, signature);
+    
+    if (status) {
+      toast.success("Transaction confirmed...", {
+        duration: 2000,
+        position: "top",
+      });
+      context.dispatch("refreshProposalsDataForAsset", {
+        assetId: params.assetId,
+      });
+      router.push("/" + DAO + "/" + params.assetId);
+    } else {
+      toast.error("Transaction failed. See details in MetaMask.");
+      console.log("Transaction failed. See details in MetaMask.");
+    }
+  },
+
+  async participantsByType(context, params) {
+    const type = params.type || 2;
+    await dao.getParticipantsByType(type)
+  },
   ...whitelistActions(whitelist),
 };
 

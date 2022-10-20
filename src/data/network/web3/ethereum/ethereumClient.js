@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import { createToaster } from "@meforma/vue-toaster";
 const {
   getCoinbaseWalletProvider,
@@ -24,6 +25,7 @@ const { CoinbaseWalletSDK } = require("@coinbase/wallet-sdk");
 
 class EthereumClient {
   _connector = 0;
+  
   constructor() {}
 
   /* --- Blockchain state --- */
@@ -52,14 +54,11 @@ class EthereumClient {
           const toast = createToaster({});
           toast.error(`Please connect to ${NETWORK.name} Network`, {
             position: "top",
-
           });
           return false
         }
         
         this.walletProvider = metamask;
-        
-        
         this._connector = new MetaMaskConnector(metamask);
         this.account = await this._connector.getAddress();
         await this._connector.getChainId()
@@ -104,7 +103,8 @@ class EthereumClient {
       }
     }
     if(wallet == "ledger") {
-      await getLedgerWalletProvider()
+      const ledger = await getLedgerWalletProvider();
+      
     }
   }
 

@@ -43,6 +43,9 @@ const contractAbi = [
   // Vouch a participant
   "function vouch(address participant, bytes signature)",
 
+  // Approve (KYC) a participant
+  "function approve( uint8 pType, address approving,  bytes32 kycHash, bytes signature)",
+
   // Propose a new thread
   "function proposeThread(uint8 variant, string name, string symbol, bytes32 descriptor, bytes data, bytes32 info) returns (uint256 id)",
 
@@ -186,6 +189,22 @@ class AssetContract {
     console.log(tx);
     return tx;
   }
+
+  /**
+   * Approve a KYC vendor verified participant
+   */
+  async approve(
+    pType,
+    approving,
+    kycHash,
+    signature
+  ) {
+    console.log({pType, approving, kycHash, signature})
+    const tx = await this.mutableContract.approve(pType, approving, kycHash, signature);
+    let status = (await tx.wait()).status;
+    return status;
+  }
+
 
   /**
    * Check if participant can make a proposal

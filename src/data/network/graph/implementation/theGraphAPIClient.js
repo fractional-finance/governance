@@ -2,10 +2,11 @@ import {
   ApolloClient,
   InMemoryCache
 } from "@apollo/client/core"
+import { ethers } from "ethers"
 import { GraphQLAPIClient } from "../graphQLAPIClient"
-
+import {NETWORK} from "@/services/constants"
 const client = new ApolloClient({
-  uri: "https://api.thegraph.com/subgraphs/name/abstrucked/weavr_goerli",
+  uri: NETWORK.graph,
   cache: new InMemoryCache()
 })
 

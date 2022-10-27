@@ -12,7 +12,8 @@ module.exports = {
       sass: {
         additionalData: globalSassFiles.map((src)=>'@import "' + src + '";').join('\n')
       }
-    }
+    },
+
 },
   chainWebpack: (config) => {
     config
@@ -68,6 +69,18 @@ module.exports = {
       })
       .end()
 
+    config.merge({
+      devServer: {
+        proxy: {
+          "/api": {
+            ws: true,
+            changeOrigin: true,
+            target: "'https://api.sumsub.com'"
+          }
+        }
+      }
+    })
+    
     config.resolve.alias
       .set("@ledgerhq/devices", "@ledgerhq/devices/lib-es")
       .end()

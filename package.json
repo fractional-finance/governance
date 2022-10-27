@@ -63,6 +63,7 @@
     "jsonwebtoken": "^8.5.1",
     "md5": "^2.3.0",
     "postcss": "^7.0.36",
+    "string-crypto": "^2.0.2",
     "vue-loader": "^15.9.7"
   },
   "browserslist": [

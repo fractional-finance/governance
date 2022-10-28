@@ -16,8 +16,8 @@ export const CONTRACTS = {
   TOKEN_ADDRESS,
 };
 export const _NETWORKS = {
-  arbitrum: { name: "Arbitrum One", id: 42161 },
-  arbitrum_goerli: { name: "Arbitrum Goerli Testnet", id: 421613 },
+  arbitrum: { name: "Arbitrum One", id: 42161, graph: process.env.VUE_APP_GRAPH_PROD },
+  arbitrum_goerli: { name: "Arbitrum Goerli Testnet", id: 421613, graph: process.env.VUE_APP_GRAPH_TEST },
   ethereum: { name: "Ethereum", id: 1 },
   rinkeby: { name: "Rinkeby", id: 4 },
   goerli: { name: "Goerli", id: 5 },

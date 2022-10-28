@@ -4,9 +4,9 @@ import {
 } from "@apollo/client/core"
 import { ethers } from "ethers"
 import { GraphQLAPIClient } from "../graphQLAPIClient"
-
+import {NETWORK} from "@/services/constants"
 const client = new ApolloClient({
-  uri: process.env.VUE_APP_GRAPH_TEST,
+  uri: NETWORK.graph,
   cache: new InMemoryCache()
 })
 

@@ -18,6 +18,7 @@ import { WhitelistPage } from "../whitelist";
 import { CONTRACTS, DAO } from "../services/constants";
 import store from "../store";
 import { ethers } from "ethers";
+import SumSub  from "@/components/SumSub.vue";
 
 const router = new createRouter({
   history: createWebHashHistory(),
@@ -41,6 +42,11 @@ const router = new createRouter({
       component: Homepage,
       props: { assetId: CONTRACTS.WEAVR },
       children: [
+        {
+          path: "kyc",
+          component: Modal,
+          props: {assetId: "", component: SumSub}
+        },
         {
           path: "tokenInfo",
           component: Modal,

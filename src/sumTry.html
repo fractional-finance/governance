@@ -1,0 +1,22 @@
+<html>
+<head>
+    <title>WebSDK CDN Example</title>
+</head>
+<body>
+<script src="https://static.sumsub.com/idensic/static/sns-websdk-builder.js"></script>
+<div id="sumsub-websdk-container"></div>
+</body>
+</html>
+<script>
+    let access_token = "_act-51816742-d6ea-4f45-ac74-1acae7d602d5";
+    function launchWebSdk(accessToken) {
+        let snsWebSdkInstance = snsWebSdk.init(
+            accessToken,
+            () => Promise.resolve(null)
+        ).build();
+        snsWebSdkInstance.launch('#sumsub-websdk-container')
+
+    }
+
+launchWebSdk(access_token)
+</script>

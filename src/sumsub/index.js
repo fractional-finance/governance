@@ -15,4 +15,3 @@ export const getAccessToken = async (id) => {
       })
 }
 
-export const style = require("./style.css")

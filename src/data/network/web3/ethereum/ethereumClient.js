@@ -4,10 +4,11 @@ const {
   getCoinbaseWalletProvider,
   getMetaMaskProvider,
   getLedgerWalletProvider,
-  DEFAULT_CHAIN_ID,
 } = require("./providers");
 import { CoinbaseConnector } from "./walletProviders/CoinbaseConnector.js";
 import { MetaMaskConnector } from "./walletProviders/MetaMaskConnector";
+import WalletConnect from "@walletconnect/client";
+import QRCodeModal from "@walletconnect/qrcode-modal";
 import { toHex } from "@/utils/common.js";
 import { ERROR } from "../../../../services/errors/index.js";
 import {NETWORK} from "../../../../services/constants"
@@ -50,7 +51,7 @@ class EthereumClient {
       try {
         
         const metamask = getMetaMaskProvider();
-        if(metamask.chainId !== ethers.utils.hexValue(DEFAULT_CHAIN_ID)) {
+        if(metamask.chainId !== ethers.utils.hexValue(NETWORK.id)) {
           const toast = createToaster({});
           toast.error(`Please connect to ${NETWORK.name} Network`, {
             position: "top",
@@ -103,8 +104,47 @@ class EthereumClient {
       }
     }
     if(wallet == "ledger") {
-      const ledger = await getLedgerWalletProvider();
-      
+      const ledger = await getLedgerWalletProvider(); 
+    }
+    if(wallet == "walletConnect") {
+      // Create a connector
+      const connector = new WalletConnect({
+        bridge: "https://bridge.walletconnect.org", // Required
+        qrcodeModal: QRCodeModal,
+      });
+
+      // Check if connection is already established
+      if (!connector.connected) {
+        // create new session
+        connector.createSession();
+      }
+
+      // Subscribe to connection events
+      connector.on("connect", (error, payload) => {
+        if (error) {
+          throw error;
+        }
+
+        // Get provided accounts and chainId
+        const { accounts, chainId } = payload.params[0];
+      });
+
+      connector.on("session_update", (error, payload) => {
+        if (error) {
+          throw error;
+        }
+
+        // Get updated accounts and chainId
+        const { accounts, chainId } = payload.params[0];
+      });
+
+      connector.on("disconnect", (error, payload) => {
+        if (error) {
+          throw error;
+        }
+
+        // Delete connector
+      });
     }
   }
 
@@ -112,13 +152,11 @@ class EthereumClient {
     return this._connector.chainId
   }
 
-  
-
   switchNetwork = async (network) => {
     try {
       await this.walletProvider.request({
         method: "wallet_switchEthereumChain",
-        params: [{ chainId: toHex(this.chainId || DEFAULT_CHAIN_ID) }],
+        params: [{ chainId: toHex(this.chainId || NETWORK.id) }],
       });
     } catch (error) {
       this.error = error;

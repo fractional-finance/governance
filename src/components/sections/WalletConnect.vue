@@ -23,7 +23,7 @@
                 :aria-disabled="wallet.disabled">
                 <div class="wallet-connector" >
                     <img class="image is-64x64 mr-2 ml-5" :src="wallet.icon"/>
-                    <h4>{{ wallet.name.charAt(0).toUpperCase() + wallet.name.slice(1) }}</h4>
+                    <h4 class="is-flex is-flex-wrap">{{ wallet.name.charAt(0).toUpperCase() + wallet.name.slice(1) }}</h4>
                 </div>
               </div>
               <p class="warning-message notification is-primary">Please ensure you are connected to {{networkName}}</p>
@@ -61,11 +61,16 @@ export default {
           icon: require("@/assets/icons/coinbase-wallet.png"),
           disabled: false
         },
-        //  ledger: {
-        //   name: "ledger",
-        //   icon: require("@/assets/icons/ledger-wallet.png"),
-        //   disabled: false
-        // }
+         ledger: {
+          name: "ledger",
+          icon: require("@/assets/icons/ledger-wallet.png"),
+          disabled: true
+        },
+        walletConnect: {
+          name: "walletConnect",
+          icon: require("@/assets/icons/coinbase-wallet.png"),
+          disabled: false
+        },
       }
     }
   },
@@ -140,7 +145,7 @@ export default {
   background: rgba(255,255,255, 0.03);
   transition: all 150ms linear;
   border-radius: 8px;
-  max-width: min(350px, 100%);
+  max-width: min(400px, 100%);
   border-left: 8px solid $mediumBlue;
   gap: 4rem;
 

@@ -3,8 +3,6 @@ const { ethers } = require("ethers");
 export class CoinbaseConnector {
   constructor(coinbaseWeb3Provider) {
     this.provider = coinbaseWeb3Provider;
-    // this.getCoinbaseEthereumAddress()
-    // this.getChainId()
   }
 
   getAddress = async () => {

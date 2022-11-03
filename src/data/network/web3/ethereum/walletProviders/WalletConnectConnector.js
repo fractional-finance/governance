@@ -1,60 +1,43 @@
 const { ethers } = require("ethers");
 
+import WalletConnect from "@walletconnect/client";
+import QRCodeModal from "@walletconnect/qrcode-modal";
 
+// Create a connector
+const connector = new WalletConnect({
+  bridge: "https://bridge.walletconnect.org", // Required
+  qrcodeModal: QRCodeModal,
+});
 
-export class LedgerConnector {
-  constructor(ledgerApp) {
-    this.provider = ledgerApp;
-    // this.getCoinbaseEthereumAddress()
-    // this.getChainId()
-  }
-
-  getAddress = async () => {
-    try {
-      let i;
-      for(i=0; i<10; i++) {
-        const address = await this.provider.getAddress("44'/60'/"+i+"'/0/0").then(o => o.address)
-        console.log(address)
-      }
-      return await this.provider.getAddress("44'/60'/"+i+"'/0/0").then(o => o.address)
-    } catch (error) {}
-  };
-
-  getChainId = async () => {
-    try {
-      // Get current chain ID for connected wallet
-      const chainId = await this.provider.request({
-        method: "eth_chainId",
-      });
-      this.chainId = Number(chainId);
-    } catch (error) {
-      this.error = error;
-    }
-  };
-
-  getSigner = async (chainId) => {
-    const [provider, account] = await Promise.all([
-      this.provider,
-      await this.getAddress(),
-    ]);
-    console.log(provider, account);
-    return new ethers.providers.Web3Provider(provider, chainId).getSigner(
-      account
-    );
-  };
-
-  getEthBalance = async () => {
-    this.provider
-      .request({
-        method: "eth_getBalance",
-        params: [this.account || (await this.getAddress()), "latest"],
-      })
-      .then((response) => {
-        const accounts = response;
-        console.log(`User's bal is ${accounts}`);
-        return response;
-      });
-  };
+// Check if connection is already established
+if (!connector.connected) {
+  // create new session
+  connector.createSession();
 }
 
-export default MetaMaskConnector;
+// Subscribe to connection events
+connector.on("connect", (error, payload) => {
+  if (error) {
+    throw error;
+  }
+
+  // Get provided accounts and chainId
+  const { accounts, chainId } = payload.params[0];
+});
+
+connector.on("session_update", (error, payload) => {
+  if (error) {
+    throw error;
+  }
+
+  // Get updated accounts and chainId
+  const { accounts, chainId } = payload.params[0];
+});
+
+connector.on("disconnect", (error, payload) => {
+  if (error) {
+    throw error;
+  }
+
+  // Delete connector
+});

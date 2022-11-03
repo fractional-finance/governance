@@ -15,7 +15,9 @@ export const getAccessToken = async (id) => {
   return await axios({
     method: "get",
     headers: headers,
-    url: url
+    url: "https://leafy-gecko-65dc0a.netlify.app/.netlify/functions/api/dev/1"
   })
 }
 
+// https://api.weavr.org:9000/.netlify/functions/api/dev/404A9Ab87f0C51245FAc908cdcDa9f67F08Df980
+// https://api.weavr.org/.netlify/functions/api/dev/dasdsada

@@ -1,4 +1,5 @@
 import CoinbaseWalletSDK from "@coinbase/wallet-sdk";
+import WalletConnectProvider from "@walletconnect/web3-provider";
 import Eth from "@ledgerhq/hw-app-eth";
 import TransportWebHID from "@ledgerhq/hw-transport-webhid";
 import {NETWORK} from "../../../../services/constants"
@@ -55,8 +56,8 @@ export const getBraveProvider = () => {
 
 
 // WalletConnect Provider
-// export const getWalletConnectProvider = () => {
-//   return new WalletConnectProvider({
-//     infuraId: INFURA_ID
-//   });
-// };
+export const getWalletConnectProvider = () => {
+  return new WalletConnectProvider({
+    infuraId: INFURA_ID
+  });
+};

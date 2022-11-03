@@ -4,10 +4,11 @@ const {
   getCoinbaseWalletProvider,
   getMetaMaskProvider,
   getLedgerWalletProvider,
+  getWalletConnectProvider
 } = require("./providers");
 import { CoinbaseConnector } from "./walletProviders/CoinbaseConnector.js";
 import { MetaMaskConnector } from "./walletProviders/MetaMaskConnector";
-import WalletConnect from "@walletconnect/client";
+import { WalletConnectConnector } from "./walletProviders/WalletConnectConnector"
 import QRCodeModal from "@walletconnect/qrcode-modal";
 import { toHex } from "@/utils/common.js";
 import { ERROR } from "../../../../services/errors/index.js";
@@ -66,8 +67,7 @@ class EthereumClient {
         metamask.on("accountsChanged", (log, event) => {
           window.location.reload()
         })
-        metamask.on("chainChanged", (log, event) => {
-          
+        metamask.on("chainChanged", (log, event) => { 
           window.location.reload()
         })
         console.log("CHAIN_ID___", this._connector.chainId)
@@ -107,45 +107,29 @@ class EthereumClient {
       const ledger = await getLedgerWalletProvider(); 
     }
     if(wallet == "walletConnect") {
-      // Create a connector
-      const connector = new WalletConnect({
-        bridge: "https://bridge.walletconnect.org", // Required
-        qrcodeModal: QRCodeModal,
-      });
-
-      // Check if connection is already established
-      if (!connector.connected) {
-        // create new session
-        connector.createSession();
-      }
-
-      // Subscribe to connection events
-      connector.on("connect", (error, payload) => {
-        if (error) {
-          throw error;
-        }
-
-        // Get provided accounts and chainId
-        const { accounts, chainId } = payload.params[0];
-      });
-
-      connector.on("session_update", (error, payload) => {
-        if (error) {
-          throw error;
-        }
-
-        // Get updated accounts and chainId
-        const { accounts, chainId } = payload.params[0];
-      });
-
-      connector.on("disconnect", (error, payload) => {
-        if (error) {
-          throw error;
-        }
-
-        // Delete connector
-      });
+      // Create connector
+      const provider = getWalletConnectProvider()
+      await provider.enable();
+      this.walletProvider = new ethers.providers.Web3Provider(provider)
+      this._connector = new WalletConnectConnector(provider);
+      this.account = await this._connector.getAddress();
+      await this._connector.getChainId()
     }
+
+    // Subscribe to accounts change
+    this.walletProvider.on("accountsChanged", (log, event) => {
+      window.location.reload()
+    })
+
+    // Subscribe to chainId change
+    this.walletProvider.on("chainChanged",  (log, event) => {
+      window.location.reload()
+    });
+
+    // Subscribe to session disconnection
+    this.walletProvider.on("disconnect",  (log, event) => {
+      window.location.reload()
+    });
   }
 
   getChainId() {

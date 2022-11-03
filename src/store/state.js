@@ -510,7 +510,7 @@ const actions = {
     const { customDomain, participant } = props;
     
     const domain = customDomain || {
-      name: "Weavr Protocol",
+      name: "Frabric Protocol",
       version: "1",
       chainId: NETWORK.id,
       verifyingContract: CONTRACTS.WEAVR

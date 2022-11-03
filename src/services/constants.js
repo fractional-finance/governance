@@ -20,10 +20,10 @@ export const _NETWORKS = {
   arbitrum_goerli: { name: "Arbitrum Goerli Testnet", id: 421613, graph: process.env.VUE_APP_GRAPH_TEST },
   ethereum: { name: "Ethereum", id: 1 },
   rinkeby: { name: "Rinkeby", id: 4 },
-  goerli: { name: "Goerli", id: 5 },
+  goerli: { name: "Goerli", id: 5, graph: process.env.VUE_APP_GRAPH_DEV },
   polygon: { name: "Polygon", id: 137 },
   optimism: { name: "Optimism", id: 10 },
   avalanche: { name: "Avalanche", id: 43114 },
 }
 export const DAO = "weavr";
-export const NETWORK = _NETWORKS.arbitrum_goerli
+export const NETWORK = _NETWORKS.goerli

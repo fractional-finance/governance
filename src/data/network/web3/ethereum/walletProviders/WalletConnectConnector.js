@@ -3,9 +3,11 @@ const { ethers } = require("ethers");
 export class WalletConnectConnector {  
   constructor(walletConnectWeb3Provider) {
     this.provider = walletConnectWeb3Provider;
+    console.log(this.provider)
   }
 
   getAddress = async () => {
+    
     try {
       return this.provider
         .request({

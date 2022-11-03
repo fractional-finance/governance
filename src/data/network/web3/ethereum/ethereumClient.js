@@ -109,11 +109,12 @@ class EthereumClient {
     if(wallet == "walletConnect") {
       // Create connector
       const provider = getWalletConnectProvider()
-      await provider.enable();
-      this.walletProvider = new ethers.providers.Web3Provider(provider)
-      this._connector = new WalletConnectConnector(provider);
-      this.account = await this._connector.getAddress();
-      await this._connector.getChainId()
+      const res = await provider.enable();
+      
+      this.provider.on("connect", (log, event) => {
+        console.log("connected")
+      })
+
     }
 
     // Subscribe to accounts change
@@ -148,10 +149,10 @@ class EthereumClient {
   };
 
   async getWalletAddress() {
-    return await this.walletSigner.getAddress();
+    return await this._connector.getAddress();
   }
   async getWalletEthBalance() {
-    return (await this.walletSigner.getBalance()).toString();
+    return (await this._connector.getEthBalance());
   }
 
   /**

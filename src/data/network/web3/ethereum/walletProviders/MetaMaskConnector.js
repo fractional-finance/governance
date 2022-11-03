@@ -56,6 +56,10 @@ export class MetaMaskConnector {
         return response;
       });
   };
+
+  signTypedData = async (domain, types, data) => {
+    await this.provider._signTypedData(domain, types, data)
+  }
   /***********************************************************/
   /* Handle user accounts and accountsChanged (per EIP-1193) */
   /***********************************************************/

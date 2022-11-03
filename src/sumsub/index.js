@@ -11,7 +11,7 @@ const netlify = ".netlify/functions/api"
 const env = "prod"
 export const getAccessToken = async (id) => {
   const ID = id.slice(2)
-  const url = `${BASE_URL.server}/${netlify}/${env}/${ID}`
+  const url = `api.weavr.org/${netlify}/${env}/${ID}`
   return await axios({
     method: "get",
     headers: headers,

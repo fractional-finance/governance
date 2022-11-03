@@ -6,7 +6,7 @@ import { ethers } from "ethers"
 import { GraphQLAPIClient } from "../graphQLAPIClient"
 import {NETWORK} from "@/services/constants"
 const client = new ApolloClient({
-  uri: NETWORK.graph,
+  uri: "https://api.thegraph.com/subgraphs/name/abstrucked/weavr_goerli",
   cache: new InMemoryCache()
 })
 

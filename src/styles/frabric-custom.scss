@@ -4,8 +4,20 @@
 @import "../../node_modules/bulma/sass/utilities/functions";
 
 
-$family-sans-serif: "Poppins Sans", "sans";
 
+$family-sans-serif: "Poppins", sans-serif ;
+
+// $family-sans: "Poppins", sans ;
+@font-face {
+  font-family: $family-sans-serif;
+  
+  src: "../assets/Poppins-Regular.ttf" format("truetype");
+}
+
+@font-face {
+  font-family: "Space Grotesk", sans-serif;
+  src: "../assets/SpaceGrotesk-Regular.ttf" format("truetype");
+}
 
 //####################################
 //#          FRABRIC THEME           #
@@ -156,5 +168,18 @@ $colors: map-merge($colors, $addColors);
     height: 196px;
   }
 }
+
+.title {
+  color: $lightGray;
+  font-family: serif !important;
+
+  &.is-extra-large {
+    font-size: 4rem;
+  }
+}
+
+.brand {
+  font-family: "Poppins", sans !important;
+ }
 
 @import "./markdown.scss";

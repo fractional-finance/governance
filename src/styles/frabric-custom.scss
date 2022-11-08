@@ -10,8 +10,8 @@ $family-sans-serif: "Poppins", sans-serif ;
 // $family-sans: "Poppins", sans ;
 @font-face {
   font-family: $family-sans-serif;
-  
   src: "../assets/Poppins-Regular.ttf" format("truetype");
+  
 }
 
 @font-face {
@@ -62,7 +62,7 @@ $transparent: rgba(0, 0, 0, 0);
 
 // Setup the new serif family
 $family-primary: $family-sans-serif;
-
+$family-secondary:  "Space Grotesk", sans-serif;
 // Components and tags Styling
 $input-color: $lightBlue;
 
@@ -78,7 +78,7 @@ $small-radius: 10px;
 $modal-content-width: min(100%, 1000px);
 
 body {
-  font-family: 'Open Sans', sans-serif;
+  font-family: $family-primary, sans-serif;
 }
 
 input {
@@ -179,7 +179,7 @@ $colors: map-merge($colors, $addColors);
 }
 
 .brand {
-  font-family: "Poppins", sans !important;
- }
+ font-family: "Poppins", sans !important;
+}
 
 @import "./markdown.scss";

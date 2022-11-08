@@ -1,0 +1,8 @@
+// SCHEMA
+/**
+ * 1. MEMBER TYPE
+ * 2. KYC
+ * 3. VOUCHES LEFT
+ * 4. TOKEN AMOUNT 
+ */
+

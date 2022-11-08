@@ -16,6 +16,15 @@ class Whitelist {
         
     return isWhitelisted;
   }
+
+  async hasKyc(weavrAddress, userAddress) {
+    const daoContract = new DaoContract(this.client, weavrAddress);
+    const erc20Address = await daoContract.getERC20Address();
+    const whitelistContract = new WhitelistInterface(this.client, erc20Address);
+    const hasKyc = await whitelistContract.hasKyc(userAddress);
+        
+    return hasKyc;
+  }
 }
 
 export default Whitelist;

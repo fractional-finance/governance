@@ -17,11 +17,7 @@ import {
   WALLET_STATE_COOKIE_KEY,
   addressMatchesCookie,
 } from "../whitelist";
-const {
-  getMetaMaskProvider,
-  getCoinbaseWalletProvider,
-  getBraveProvider,
-} = require("../data/network/web3/ethereum/providers.js");
+
 
 /**
  * TODO - Abstrucked -
@@ -198,6 +194,10 @@ const actions = {
     // TODO(goblin): See https://github.com/fractional-finance/governance/issues/19
     // if (!isWhitelisted && !addressMatchesCookie(walletState.address)) {
     // }
+    const hasKyc = await whitelist.hasKyc(
+      CONTRACTS.WEAVR,
+      walletState.address
+    );
 
     walletState = new WalletState(
       walletState.address,
@@ -206,7 +206,7 @@ const actions = {
       symbol,
       wallet.getChainId()
     );
-
+    context.commit("setKyc", hasKyc);
     context.commit("setWallet", walletState);
 
     $toast.clear();

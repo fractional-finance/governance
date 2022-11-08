@@ -1,17 +1,22 @@
 <template>
 <div>
-  <div v-if="whitelisted && isConnected" class="button is-warning mr-1" @click="onVouch"><span class="mr-1"></span>Vouch</div>
-  <div v-if="whitelisted && isConnected" class="button is-success mr-5" @click="onKyc"><span class="mr-1"></span>Get Verified</div>
+  <div v-if="whitelisted && isConnected " class="button is-warning mr-1" @click="onVouch"><span class="mr-1"></span>Vouch</div>
+  <div v-if="whitelisted && isConnected && !hasKyc" class="button is-success mr-5" @click="onKyc"><span class="mr-1"></span>Get Verified</div>
+  <div v-if="whitelisted && isConnected && hasKyc" class="button p-4 has-background-mint" @click="kycInfo">
+        <span class="">
+          <unicon name="user-check" :width="20" :height="20" fill="white" alt="address verified"/>
+        </span>
+      </div>
   <div @click="tokenDetails" style="cursor: pointer;" class="tag is-large is-flex is-address-container" v-if="address !=null">
     <div>
       <span >{{ balance }}</span>
       <span class="has-text-mediumBlue ml-1"> {{ symbol }}</span>
     </div>
     <div
-      class="tag is-primary has-radius-xs is-large is-clickable"
+      :class="[`tag has-radius-xs is-large is-clickable`, hasKyc ? 'has-background-primary' : `is-dark`]"
       @click="onClick"
     >
-      <div class="is-family-monospace address">
+      <div class="is-family-monospace address has-text-white">
         {{
           address.substring(0, 8) + "..." + address.substring(address.length - 4)
         }}
@@ -58,14 +63,16 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import { DAO } from "../../../services/constants"
+import { DAO, CONTRACTS } from "../../../services/constants"
 import { Modal } from "../modal/Modal.vue"
 import { ethers } from 'ethers';
+import { createToaster } from "@meforma/vue-toaster";
 export default {
   name: "SignerAddress",
   computed: {
     ...mapGetters({
       whitelisted: "isWhitelisted",
+      hasKyc: "hasKyc",
       address: "userWalletAddress",
       balance: "userTokenBalance",
       symbol: "assetTokenSymbol",
@@ -79,6 +86,7 @@ export default {
     ...mapActions({
       sync: "syncWallet",
       tokenInfo: "tokenInfo",
+      checkKyc: "checkKyc",
       logout: "logout",
       participantsList: "participantsByType"
     }),
@@ -97,6 +105,9 @@ export default {
     },
     onKyc() {
       this.$router.push("/".concat(DAO).concat("/kyc"))
+    },
+    kycInfo() {
+     this.$toast.success("You are a verified member with full voting abilities", { position: "top", duration: false})
     },
     onLogout() {
       this.logout()
@@ -121,8 +132,10 @@ export default {
     // this.$router.push({name: "/"+DAO+"/tokenInfo", params: {assetId: this.assetId}})
     }
   },
-  mounted() {
+  async mounted() {
     this.participantsList({type: "GENESIS"})
+    console.log("Calling kyc...")
+    
   }
   
 };

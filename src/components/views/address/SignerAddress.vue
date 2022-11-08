@@ -1,13 +1,13 @@
 <template>
 <div>
-  <div v-if="whitelisted && isConnected " class="button is-warning mr-1" @click="onVouch"><span class="mr-1"></span>Vouch</div>
+  <div v-if="whitelisted && isConnected " class="button has-background-cyan has-text-white mr-1" @click="onVouch"><span class="mr-1"></span>Vouch</div>
   <div v-if="whitelisted && isConnected && !hasKyc" class="button is-success mr-5" @click="onKyc"><span class="mr-1"></span>Get Verified</div>
-  <div v-if="whitelisted && isConnected && hasKyc" class="button p-4 has-background-mint" @click="kycInfo">
+  <div v-if="whitelisted && isConnected && hasKyc" class="button has-background-mint" @click="kycInfo">
         <span class="">
-          <unicon name="user-check" :width="20" :height="20" fill="white" alt="address verified"/>
+          <unicon name="user-check" :width="25" :height="25" fill="white" alt="address verified"/>
         </span>
       </div>
-  <div @click="tokenDetails" style="cursor: pointer;" class="tag is-large is-flex is-address-container" v-if="address !=null">
+  <div @click="tokenDetails" style="cursor: pointer;" class="ml-4 tag is-large is-flex is-address-container" v-if="address !=null">
     <div>
       <span >{{ balance }}</span>
       <span class="has-text-mediumBlue ml-1"> {{ symbol }}</span>

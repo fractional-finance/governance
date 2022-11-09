@@ -6,8 +6,7 @@
 
 
 $family-sans-serif: "Poppins", sans-serif ;
-
-// $family-sans: "Poppins", sans ;
+$family-sans: "Space Grotesk", sans ;
 @font-face {
   font-family: $family-sans-serif;
   src: "../assets/Poppins-Regular.ttf" format("truetype");
@@ -15,7 +14,7 @@ $family-sans-serif: "Poppins", sans-serif ;
 }
 
 @font-face {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: $family-sans;
   src: "../assets/SpaceGrotesk-Regular.ttf" format("truetype");
 }
 
@@ -179,7 +178,7 @@ $colors: map-merge($colors, $addColors);
 }
 
 .brand {
- font-family: "Poppins", sans !important;
+ font-family: $family-sans !important;
 }
 
 @import "./markdown.scss";

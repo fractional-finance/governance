@@ -2,14 +2,11 @@
   <div v-if="assetId" class="container p-5 is-dark">
     <StackNavigationBar @onBack="goBack" :address="assetId" />
     <p>
-      Defines the legal charter of 12321 DAO LLC (DBA WeavrDAO),
-      a non-profit LLC in the Marshall Islands.
-    </p>
-    <p>
-      Please inspect the <a href="https://bafybeidibuergjupi4aa44imcokjkv3vlsmkv3wok7uza65j4nqvjtep7e.ipfs.w3s.link/ipfs/bafybeidibuergjupi4aa44imcokjkv3vlsmkv3wok7uza65j4nqvjtep7e/12321%20DAO%20LLC%20Operating%20Agreement_redacted.pdf">
-    </a>
-      operating agreement and <a href="https://bafybeihqk7gdugpbvzaivp6dvedp7puoer6xzhnftzqseg6njlcsvj6f6i.ipfs.w3s.link/ipfs/bafybeihqk7gdugpbvzaivp6dvedp7puoer6xzhnftzqseg6njlcsvj6f6i/12321_DAO_LLC_Formation_Declaration_redacted.pdf">
-      Formation Declaration</a> documents for more information about 12321 DAO LLC.
+      Welcome to the living charter of 12321 DAO LLC (DBA WeavrDAO).
+      Please take a look at the <a href="https://bafybeihqk7gdugpbvzaivp6dvedp7puoer6xzhnftzqseg6njlcsvj6f6i.ipfs.w3s.link/ipfs/bafybeihqk7gdugpbvzaivp6dvedp7puoer6xzhnftzqseg6njlcsvj6f6i/12321_DAO_LLC_Formation_Declaration_redacted.pdf">
+      Formation Declaration</a>, <a href="https://bafybeidibuergjupi4aa44imcokjkv3vlsmkv3wok7uza65j4nqvjtep7e.ipfs.w3s.link/ipfs/bafybeidibuergjupi4aa44imcokjkv3vlsmkv3wok7uza65j4nqvjtep7e/12321%20DAO%20LLC%20Operating%20Agreement_redacted.pdf">
+      operating agreement </a>, and the <a href="https://bafybeidibuergjupi4aa44imcokjkv3vlsmkv3wok7uza65j4nqvjtep7e.ipfs.w3s.link/ipfs/bafybeidibuergjupi4aa44imcokjkv3vlsmkv3wok7uza65j4nqvjtep7e/12321%20DAO%20LLC%20Operating%20Agreement_redacted.pdf">
+      Certificate of Formation </a> for more information.
     </p>
       <ProposalList
         :proposals="resolutions"

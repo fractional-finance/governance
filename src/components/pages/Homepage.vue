@@ -5,8 +5,9 @@
       Welcome to the living charter and Operating Agreement of 12321 DAO LLC (DBA WeavrDAO). </p>
     <p>
       Please take a look at the <a href="https://bafybeidibuergjupi4aa44imcokjkv3vlsmkv3wok7uza65j4nqvjtep7e.ipfs.w3s.link/ipfs/bafybeidibuergjupi4aa44imcokjkv3vlsmkv3wok7uza65j4nqvjtep7e/12321%20DAO%20LLC%20Operating%20Agreement_redacted.pdf">
-      Initial Operating Agreement</a>, <a href="https://bafybeidibuergjupi4aa44imcokjkv3vlsmkv3wok7uza65j4nqvjtep7e.ipfs.w3s.link/ipfs/bafybeidibuergjupi4aa44imcokjkv3vlsmkv3wok7uza65j4nqvjtep7e/12321%20DAO%20LLC%20Operating%20Agreement_redacted.pdf">
-      operating agreement </a>, and the <a href="https://bafybeihqk7gdugpbvzaivp6dvedp7puoer6xzhnftzqseg6njlcsvj6f6i.ipfs.w3s.link/ipfs/bafybeihqk7gdugpbvzaivp6dvedp7puoer6xzhnftzqseg6njlcsvj6f6i/12321_DAO_LLC_Formation_Declaration_redacted.pdf">
+      Initial Operating Agreement</a>, <a href="https://bafybeihqk7gdugpbvzaivp6dvedp7puoer6xzhnftzqseg6njlcsvj6f6i.ipfs.w3s.link/ipfs/bafybeihqk7gdugpbvzaivp6dvedp7puoer6xzhnftzqseg6njlcsvj6f6i/12321_DAO_LLC_Formation_Declaration_redacted.pdf">
+      Initial Director Resolutions </a>,
+      and the <a href="https://bafybeidetmv6dqrgljhuk4wvgl3gonsgyftehl2hhz6kyzqvgvkpq7e47i.ipfs.w3s.link/ipfs/bafybeidetmv6dqrgljhuk4wvgl3gonsgyftehl2hhz6kyzqvgvkpq7e47i/12321%20DAO%20LLC%20Certificate%20of%20Formation_redacted.pdf">
       Certificate of Formation </a> for more information.
     </p>
       <ProposalList
